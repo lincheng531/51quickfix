@@ -814,7 +814,7 @@ def update_device(request, oid):
         data['initial'] = get_pinyin_initials(data.get('name'))
     keyc = ['category', 'name', 'brand', 'model', 'specifications', 'initial']
     keys = ['store', 'uid', 'category', 'name', 'brand', 'model', 'specifications', 'psnumber', 'manufacturer',
-            'provider', 'scrap_time', 'logo']
+            'provider', 'scrap_time', 'logo', 'supplier']
 
     rbk = Device.objects.filter(rid=oid).first()
     cbk = Product.objects.filter(id=ObjectId(cid)).first()

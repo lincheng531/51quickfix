@@ -1,0 +1,97 @@
+{% extends "admin/base.html" %}
+{% block header %}
+<script src="/static/js/kfilter.js"></script>
+<script src="/static/js/dropdown.js"></script>
+<script src="/static/js/ksearch.js"></script>
+{% endblock %}
+{% block head %} 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".nice-select").kfilter(function(title){
+            jump('store', title, 'page')
+
+        }) 
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+    })
+</script>
+{% endblock %}
+{%block content%}
+{% load helpers %} 
+<div class="sub_nav"> </div>
+<div class="wrapper search_store">
+    {{request.GET|search_store_admin}}
+</div>
+
+<div class="wrapper">
+    <div class="result">
+            <div class="f2">共找到<b>{{paginator.count}}</b>个符合条件的结果</div>
+            <div class="sub_nav">{{request.GET|search_box}} </div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td class="brline"><input type="checkbox" id="select_all" onclick="check_all('#select_all','.c')"> 全选</td>
+            <td>编号</td>
+            <td>品牌</td>
+            <td>名称</td>
+            <td>地址</td>
+        </tr>
+        </thead>
+        <tbody> 
+        {% if res %} {% for re in res %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}">
+            <td class="brline">
+                <input name="" type="checkbox" onclick="check_one('.c')" class="c c_{{re.id}}" value="{{re.id}}">
+            </td>
+            <td style="width:80px"><a href="/admin/store/detail/{{re.id}}">{{ re.no|fix_none }}</a></td>
+            <td style="width:80px"><a href="/admin/store/detail/{{re.id}}">{%if re.company %}{{re.company}}{%else%}无{%endif%}</a></td>
+            <td class="tip1">
+                <a href="/admin/store/detail/{{re.id}}">{{ re.name }}</a>
+            </td>
+            <td>{{re.address}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="7">{% include "pager.html" %}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align:center">暂无</td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+<div id="cpanle" style="display: none">
+    <div class="wrapper">
+        <table style="width: 100%"><tr>
+            <td style="width: 18%"><span class="fl">已选择<span class="f1" id="choose">0</span>个餐厅</span></td>
+            <td style="width: 70%;text-align: center">  
+            <a href="/store/inventory/append">盘点</a>   | 
+        <a href="javascript:dump_qrcode()">生成二维码</a> |   
+        <a href="javascript:dump_export()">导出</a></td>
+            <td style="width: 18%;text-align: right"><a href="/store/assets/store/append">+新增餐厅</a></td></tr></table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-25;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+<form id="dump_idc" action="/store/assets/dump" method="POST">
+    <input type="hidden" name="oid" id="dump_idc_oid" value="">
+</form>
+<form id="cdump_qrcode" action="/store/assets/qrcode" method="POST">
+    <input type="hidden" name="oid" id="dump_qrcode_oid" value="">
+</form>
+
+{%endblock%}

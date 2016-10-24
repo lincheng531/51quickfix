@@ -1,0 +1,195 @@
+{% extends "provider/base.html" %}
+{% block header %}
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+{% endblock %}
+{% block head %}
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        init_tr('#cbody');
+        $(".nice-select").kfilter(function(title){
+            jump('store', title)
+
+        })
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('region', title)
+            })
+        })
+         $('#dropdown_2').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('store', title)
+            })
+        })
+         $('#dropdown_3').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('category', title)
+            })
+        })
+
+         $('#dropdown_4').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('brand', title)
+            })
+        })
+         $('#dropdown_5').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('product', title)
+            })
+        })
+        $('#dropdown_6').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('state', title)
+            })
+        })
+         $('#dropdown_7').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('error_code', title)
+            })
+        })
+        $('#dropdown_8').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('status', title)
+            })
+        })
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+
+        $('#start_day1,#end_day1,#start_day2,#end_day2').click(function(){
+            WdatePicker();
+        });
+
+    })
+</script>
+{% endblock %}
+
+{%block content%}
+{% load helpers %}
+{{'region'|nav_box}}
+{{'store'|nav_box}}
+{{'error_code'|nav_box}}
+{{'brand'|nav_box}}
+{{'product'|nav_box}}
+{{'category'|nav_box}}
+{{'state'|nav_box}}
+{{'status'|nav_box}}
+
+<div class="sub_nav wrapper"></div>
+<div class="wrapper">
+        <form method="GET" action="">
+            {{'查询|请输入编号，商户或资产'|search_form}}
+            <input type="hidden" name="q" value={{q}}>
+        </form>
+</div>
+<div class="sub_nav wrapper">{{request.GET|search_box}}</div>
+<div class="wrapper">
+    <div class="nav">
+        <ul class="fl">
+            <li {% ifequal q '0'%}class="active"{% endifequal %}>
+                <a href="?q=0">待审核工单({{new_call}})</a>
+            </li>
+            <li {% ifequal q '2' %}class="active"{% endifequal %}>
+                <a href="?q=2">审核中的工单({{hist_call}})</a>
+            </li>
+            <li {% ifequal q '1' %}class="active"{% endifequal %}>
+                <a href="?q=1">未通过工单({{step_call}})</a>
+            </li>
+            <li {% ifequal q '3' %}class="active"{% endifequal %}>
+                <a href="?q=3">已结算工单({{return_call}})</a>
+            </li>
+        </ul>
+         <div class="fr">
+            <form action="" method="GET">
+                <input type="hidden" value="{{q}}" name="q">
+                <label class="f1" style="font-weight: bold;font-size:14px;">时间</label>
+                <input type="text" name="start_day" class="input2" id="start_day2">
+                <label class="f1" style="font-weight: bold;font-size:14px;">至</label>
+                <input type="text" name="end_day" class="input2" id="end_day2"> 
+                <input type="submit" value="查询" class="b3">
+            </form>
+        </div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table center">
+        <thead>
+        <tr>
+            <td class="tc" style="width: 40px"><input type="checkbox" id="cc" onclick="check_all('#cc','.c')"></td>
+            <td>报修编号</td>
+            <td id="dropdown_1" ref="region">城市<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_2" ref="store">餐厅<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_3" ref="category">类别<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_4" ref="brand">品牌<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_5" ref="product">设备/设施名称<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_6" ref="state">时效<img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_7" ref="error_code" >故障描述<img src="/static/images/icon_Triangle.png"></td>
+            <td>金额(¥)</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody id="cbody">
+        {% for re in res %}
+        <tr  id="bk_{{re.id}}">
+            <td class="tc"><input type="checkbox" class="c" cid="{{re.id}}"></td>
+            <td><a href="/provider/repair/detail/{{re.maintenance.id}}">{{ re.maintenance.code }}</a></td>
+            <td>{{ re.maintenance.city }}</td>
+            <td>{{ re.maintenance.store_name }}</td>
+            <td>{{ re.device.category}}</td>
+            <td>{{ re.device.brand }}</td>
+            <td>{{ re.device.name }}</td>
+            <td>{{ re.maintenance.states }}</td>
+            <td style="width: 100px;line-height: 20px;padding: 0 10px;">{{re.maintenance.content}}</td>
+            <td>{{ re.total }}</td>
+            {%ifequal q '0' %}
+            <td style="line-height: 20px;width: 150px"><a href="javascript:void(0);" cid="{{re.id}}" id="verify_i_{{re.id}}" onclick="verify_one('#verify_i_{{re.id}}', 1)">提交结算</a></td>
+            {%endifequal%}
+            {%ifequal q '1' %}
+            <td style="line-height: 20px;width: 150px"><a href="javascript:void(0);" cid="{{re.id}}" id="verify_i_{{re.id}}" onclick="verify_one('#verify_i_{{re.id}}', 1)">提交审核</a></td>
+            {%endifequal%}
+            {%ifequal q '2' %}
+            <td style="line-height: 20px;width: 150px">等待商户结算</td>
+            {%endifequal%}
+            {%ifequal q '3' %}
+            <td style="line-height: 20px;width: 150px">已结算</td>
+            {%endifequal%}
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="11">{% include "pager.html" %}</td>
+            <td></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div id="cpanle">
+    <div class="wrapper">
+        <span class="fl tl" style="width: 300px">已选择:<span id="choose" class="f1">0</span></span>
+        <form action="/provider/repair/dump" method="post" id="repair_form1" class="fl" >
+            <input type="hidden" name="q" value="{{q}}" />
+            <input type="hidden" name="sb">
+                <label class="f1" style="font-weight: bold;font-size:14px;">时间 </label>
+                <input name="start_day" class="input2" id="start_day1" type="text">
+                <label class="f1" style="font-weight: bold;font-size:14px;">至</label>
+                <input id="end_day1" name="end_day" class="input2" type="text">
+            <input type="button" class="b3" onclick="dump_repair()" value="导出"  />
+        </form>
+        <span class="fl" style="width: 80px; border-left: 1px solid #e1e1e1;margin:15px 5px 0 20px;line-height: 20px;">
+        <a href="javascript:void(0);" cid="{{re.id}}" id="verify_q_{{re.id}}" onclick="verify_one('#verify_q_{{re.id}}', 2)">
+        提交审核
+        </a>
+        </span>
+        
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-60;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

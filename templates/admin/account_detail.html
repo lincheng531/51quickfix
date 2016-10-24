@@ -1,0 +1,181 @@
+{% extends "admin/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function(){
+        verify_account('input[name="card_type"]');
+        verify_account('input[name="electrician_type"]');
+        verify_account('input[name="gas_type"]');
+        verify_account('input[name="refrigeration_type"]');
+        $('#id_scrap_time,#id_electrician_day1,#id_electrician_day2,#id_gas_day1,#id_gas_day2,#id_refrigeration_day1,#id_refrigeration_day2').click(function(){
+            WdatePicker();
+        });
+        {%for t in user.train%}
+            verify_account('input[name="train_type_{{forloop.counter0}}"]');
+            $('#id_train_day1_{{forloop.counter0}},#id_train_day2_{{forloop.counter0}}').click(function(){
+                WdatePicker();
+            });
+        {%endfor%}
+    });
+</script>
+<style type="text/css">  
+    
+
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">账号管理</a> >账号</span>  </div>
+    <div class="box clearfix">
+    <div class="content"  style="width: 100%">
+            <form action="" method="POST" id="form1">
+             <table width="100%" class="table3">
+              {%ifequal user.category '1'%}
+                <tr>
+                <th style="width: 25%" class="tr">类别</th><td>{{user.category_name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                   
+                    <a href="/admin/{{current}}/active/{{user.id}}/1" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 通过
+                    </a>
+                    <a href="/admin/{{current}}/active/{{user.id}}/2" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 拒绝
+                    </a>
+                   
+                </td>
+                </tr>
+                <tr><th class="tr">姓名</th><td colspan="2">{{user.name}} 
+                    {%ifequal user.is_active 1%}<span class="f1">(已审核通过)</span>{%endifequal%}
+
+                </td></tr>
+                <tr><th class="tr">手机号码</th><td colspan="2">{{user.mobile}}</td></tr>
+                {%if user.store %}
+                <tr><th class="tr">餐厅</th><td colspan="2"><a href="/admin/store/detail/{{user.store_id}}">{{user.store}}</a></td></tr>
+                {%endif%}
+                <tr><th class="tr">地址</th><td colspan="2">{{user.area|fix_none}} {{user.city|fix_none}} {{user.address}}</td></tr>
+                <tr>
+                    <th class="tr">头像</th>
+                    <td colspan="2"><img src="{{user.avatar_img}}" style="max-width: 300px" /></td>
+                </tr>
+                {%endifequal%}
+                {% ifequal user.category '0'%}
+                <tr><td colspan="2">
+                        <table style="width: 100%"> 
+                            <tr><td style="text-align: right;width: 190px">
+                                
+                                        <img src="{{user.avatar_img}}" style="max-width: 200px;border:2px solid #e1e1e1;border-radius:25px;">
+                                
+                            </td><td style="width: 300px">
+                                    <p>姓名:{{user.name|fix_none}}</p>
+                                    <p>手机号码:{{user.username}}</p>
+                                    <p>居住地:{{user.area|fix_none}} {{user.city|fix_none}}  {{user.district|fix_none}} {{user.address|fix_none}}</p>
+                            </td><td></td></tr>
+                        </table>
+                    </td></tr>
+                <tr><td colspan="2">身份证<div class="hr"></div></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <table style="width: 100%">
+                        <tr><td width="350px">
+                        {%for c in user.card %}<p><img src="{{c}}"  style="max-width: 300px"/></p>{%endfor%}
+                        </td><td>
+                        
+                            <div class="cbox">
+                                <p>{{form.card_type.0}}</p>
+                                <p>用户名:{{form.screen_name}}</p>
+                                <p>身份证号码:{{form.card_no}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p> {{form.card_type.1}}</p>
+                                <p>原因:{{form.card_msg}}</p>
+                            </div>
+
+
+                        </td></tr>
+                        </table>
+                    </td>
+                </tr>
+                {%if user.electrician%}
+                <tr><td colspan="2">电工证<div class="hr"></div></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <table style="width: 100%">
+                        <tr><td width="350px">
+                                <img style="max-width: 300px" src="{{user.electrician}}"/>
+                        </td><td>
+                            <div class="cbox">
+                                <p>{{form.electrician_type.0}}</p>
+                                <p>有效期:{{form.electrician_day1}}-{{form.electrician_day2}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p>{{form.electrician_type.1}}</p>
+                                <p>失败原因:{{form.electrician_msg}}</textarea></p>
+                            </div>
+
+                        </td></tr>
+                        </table>
+                    </td></tr>
+                {%endif%}
+                {%if user.gas%}
+                <tr><td colspan="2">煤气证<div class="hr"></div></td></tr>
+                <tr><td colspan="2">
+                        <table style="width: 100%">
+                        <tr><td width="350px">
+                                <img style="max-width: 300px" src="{{user.gas}}"/>
+                        </td><td>
+
+                            <div class="cbox">
+                                <p>{{form.gas_type.0}}</p>
+                                <p>有效期:{{form.gas_day1}}-{{form.gas_day2}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p>{{form.gas_type.1}}</p>
+                                <p>失败原因:{{form.gas_msg}}</textarea></p>
+                            </div>
+                        </td></tr>
+                        </table>
+                </td></tr>
+                {%endif%}
+                {%if user.refrigeration%}
+                <tr><td colspan="2">制冷证<div class="hr"></div></td></tr>
+                <tr><td colspan="2">
+                         <table style="width: 100%">
+                        <tr><td width="350px">
+                            <img style="max-width: 300px" src="{{user.refrigeration}}"/>
+                         </td><td>
+                             <div class="cbox">
+                                <p>{{form.refrigeration_type.0}}</p>
+                                <p>有效期:{{form.refrigeration_day1}}-{{form.refrigeration_day2}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p>{{form.refrigeration_type.1}}</p>
+                                <p>失败原因:{{form.refrigeration_msg}}</textarea></p>
+                            </div>
+                        </td></tr>
+                        </table>
+                </td></tr>
+                {%endif%}
+                {%if user.train%}
+                <tr><td colspan="2">厂家培训证<div class="hr"></div></td></tr>
+                <tr><td colspan="2">
+                    <table style="width: 100%">
+                    {%for t in user.train%}
+                    {%if t%}
+                    <tr><td width="350px">
+                        <p><img src="{{t}}" style="max-width: 300px"/></p>
+                    </td><td>
+                            {{form|user_select_field:forloop.counter0}}
+                            
+                    </td></tr>
+                    {%endif%}
+                     {%endfor%}
+                    </table>
+                </td></tr>
+                {%endif%}
+                <tr><td colspan="2" align="center"> <input type="button" value="提交" onclick="valid_forms2('#form1')" class="b2"></td></tr>
+                {% endifequal %}
+            </table>
+        </form>
+    </div>
+    </div>
+</div> 
+
+{% endblock %}

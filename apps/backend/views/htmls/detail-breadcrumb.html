@@ -1,0 +1,8 @@
+<div class="m-b">
+  <ol class="breadcrumb">
+      <li ng-class="{active: $last}" ng-repeat="item in breads">
+          <a ng-if="!$last" href ui-sref="{{item.sref}}">{{item.title}}</a>
+          <a ng-if="$last" href >{{item.title}}</a>
+      </li>
+  </ol>
+</div>

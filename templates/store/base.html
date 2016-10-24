@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="never">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">  
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.dropdown.min.js"></script>
+    <script src="/static/js/jquery.blockui.js"></script>
+    <script src="/static/js/store.js"></script>
+    <link href="/static/css/jquery.dropdown.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    <link href="/static/css/store.css" rel="stylesheet">
+    {% block header %}{% endblock %} 
+    <title>Dashboard</title>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+     <div id="jq-dropdown-0" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/store/account/profile">个人资料</a></li>
+                <li><a href="/admin/logout">退出</a></li>
+            </ul>
+    </div>
+    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/store/brand/list">品牌列表</a></li>
+                <li><a href="/store/supplier/list">供应商列表</a></li>
+                <li><a href="/store/product/list">标准设备列表</a></li>
+                <li><a href="/store/call/list">标准设备对应服务商</a></li>
+            </ul>
+    </div>
+     <div id="jq-dropdown-5" class="jq-dropdown jq-dropdown-tip sub_nav">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/store/repair/list?q=0">维修跟踪</a></li>
+                <li><a href="javascript:void(0)">费用审核</a></li>
+                <li><a href="javascript:void(0)">费用结算</a></li>
+            </ul>
+    </div>
+    <div class="header">
+        <div class="wrapper">
+                <a id="home" href="/store/" style="padding-left: 30px;"><img src="/static/images/icon_home.png"/>&nbsp;</a>
+                 {% if request.user.roles.apps_store_repair_list %}
+                <a href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-5" {% ifequal current 'repair'%}class="active"{% endifequal %}>维修</a> 
+                {% endif %}
+                {% if request.user.roles.apps_store_inventory_list %}
+                <a href="/store/inventory/list" {% ifequal current 'inventory'%}class="active"{% endifequal %}>盘点</a> 
+                {% endif %}
+                <a  style="display: none" href="javascript:void(0)" {% ifequal current 'purchase'%}class="active"{% endifequal %}>采购</a> 
+                <a  style="display: none" href="javascript:void(0)" {% ifequal current 'maintenance'%}class="active"{% endifequal %}>保养</a> 
+                {% if request.user.roles.apps_store_assets_list %}
+                <a href="/store/assets/list" {% ifequal current 'assets'%}class="active"{% endifequal %}>固定资产</a> 
+                {% endif %}
+                
+                <a href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-1" >数据管理</a> 
+                
+                {% if request.user.roles.apps_store_account_list %}
+                <a href="/store/account/list?q=1" {% ifequal current 'account'%}class="active"{% endifequal %}>用户中心</a>
+                {% endif %}
+                {% if request.user.roles.apps_store_role_list %}
+                <a href="/store/role/list" {% ifequal current 'role'%}class="active"{% endifequal %}>权限管理</a> 
+                {% endif %} 
+                <a id="account" href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-0"><img src="/static/images/icon_me.png"/> {{request.user.screen_name|default:request.user.name|default:request.user.username }}</a>
+                
+        </div>
+    </div>
+          {% if form.errors %}
+                <script type="text/javascript">
+                balert("{% for field in form %}{% for error in field.errors %}{{field.label}}:<span class='f1'>{{ error|escape }}</span><br/>{% endfor %}{% endfor %}")</script>
+           {% endif %}          
+
+        {% if messages %}{% autoescape off %} {% for message in messages %} 
+            <script type="text/javascript">
+                balert('{{ message }}');
+            </script>
+        {% endfor %} {% endautoescape %}
+        {% endif %} 
+        {% block headline %}
+        {% endblock %}
+        {% block content %}{% endblock %}   
+        <div class="copyright center">&copy; 51quickfix 2015. AUTHOR kevin(376105482@qq.com) </div>
+
+</body>
+
+</html>

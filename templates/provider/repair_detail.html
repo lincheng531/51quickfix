@@ -1,0 +1,303 @@
+{% extends "provider/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/date.js"></script>
+<script type="text/javascript" src="/static/js/jquery.datepickercn.js"></script>
+<link href="/static/css/datePicker.css" rel="stylesheet">
+<script type="text/javascript">
+    $(function(){
+        $('#id_scrap_time').datePicker();
+    });
+</script> 
+<style type="text/css">
+    
+    </style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/provider/repair/list?q=0">首页</a> > <a href="/provider/{{current}}/list?q=0">维修</a> > 维修工单</span>  </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" >
+             <table width="100%">
+                <tr><td colspan="2" class="td1" >报修信息 <span class="fr f2" style="font-size: 12px;font-weight: normal">报修编号:{{ res.code }} &nbsp;</span></td></tr>
+                <tr style="display: none"><th>报修类型</th><td>{{device.category|fix_none}}</td></tr>
+                <tr><th class="f2">设备</th><td>{{device.name}} {{device.brand}} {{device.model}}  {%if device.guarantee %}
+                            <img src="/static/images/icon_warranty_period.png"/>{%else%}{%endif%}</td></tr>
+                <tr><th class="f2">固定资产编号</th><td>{{device.no|fix_none}}</td></tr>
+                <tr><th class="f2">报修故障</th><td>{{res.content|fix_none}} 
+                        {%ifequal res.state 1%}<img src="/static/images/icon_urgency.png"/>{%endifequal%}</td></tr>
+                <tr><th class="f2">维修时间</th><td>
+                    {{detail.create_time|date:'Y年m月d日H时m分'}}-
+                    {{detail.work_time|date:'Y年m月d日H时m分'}}间维修</td></tr>
+                {% if res.logo %}
+                <tr>
+                    <th class="f2">故障图片:</th>
+                    <td>{% for logo in  res.logo %}<img src="{{logo}}" style="max-width: 120px"> {% endfor %} </td>
+                </tr>
+                {% endif %}
+                <tr><td colspan="2" class="td1">维修情况 </td></tr>
+                {%if detail.bill %}
+                <tr><th class="f2">故障分析</th><td>{{bill.analysis|fix_none}}</td></tr>
+                <tr><th class="f2">维修措施</th><td>{{bill.measures|fix_none}}</td></tr>
+                <tr><th class="f2">其他建议</th><td>{{bill.other_message|fix_none}}</td></tr>
+                <tr><td colspan="2"><div class="hr"></div></td></tr>
+                <tr><th class="f2">零件费</th><td>¥ {{bill.spare_total}} 
+                            <a class="fr f2" style="padding-right: 50px" href="/provider/repair/edit/{{res.id}}">
+                                <img src="/static/images/icon_edit.png"/>&nbsp;编辑
+                            </a>
+                    </td></tr>
+                <tr><th class="f2">交通费</th><td>¥ {{bill.travel}}</td></tr>
+                <tr><th class="f2">人工费</th><td>¥ {{bill.labor}}</td></tr>
+                <tr><th class="f2">住宿费</th><td>¥ {{bill.stay_total}}</td></tr>
+                {%for other in bill.others %}
+                <tr><th class="f2">{{other.msg}}</th><td> {{other.total }}</td></tr>
+                {%endfor%}
+                <tr class="f1" style="font-size:14px"><th>合计</th><td>￥{{bill.total }}</td></tr>
+                {%endif%}
+                <tr>
+                    <td colspan="2">
+                            {%if bill %}
+                            <table class="table2"  style="width: 95%">
+                                <thead>
+                                <tr>
+                                    <td>零配件</td>
+                                    <td>编号</td>
+                                    <td>破坏类型</td>
+                                    <td>整机保固</td>
+                                    <td>最新零配件保固</td>
+                                    <td>单价(¥)</td>
+                                    <td>数量</td>
+                                    <td>费用(¥)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for d in bill.spare %}
+                                <tr>
+                                    <td>{{d.name}}</td>
+                                    <td>{{d.no}}</td>
+                                    <td>{%ifequal d.category 1%}自然{%else%}人为{%endifequal%}</td>
+                                    <td>{{device.expiration_date|date:"Y-m-d"}}</td>
+                                    <td>{%ifequal d.status 1%}保{%else%}非保{%endifequal%}</td>
+                                    <td>{{d.base_price}}</td>
+                                    <td>{{d.count}}</td>
+                                    <td>{{d.total}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                                
+                            </table>
+                            {% endif %}
+                    </td>
+                </tr>
+                <tr><td colspan="2"><div class="hr"></div></td></tr>
+                <tr><td colspan="2">
+                    <div class="dbox clearfix" style="width: 83%;float: right">
+                        {%if res.grab_user %}
+                        <div class="dsiderbar"><img src="{{res.grab_user.avatar_img|default_logo}}" width="40px"></div>
+                        <div class="dcontent">
+                            <h2><span>{{res.grab_user.name}}</span> 维修</h2>
+                            <p>{{res.grab_user.company}} / {{res.grab_user.username}}</p>
+                            <p>{{res.content}}</p>
+                            <div class="hr"></div>
+                            <p>{%for l in res.logo%}{%if l%}<img src="l"/>{%endif%}{%endfor%}</p>
+
+                        </div>
+                        {%endif%}
+                    </div>
+                </td></tr>
+                <tr><td colspan="2" class="td1">商户 </td></tr>
+                <tr><td colspan="2">
+                    <div class="dbox clearfix" style="width: 83%;float: right">
+                        <div class="dsiderbar"><img src="{{res.user.avatar_img|default_logo}}" width="40px"></div>
+                        <div class="dcontent">
+                            <h2><span>{{res.user.name}}</span> 报修</h2>
+                            <p>{{res.user.company}} / {{res.user.username}}</p>
+                            <p>{{res.statuss}} </p>
+                            <p>{{res.message|fix_none}} {{res.other_message|fix_none}}</p>
+                            <div class="hr"></div>
+
+                        </div>
+                    </div>
+                </td></tr>
+                {%if verify %}
+                <tr><td colspan="2" class="td1">审核信息 </td></tr>
+                <tr><td colspan="2">
+                    <div class="dbox clearfix" style="width: 83%;float: right">
+                        <div class="dsiderbar f2" style="line-height: 180px;">我方核对结果</div>
+                        <div class="dcontent">
+                            <p style="padding: 20px 0">
+                                <img src="/static/images/step-{{verify.status}}.png" />
+                            </p>
+                            <p><input type="checkbox" name="tip" />本工单已核对无误</p>
+                            <p><textarea name="user_message" class="ta1" rows="6" cols="70" 
+                            onfocus='if(this.value=="请填写备注信息"){this.value=""}' 
+                            onblur='if(this.value==""){this.value="请填写备注信息"}' >{%if verify.user_message %}{{verify.user_message}}{%else%}请填写备注信息{%endif%}</textarea></p>
+                            <p class="f2">提示:你可以在当前保存更改，并在列表提交多个工单来结算费用</p>
+                            <input type="button" class="b2" value="仅保持更改" onclick="verify_detail_submit(0)"/>
+                            <input type="button" class="b4" value="保存并提交" onclick="verify_detail_submit(2)"/>
+                        </div>
+                    </div>
+                </td></tr>
+                {%endif%}
+            </table>
+    </form>
+    <div class="siderbar">
+        <div class="w1">
+            <h3><img src="/static/img/store/{{res.head_type}}.png" width="60px;"></h3>
+            <p>{{store.name}} {{store.no|fix_none}}</p>
+            <p class="f3">{{store.mobile|fix_none}}</p>
+            <p class="f3">{{store.address|fix_none}}</p>
+        </div>
+        <div class="w2">
+            <table width="100%">
+                <tr>
+                    <td><img src="{{res.user.avatar_img|default_logo}}" width="40px"></td>
+                    <td>{{res.user.name}}<p class="f3">{{res.user.username}}</p></td>
+                    <td class="tr">报修</td>
+                </tr>
+                {%if res.target %}
+                 <tr>
+                    <td><img src="{{res.target.user.avatar_img|default_logo}}" width="40px"></td>
+                    <td>{{res.target.user.name}}<p class="f3">{{res.target.user.username}}</p></td>
+                    <td class="tr">维修</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+        <div class="w3">
+            <table id="timeline">
+            {% for stat in res.status_list %}
+                {% ifequal stat.head_type -1%}
+                <tr><td class="center"><img src="/static/images/time_dot_2.png"/></td>
+                <td colspan="2" class="f1">{{stat.create_time}}</td></tr>
+                {%endifequal%}
+                {% ifequal stat.head_type 1 %}
+                <tr>
+                    <td style="width: 60px"><span class="icon">报修</span></td>
+                    <td ><p class="f3">{{stat.must_time}}到修(合约)</p>
+                    <p>{{stat.name}}</p>
+                    <p class="f3">{{stat.mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 2 %}
+                <tr>
+                    <td ><span class="icon">通知</span></td>
+                    <td>
+                        <p  class="f3">{{stat.company}} {{stat.city}}{{stat.count}}人</p>
+                        <p>{{stat.name}}(主管)</p>
+                        <p class="f3">{{stat.mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 3 %}
+                <tr>
+                    <td class="center"><img src="/static/images/time_dot.png"/></td>
+                    <td>
+                        <p class="f3">{{stat.company}} {{stat.city}}</p>
+                        <p>{{stat.to_name}}</p>
+                        <p class="f3">{{stat.to_mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 4 %}
+                <tr>
+                    <td class="center"><img src="/static/images/time_dot.png"/></td>
+                    <td>
+                        <p class="f3">{{stat.company}} {{stat.city}}</p>
+                        <p>{{stat.to_name}}</p>
+                        <p class="f3">{{stat.to_mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 5 %}
+                <tr>
+                    <td class="center"><img src="/static/images/time_dot.png"/></td>
+                    <td>
+                        <p class="f3">{{stat.company}} 总部</p>
+                        <p>{{stat.to_name}}</p>
+                        <p class="f3">{{stat.to_mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 6 %}
+                <tr>
+                    <td><span class="icon">接单</span></td>
+                    <td>
+                        <p class="f3">预计{{stat.must_time}}时候到店</p>
+                        <p>{{stat.to_name}}({{stat.company}}{{stat.city}})</p>
+                        <p class="f3">{{stat.to_mobile}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+
+                {% ifequal stat.head_type 7 %}
+                <tr>
+                    <td><span class="icon">到店</span></td>
+                    <td>
+                        <p>实际到店</p>
+                        {% if stat.later %}
+                        <p class="f3">迟到原因:{{stat.later}}</p>
+                        {% endif %}
+                    </td>
+                    <td class="f3" valign="top">{{stat.arrival_time}}</td>
+                </tr>
+                {% endifequal %}
+
+                {% ifequal stat.head_type 8 %}
+                <tr>
+                    <td><span class="icon">维修</span></td>
+                    <td>
+                        预计{{stat.create_time}}修复
+                    </td>
+                    <td></td>
+                </tr>
+                {% endifequal %}
+                
+                {% ifequal stat.head_type 12 %}
+                <tr>
+                    <td><span class="icon">暂停</span></td>
+                    <td>
+                        {{stat.title}}
+                        <p>{{stat.content}}</p>
+                    </td>
+                    <td valign="top"  class="f3">{{stat.stop_time}}</td>
+                </tr>
+                {% endifequal %}
+
+                {% ifequal stat.head_type 9 %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <p>{{stat.msg}}</p>
+                    </td>
+                    <td valign="top"  class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                 {% ifequal stat.head_type 10 %}
+                <tr>
+                    <td><span class="icon">确认修单</span></td>
+                    <td>
+                        <p>{{stat.msg}}</p>
+                    </td>
+                    <td valign="top"  class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+                {% ifequal stat.head_type 11 %}
+                <tr>
+                    <td><span class="icon">24H</span></td>
+                    <td>
+                        <p>{{stat.msg|safe}}</p>
+                    </td>
+                    <td valign="top" class="f3">{{stat.create_time}}</td>
+                </tr>
+                {% endifequal %}
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

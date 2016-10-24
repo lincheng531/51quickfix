@@ -1,0 +1,17 @@
+{% load helpers %}
+<ul class="pagination" style="text-align: right"> 
+    <li>{% if p.has_previous %} 
+    <a target="_self" href="javascript:jump('page', {{ p.previous_page_number }})"  class="page-numbers">&laquo;</a> 
+        {% endif %}</li>
+            {% for i in p.paginator.page_range|paginat:p.number %}
+                {% ifequal i  p.number %}
+            <li class="active"><a href="javascript:void(0)">{{ i }}</a></li>
+                {% else %}
+            <li class=""><a href="javascript:jump('page', {{ i }})" class="current">{{ i }}</a></li>
+                {% endifequal %}
+            {% endfor %}
+   
+    <li><a href="javascript:void(0);">共{{ paginator.num_pages|default:"1" }}页</a></li>
+    <li>{% if p.has_next %} <a  href="javascript:jump('page', {{ p.next_page_number }})" class="page-numbers" >&raquo;</a> {% endif %}</li>
+
+</ul>

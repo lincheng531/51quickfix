@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %} {%block content%}
+{% load helpers %}
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl">
+                                 <a href="/admin/">首页</a> >
+                                 <a href="/admin/{{current}}/list">账号管理</a> >账号</span>  </div>
+    <div class="box clearfix">
+    <div class="content"  style="width: 100%">
+             <table width="100%" class="table3">
+                <tr>
+                <th style="width: 25%" class="tr">类别</th><td>{{res.category_name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                
+                </td>
+                </tr>
+                <tr><th class="tr">姓名</th><td colspan="2">{{res.name}}</td></tr>
+                <tr><th class="tr">手机号码</th><td colspan="2">{{res.mobile}}</td></tr>
+                <tr><th class="tr">密码</th><td>
+                    <form action="" method="POST">
+                        {{form.password}} <input type="submit" value="重设密码"/>
+                    </form>
+                </td></tr>
+                
+            </table>
+    </div>
+    </div>
+</div> 
+
+{% endblock %}

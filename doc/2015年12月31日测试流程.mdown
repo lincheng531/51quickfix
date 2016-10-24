@@ -1,0 +1,22 @@
+2015年12月31日测试流程
+	db.spare.remove()
+	db.b_spare.remove()
+	db.bill.remove()
+	db.call.remove()
+	db.error_code.remove()
+	db.maintenance.remove()
+	db.maintenance_users.remove()
+	db.member.remove()
+	db.push.remove()
+	db.user.remove({'username':{'$nin':['17717373384', '13764520898', '13585753381', '11111111111']}})
+	create_store_user_20160101_1.py
+	python dump_push_20160101_2.py 
+	dump_spare_20160101_3.py
+	update_product_20160101_2.py
+	python sh_call_push_20160101_4.py 
+
+	  1:清掉spare,call,push, update product
+	  2：删除member,push,user
+      1:更新标准设备
+      2:更新设备对应的服务商
+      3:新建测试餐厅->新建对应的测试设备

@@ -1,0 +1,101 @@
+{% extends "admin/base.html" %} {%block content%}
+<script src="/static/js/sfilter.js"></script>
+<link href="/static/css/sfilter.css" type="text/css" />
+<style>
+.cls_sfilter_list{max-height:200px;padding:1px; margin:1px; overflow:auto;}
+.cls_sfilter_list li{list-style:none; padding:2px;margin:0;}
+.select_class{color:green;}
+.cls_sfilter{display: none;}
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        $("select[name='store']").sfilter(function(title, html){
+            if(title != undefined && title.length >0){
+                window.location="/admin/{{current}}/list?store="+html;
+            }
+        });
+        
+
+    })
+</script>
+<div class="content" style="margin:0;padding:0">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:void(0);" class="btn">列表</a></li>
+        <li style="display:none"><a href="/admin/{{current}}/append" target="_self" class="btn fr">添加</a></li>
+    </ul>
+    <br />
+    <div class="table-responsive">
+    {% include "admin/search_form.html" %}
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+            <tr>
+                <td class="brline" width="12">
+                    <input name="" type="checkbox" value="" onclick=$( "input[class='c']").prop( "checked",this.checked);>
+                </td>
+                <td><span class="cblue">全部</span></td>
+                
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="brline" width="13"></td>
+                <td>名称</td>
+                <td>门店名称</td>
+                <td>维修机器</td>
+                <td>区域</td>
+                <td>呼叫人</td>
+                <td>状态</td>
+                <td>创建时间</td>
+                <td>操作</td>
+            </tr>
+            {% if res %} 
+            {% for re in res %}
+            <tr>
+                <td class="brline">
+                    <input name="" type="checkbox" class="c" value="{{re.id}}">
+                </td>
+                <td><a target="_self" href="/admin/{{current}}/detail/{{ re.id }}"> {{ re.user.name }}</a></td>
+               
+                <td>{{ re.user.store }}</td>
+                <td>{{ re.product }}</td>
+                <td>{{ re.area }}</td>
+                <td>{{ re.user_count }}</td>
+                <td>
+                    {% ifequal re.status 0%}
+                        <span class="label label-default">呼叫中</span>
+                    {%else%}
+                        {% ifequal re.status 1%}
+                            <span class="label label-primary">有回应</span>
+                        {% endifequal %}
+                        {% ifequal re.status 2%}
+                            <span class="label label-success">已确认</span>
+                        {% endifequal %}
+                        {% ifequal re.status -1%}
+                            <span class="label label-danger">取消</span>
+                        {% endifequal %}
+                    {%endifequal%}</td>
+                <td>{{ re.create_time }}</td>
+                <td>
+                    <a href="/admin/{{current}}/detail/{{ re.id }}" target="_self">查看</a> &nbsp;
+                    <a style="display: none" href="/admin/{{current}}/delete/{{ re.id }}" class="del" onclick="return confirm('Are you sure you want to delete this item?');">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="9">{% include "admin/pager.html" %}</td>
+                <td></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9" style="text-align:center">暂无</td>
+                <td></td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{%endblock%}

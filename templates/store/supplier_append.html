@@ -1,0 +1,23 @@
+{% extends "store/base.html" %}
+{%block content%}
+{% load helpers %} 
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > 
+    <a href="/store/{{current}}/list">供应商管理</a> >新增供应商</span> </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" style="width: 100%">
+            <table width="100%">
+                <tr>
+                    <th>名称</th>
+                    <td> {{form.name}} </td>
+                </tr>
+
+                <tr><td></td><td class="tl"> 
+                                <input type="submit" class="b2" value="保存"  /> 
+                                
+                            </td></tr>
+            </table>
+    </form>
+</div> 
+
+{%endblock%}

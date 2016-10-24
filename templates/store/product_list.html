@@ -1,0 +1,74 @@
+{% extends "store/base.html" %}
+
+{%block content%}
+<script src="/static/js/ksearch.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+    })
+</script>
+{% load helpers %}
+<div class="sub_nav"> </div>
+<div class="wrapper search_store">
+     {{'查询|请输入设备名称,类型,品牌,供应商'|search_squar}} 
+</div>
+<div class="wrapper">
+     <div class="result">
+            <div class="f2">共找到<b>{{p.object_list|count}}</b>个符合条件的结果</div>
+            <div class="sub_nav">{{request.GET|search_box}} </div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td style="padding-left:20px;width:200px;">名称</td>
+            <td>类型</td>
+            <td >品牌</td>
+            <td >供应商</td>
+            <td style="width: 120px">规格</td>
+            <td style="width: 120px">型号</td>
+            <td style="width: 60px">零件数</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if res %} {% for re in res %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}">
+            <td style="padding-left:20px">
+            <a href="/store/product/detail/{{re.id}}">{{re.name}}</a> </span></td>
+            <td>{{re.efcategory}}</td>
+            <td>{{re.brand.name}}</td>
+            <td>{{re.supplier.name}}</td>
+            <td>{{re.specification}}</td>
+            <td>{{re.model}}</td>
+            <td style="text-align: center">{{re.spare|count}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3">{% include "pager.html" %}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" style="text-align:center">暂无</td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+
+<div id="cpanle">
+    <a href="/store/product/append">+增加标准设备</a>   
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-60;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

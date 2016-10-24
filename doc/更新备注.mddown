@@ -1,0 +1,4 @@
+1:写脚本更新maintenance,grab_user数据
+2:#重新划分维修工和主管的数据结构
+3:标准设备和零件加上餐厅的head_type
+4:检查餐厅和维修工的head_type，餐厅管理人员对应餐厅的head_type

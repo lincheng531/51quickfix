@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content" style="margin:0;padding:0;height:600px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="/admin/{{current}}/list" target="_self" class="btn">列表</a></li>
+        <li><a href="/admin/{{current}}/append" target="_self">添加</a></li>
+    </ul>
+    <br />
+    <form method="POST" action="" id="form">
+        <div class="table-responsive">
+            <table class="table table-striped" border="0" cellspacing="0" cellpadding="0">
+                {% for field in form %}
+                <tr>
+                    <th>{{ field.label_tag }}</th>
+                    <td>{{ field }} <span style="color:red">{{ field.errors }}</span></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+<style>
+    .box .dataTables_wrapper {
+        padding-top: 0;
+    }
+
+    table.dataTable {
+        margin-top: 0;
+    }
+
+    #maintenances .dataTables_wrapper .row:first-child {
+        display: none;
+    }
+</style>
+
+<div class="box" id="maintenances">
+    <div class="table-responsive">
+        <table ui-jp="dataTable" ui-options="{
+          ajax: 'maintenance/list?status={{status}}&search_q={{search_q}}',
+          processing: true,
+          serverSide: true,
+          aoColumns: [
+            { mData: 'code', mRender: function(data, type, full){return '<a href=/admin/#/app/fix-detail?id='+full.id+'>'+full.code+'</a>'} },
+            { mData: 'city' },
+            { mData: 'head_type_' },
+            { mData: 'store_name' },
+            { mData: 'brand' },
+            { mData: 'product' },
+            { mData: 'state_' },
+            { mData: 'content' },
+            { mData: 'company' },
+            { mData: 'status_' },
+            { mData: 'create_time' }
+          ],
+          language: {
+            paginate: {
+              previous: '上一页',
+              next: '下一页',
+              First: '首页',
+              Last: '末页'
+            }
+          }
+        }" class="table table-striped b-t b-b">
+            <thead>
+            <tr class="blue-grey-400 text-white">
+                <th>报修编号</th>
+                <th style="width: 7%">城市</th>
+                <th style="width: 7%">品牌</th>
+                <th style="width: 7%">商户</th>
+                <th>类别</th>
+                <th style="width: 10%">资产</th>
+                <th style="width: 6%">时效</th>
+                <th>故障描述</th>
+                <th style="width: 7%">服务商</th>
+                <th style="width: 10%">状态</th>
+                <th style="width: 9%">叫修时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>

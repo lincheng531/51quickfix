@@ -1,0 +1,57 @@
+{% extends "provider/base.html" %} {%block content%}
+{% load helpers %} 
+<script type='text/javascript' src='/static/js/sfilter.js'></script>
+<link rel="stylesheet" href='/static/css/sfilter.css' type="text/css" />
+<script type="text/javascript">
+    $(document).ready(function(){
+            $("#id_city").sfilter(function(){});
+    });
+</script>
+<style type="text/css">
+#id_store li{display: block;float:left; margin: 3px 5px;}
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/provider/repair/list?q=0">首页</a> > 
+                                                        <a href="/provider/{{current}}/list?q=2">账号管理</a> >新增账号
+                                    </span> </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" style="width: 100%">
+                 <table width="100%">
+                <tr>
+                    <th>账户类型</th>
+                    <td style="line-height: 20px">
+                        <input id="category1" type="radio" name="category" value="2" onclick="window.location.href='/provider/account/append/2'" /><label for="category1">主管</label> <br/>
+                        <input id="category2" type="radio" name="category" value="0" onclick="window.location.href='/provider/account/append/0'" /><label for="category2">维修工</label><br />
+                    </td>
+                  
+                </tr>
+                 <tr>
+                    <th>城市</th>
+                    <td> {{form.city}} </td>
+                </tr>
+                <tr>
+                    <th>姓名</th>
+                    <td> {{form.name}} </td>
+                </tr>
+                <tr>
+                    <th>手机号码</th>
+                    <td> {{form.mobile}} (登陆账号)</td>
+                </tr>
+               <tr>
+                    <th>密码</th>
+                    <td> {{form.password}} (设置密码)</td>
+                </tr>
+                {% ifequal category "2"%}
+                 <tr>
+                    <th>下属维修工</th>
+                    <td>{{form.repair_user}}</td>
+                </tr>
+                {% endifequal %}
+                <tr><td></td><td class="tl"> 
+                                <input type="submit" class="b2" value="保存"  /> 
+                                
+                            </td></tr>
+            </table>
+    </form>
+</div> 
+{% endblock %}

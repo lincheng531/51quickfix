@@ -1,0 +1,48 @@
+<style>
+    hr {
+        margin: 0;;
+    }
+</style>
+<div class="box sidebar store ">
+    <div class="box-body text-center">
+        <div class="m-t-md m-b">
+            <span class="avatar w-96">
+                <img ng-src="{{store.store_logo}}">
+                <i class="busy b-white right"></i>
+            </span>
+        </div>
+        <h6>{{store.title}}</h6>
+        <p class="text-muted text-sm m-a">
+            编号&nbsp; <span ng-bind="store.code"></span>
+            <br>
+            <span ng-bind="store.number"></span>
+            <br>
+            <span ng-bind="store.address"></span>
+        </p>
+        <div class="form-group m-t-md">
+            <a class="btn form-control dark lt">查看详情</a>
+        </div>
+    </div>
+    <hr>
+    <div class="box-body text-center">
+        <div class="m-t-md m-b">
+            <span class="avatar w-96">
+                <img ng-src="{{fixer.avatar_img}}">
+                <i class="busy b-white right"></i>
+            </span>
+        </div>
+        <h6><span ng-bind="fixer.screen_name"></span></h6>
+        <p class="m-a">
+            <div class="text-muted text-sm"><span ng-bind="fixer.title"></span></div>
+            <div class="text-muted text-sm"><span ng-bind="fixer.mobile"></span></div>
+            <div class="text-muted text-sm m-t-sm"><span class="" ng-bind="fixer.company"></span></div>
+        </p>
+        <div class="form-group m-t-md">
+            <a class="btn form-control dark"><span class="lt">转服务商</span></a>
+        </div>
+    </div>
+    <hr>
+    <div class="box-body">
+        <div ui-include="'/static/views/htmls/detail-timeline.html'"></div>
+    </div>
+</div>

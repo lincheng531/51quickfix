@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>51QuickFix</title>
+    <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <link rel="apple-touch-icon" href="/static/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="Flatkit">
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" sizes="196x196" href="/static/images/logo.png">
+
+    <!-- style -->
+    <link rel="stylesheet" href="/static/bower_components/animate.css/animate.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/bower_components/glyphicons/styles/glyphicons.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/material-design-icons/material-design-icons.css" type="text/css"/>
+
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <!-- build:css styles/app.min.css -->
+    <link rel="stylesheet" href="/static/styles/app.css" type="text/css"/>
+    <!-- endbuild -->
+    <link rel="stylesheet" href="/static/styles/font.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/styles/base.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/website/css/index.css" type="text/css"/>
+    <!--<script type="text/javascript">-->
+    <!--window.g = {-->
+    <!--'name': '%% request.user.screen_name|default:request.user.name|default:request.user.username | safe %%'-->
+
+    <!--};-->
+    <!--</script>-->
+</head>
+<body>
+<div class="app" ui-view>
+    {% block header %}
+        {% include 'website/header.html' %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block footer %}
+    {% endblock %}
+</div>
+
+<!-- build:js scripts/app.angular.js -->
+<!-- jQuery -->
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/static/bower_components/tether/dist/js/tether.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/PACE/pace.min.js"></script>
+<!-- Angular -->
+<!--<script src="/static/bower_components/angular/angular.js"></script>-->
+<!--<script src="/static/bower_components/angular-animate/angular-animate.js"></script>-->
+<!--<script src="/static/bower_components/angular-resource/angular-resource.js"></script>-->
+<!--<script src="/static/bower_components/angular-sanitize/angular-sanitize.js"></script>-->
+<!--<script src="/static/bower_components/angular-touch/angular-touch.js"></script>-->
+
+<!--&lt;!&ndash; router &ndash;&gt;-->
+<!--<script src="/static/bower_components/angular-ui-router/release/angular-ui-router.js"></script>-->
+<!--&lt;!&ndash; storage &ndash;&gt;-->
+<!--<script src="/static/bower_components/ngstorage/ngStorage.js"></script>-->
+<!--&lt;!&ndash; utils &ndash;&gt;-->
+<!--<script src="/static/bower_components/angular-ui-utils/ui-utils.js"></script>-->
+<!--&lt;!&ndash; lazyload &ndash;&gt;-->
+<!--<script src="/static/bower_components/oclazyload/dist/ocLazyLoad.js"></script>-->
+
+<!--&lt;!&ndash; App &ndash;&gt;-->
+<!--<script src="/static/scripts/app.js"></script>-->
+<!--<script src="/static/scripts/config.js"></script>-->
+<!--<script src="/static/scripts/config.lazyload.js"></script>-->
+<!--<script src="/static/scripts/config.router.js"></script>-->
+<!--<script src="/static/scripts/app.ctrl.js"></script>-->
+<!--<script src="/static/scripts/detail.ctrl.js"></script>-->
+
+<!--<script src="/static/scripts/directives/ui-jp.js"></script>-->
+<!--<script src="/static/scripts/directives/ui-nav.js"></script>-->
+<!--<script src="/static/scripts/directives/ui-fullscreen.js"></script>-->
+<!--<script src="/static/scripts/directives/ui-scroll-to.js"></script>-->
+<!--<script src="/static/scripts/directives/ui-toggle-class.js"></script>-->
+<!--<script src="/static/scripts/directives/ui-include.js"></script>-->
+
+<!--<script src="/static/scripts/filters/fromnow.js"></script>-->
+
+<!--<script src="/static/scripts/services/ngstore.js"></script>-->
+<!--<script src="/static/scripts/services/ui-load.js"></script>-->
+<!--<script src="/static/scripts/services/palette.js"></script>-->
+
+<script src="/static/website/js/index.js"></script>
+<!-- endbuild -->
+</body>
+</html>

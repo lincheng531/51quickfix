@@ -1,0 +1,68 @@
+{% extends "store/base.html" %} {%block content%}
+{% load helpers %} 
+
+<style type="text/css">
+#id_store li{display: block;float:left; margin: 3px 5px;}
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">账号管理</a> >新增账号</span> </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" style="width: 100%">
+                 <table width="100%">
+                <tr>
+                    <th>账户类型</th>
+                    <td>
+                        {%ifequal category '1'%}
+                        餐厅负责人
+                        {%endifequal%}
+                         {%ifequal category '3'%}
+                        区域负责人
+                        {%endifequal%}
+                         {%ifequal category '4'%}
+                        OC
+                        {%endifequal%}
+                         {%ifequal category '5'%}
+                        餐厅后台管理员
+                        {%endifequal%}
+
+                    </td>
+                        
+                </tr>
+                <tr>
+                    <th>姓名</th>
+                    <td> {{form.name}} </td>
+                </tr>
+                <tr>
+                    <th>手机号码</th>
+                    <td> {{form.mobile}} (登陆账号)</td>
+                </tr>
+               <tr>
+                    <th>密码</th>
+                    <td> {{form.password}} (设置密码)</td>
+                </tr>
+                {% ifequal category "1"%}
+                 <tr>
+                    <th>负责餐厅</th>
+                    <td>{{form.store}}</td>
+                </tr>
+                {% endifequal %}
+                 {% ifequal category "3"%}
+                 <tr>
+                    <th>负责区域</th>
+                    <td>{{form.area}}</td>
+                </tr>
+                {% endifequal %}
+                 {% ifequal category "4"%}
+                 <tr>
+                    <th valign="top">负责餐厅</th>
+                    <td>{{form.store}}</td>
+                </tr>
+                {% endifequal %}
+                <tr><td></td><td class="tl"> 
+                                <input type="submit" class="b2" value="保存"  /> 
+                                
+                            </td></tr>
+            </table>
+    </form>
+</div> 
+{% endblock %}

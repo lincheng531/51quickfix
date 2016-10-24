@@ -1,0 +1,14 @@
+{
+  "name": "spline",
+  "homepage": "https://github.com/mobify/spline",
+  "version": "2.2.0",
+  "_release": "2.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.2.0",
+    "commit": "1a046506c020e75a48beba51f6982bcbcef0180a"
+  },
+  "_source": "https://github.com/mobify/spline.git",
+  "_target": "^2.2.0",
+  "_originalSource": "spline"
+}

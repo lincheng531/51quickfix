@@ -1,0 +1,113 @@
+{% extends "store/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript">
+    $(function(){
+
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('brand', title, 'page')
+            })
+        })
+        $('#dropdown_2').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('product', title, 'page')
+            })
+        })
+        $('#dropdown_3').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('inventory_detail_status', title, 'page')
+            })
+        })
+
+    });
+</script>
+<style type="text/css">
+
+</style>
+{{'supplier'|nav_box}}
+{{'brand'|nav_box}}
+{{'product'|nav_box}}
+{{'inventory_detail_status'|nav_box}}
+
+<div class="wrapper">
+<div class="sub_nav">首页 > 
+                        <a href="store/inventory/detail/{{header.id}}">盘点</a> > 
+                        <a href="/store/inventory/detail2/{{header.id}}/{{store.id}}">{{header.title}}</a> > <span class="f2">{{store.name}}</span></div>
+        <div class="tbox">
+            <div class="title clearfix"><h3 class="f4 fl" style="line-height: 40px">{{header.title}}</h3> <span class="f2 fr" style="line-height: 40px;padding-right: 20px">任务时效 {{header.start_time|date:'Y年m月d日'}}-{{header.end_time|date:'Y年m月d日'}}</span></div>
+            <div class="content">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 10%;font-size:16px;color:#666">商户</td>
+                        <td style="width: 32%">
+                            <p>{{store.name}} ({{store.no}})</p><span
+                            <p class="f2">{{store.area}} {{store.city}} {{store.address}}</p>
+                            <p>&nbsp;</p>
+                            <p class="f2">餐厅经理 {{store.store_manager }}({{store.mobile}})</p>
+                            <p class="f2">固定电话 {{store.tel}}</p>
+                        </td>
+                        <td style="width:8%;border-right: 1px solid #ccc" valign="bottom">
+                            <a href="/store/assets/store/{{store.id}}">查看详情</a>
+                        </td>
+                        <td style="width:10%;text-align: center;font-size:16px;color:#666">进度</td>
+                        <td style="width:20%">
+                            <p>已盘点<span class="f1" style="font-size:16px">{{complete}}</span>项</p>
+                            <p>缺失<span class="f1" style="font-size:16px">{{miss}}</span>项目</p>
+                            <p>总计<span class="f1" style="font-size:16px">{{devices|count}}</span>项目</p>
+                        </td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%" valign="bottom"><a href="javascript:void(0)" onclick="$('#inventory_form1').submit()">导出盘点表</a>
+                                <form action="/store/inventory/dump" method="post" id="inventory_form1">
+                                    <input type="hidden" id="oid" name="oid" value="{{store.id}}">
+                                    <input type="hidden" name="header" value="{{header.id}}" />
+                                </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="device_search clearfix">
+            <h3>盘点列表<span class="f2">({{devices|count}})</span></h3>
+            {{request.GET|search_deivce}} 
+        </div>
+        <div class="assets_search_form">{{form}}  {{request.GET|search_box}} </div>
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td style="padding-left: 20px;width: 100px">固定资产编号</td>
+            <td style="width: 150px" id="dropdown_1" ref="brand">品牌 <img src="/static/images/icon_Triangle.png"></td>
+            <td style="width: 150px" id="dropdown_2", ref="product">名称 <img src="/static/images/icon_Triangle.png"></td>
+            <td style="width: 250px" >型号/规格</td>
+            <td style="width: 100px" id="dropdown_3", ref="inventory_detail_status">状态 <img src="/static/images/icon_Triangle.png"></td>
+            <td >说明</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if devices %} {% for re in devices %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}"  onmouseover="this.style.backgroundColor='#e1e1e1'" onmouseout="this.style.backgroundColor='#fff'">
+            <td style="padding-left:20px"><a href="/store/assets/detail/{{re.device.id}}">{{ re.device.no|fix_none }}</a></td>
+            <td>{{ re.device.brand }}</td>
+            <td><a href="/store/assets/detail/{{re.device.id}}">{{ re.device.name }}</a></td>
+            <td>{% if re.device.model %}{{re.device.model}}{%else%}{{ re.device.specifications|fix_none }}{%endif%} </td>
+            <td>
+                {% ifequal re.status 0 %}未盘点{%endifequal%}
+                {% ifequal re.status 1 %}存在{%endifequal%}
+                {% ifequal re.status 2 %}缺失{%endifequal%}
+            </td>
+            <td>{{ re.content|fix_none }}</td>
+            <td>{% if re.logo %}查看照片{%endif%}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody></table>
+</div>
+{% endblock %}

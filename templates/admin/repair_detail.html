@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content" style="margin:0;padding:0;height:600px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a target="_self" href="/admin/{{current}}/list" class="btn">列表</a></li>
+        <li><a href="/admin/{{current}}/edit/{{oid}}" class="btn">修改</a></li>
+        <li><a href="/admin/{{current}}/append">添加</a></li>
+    </ul>
+    <br />
+    <div class="table-responsive">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+        <tr>
+            <th>商家：</th>
+            <td>{{item.user.name}}</td>
+        </tr>
+        <tr>
+            <th>供应商：</th>
+            <td>{{item.supplier.name}}</td>
+        </tr>
+        <tr>
+            <th>维修品：</th>
+            <td>{{item.product.name}}</td>
+        </tr>
+        <tr>
+            <th>维修品序列号：</th>
+            <td>{{item.product_code}}</td>
+        </tr>
+        <tr>
+            <td>生产时间：</td>
+            <td>{{item.production_date}}</td>
+        </tr>
+        <tr>
+            <th>安装时间：</th>
+            <td>{{item.installation_date}}</td>
+        </tr>
+        <tr>
+            <th>过期时间：</th>
+            <td>{{item.expiration_date}}</td>
+        </tr>
+        <tr>
+            <th>创建时间：</th>
+            <td>{{item.create_time}}</td>
+        </tr>
+    </table>
+    </div>
+</div>
+{%endblock%}

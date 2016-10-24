@@ -1,0 +1,110 @@
+{% extends "store/base.html" %}
+{% block header %}
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+
+{% endblock %}
+
+{% block head %} 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+    })
+</script>
+{% endblock %}
+
+{%block content%}
+{% load helpers %}
+<di class="sub_nav">&nbsp;</di>
+<div class="wrapper search_store">{{request.GET|search_account}}</div>
+<div class="sub_nav wrapper">{{request.GET|search_box}} </div>
+<div class="wrapper">
+    <div class="nav"> 
+        <ul>
+            {%ifequal user.category '3' %}
+            <li {% ifequal q '1' %}class="active" {% endifequal %}><a href="?q=1">餐厅负责人</a></li>
+            <li {% ifequal q '4' %}class="active" {% endifequal %}><a href="?q=4">OC</a></li>
+            {%endifequal%}
+            {%ifequal user.category '4' %}
+            <li {% ifequal q '1' %}class="active" {% endifequal %}><a href="?q=1">餐厅负责人</a></li>
+            {%endifequal%}
+            {%ifequal user.category '5' %}
+            <li {% ifequal q '1' %}class="active" {% endifequal %}><a href="?q=1">餐厅负责人</a></li>
+            <li {% ifequal q '4' %}class="active" {% endifequal %}><a href="?q=4">OC</a></li>
+            <li {% ifequal q '3' %}class="active" {% endifequal %}><a href="?q=3">区域负责人</a></li>
+            <li {% ifequal q '5' %}class="active" {% endifequal %}><a href="?q=5">管理员</a></li>
+            {%endifequal%}
+        </ul>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table center">
+        <thead>
+        <tr>
+            {%ifequal q '1'%}
+            <td>城市</td>
+            <td>餐厅名称</td>
+            <td>餐厅编号</td>
+            {% endifequal %}
+            {% ifequal q '3'%}
+            <td>负责区域</td>
+            {% endifequal %}
+            {% ifequal q '4'%}
+            <td width="300px">负责餐厅</td>
+            {% endifequal %}
+            <td>姓名</td>
+            <td>手机号码</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if res %} {% for re in res %}
+        <tr id="bk_{{re.id}}">
+        {%ifequal q '1'%}
+            <td><a href="/store/account/detail/{{re.id}}">{{ re.city }}</a></td>
+            <td>{{ re.store.name }}</td>
+            <td>{{ re.store.no }}</td>
+        {%endifequal%}
+        {%ifequal q '3'%}
+            <td>{{re.area}}</td>
+        {% endifequal %}
+        {%ifequal q '4'%}
+            <td>{{re.store}}</td>
+        {% endifequal %}
+            <td><a href="/store/account/detail/{{re.id}}">{{ re.name }}</a></td>
+            <td><a href="/store/account/detail/{{re.id}}">{{ re.username}}</a></td>
+            <td>{% if re.is_active %}<a href="/store/account/active/{{re.id}}/0">冻结</a>{%else%} <a href="/store/account/active/{{re.id}}/1">激活</a>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="11">{% include "pager.html" %}</td>
+            <td></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="11" style="text-align:center">暂无</td>
+            <td></td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+
+<div id="cpanle">
+    <div class="wrapper">
+        <a href="/store/account/append/1">+添加用户</a>
+       <!--{% ifequal q '1' %}<a href="/store/account/append/1">+增加餐厅负责人</a>{%endifequal%}
+       {% ifequal q '3' %}<a href="/store/account/append/3">+区域负责人</a>{%endifequal%}
+       {% ifequal q '4' %}<a href="/store/account/append/4">+OC</a>{%endifequal%}
+       {% ifequal q '5' %}<a href="/store/account/append/5">+管理员</a>{%endifequal%}-->
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-60;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

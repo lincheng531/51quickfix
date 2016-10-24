@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="never">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">  
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.dropdown.min.js"></script>
+    <script src="/static/js/jquery.blockui.js"></script>
+    <script src="/static/js/store.js"></script>
+    <link href="/static/css/jquery.dropdown.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    <link href="/static/css/store.css" rel="stylesheet">
+    {% block header %}{% endblock %} 
+    <title>Dashboard</title>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+     <div id="jq-dropdown-0" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/admin/account/profile">个人资料</a></li>
+                <li><a href="/admin/logout">退出</a></li>
+            </ul>
+    </div>
+     <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip sub_nav">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/admin/store/list/0">未审核餐厅</a></li>
+                <li><a href="/admin/store/list/1">已审核餐厅</a></li>
+            </ul>
+    </div>
+    <div id="jq-dropdown-2" class="jq-dropdown jq-dropdown-tip sub_nav">
+            <ul class="jq-dropdown-menu">
+                <li><a href="/admin/account/list/1/0">[餐厅]未审核用户</a></li>
+                <li><a href="/admin/account/list/1/1">[餐厅]已审核用户</a></li>
+                <li><a href="/admin/account/list/1/2">[餐厅]审核异常用户</a></li>
+                <li><a href="/admin/account/list/0/0">[维修工]未审核用户</a></li>
+                <li><a href="/admin/account/list/0/1">[维修工]已审核用户</a></li>
+                <li><a href="/admin/account/list/0/2">[维修工]审核异常用户</a></li>
+            </ul>
+    </div>
+    <div class="header">
+        <div class="wrapper">
+                <a id="home" href="/admin/" style="padding-left: 30px;"><img src="/static/images/icon_home.png"/>&nbsp;</a>
+                <a href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-1" {% ifequal current 'store'%}class="active"{% endifequal %}>餐厅</a> 
+                <a href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-2" {% ifequal current 'account'%}class="active"{% endifequal %}>用户中心</a>
+                <a id="account" href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-0"><img src="/static/images/icon_me.png"/> {{request.user.screen_name|default:request.user.name|default:request.user.username }}</a>
+        </div>
+    </div>
+          {% if form.errors %}
+                <script type="text/javascript">
+                balert("{% for field in form %}{% for error in field.errors %}{{field.label}}:<span class='f1'>{{ error|escape }}</span><br/>{% endfor %}{% endfor %}")</script>
+           {% endif %}          
+
+        {% if messages %}{% autoescape off %} {% for message in messages %} 
+            <script type="text/javascript">
+                balert('{{ message }}');
+            </script>
+        {% endfor %} {% endautoescape %}
+        {% endif %} 
+        {% block headline %}
+        {% endblock %}
+        {% block content %}{% endblock %}   
+        <div class="copyright center">&copy; 51quickfix 2015. AUTHOR kevin(376105482@qq.com) </div>
+
+</body>
+
+</html>

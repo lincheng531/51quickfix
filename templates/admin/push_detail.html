@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content">
+    <ul class="nav nav-tabs">
+        <li class="active"><a target="_self" href="/admin/{{current}}/list" class="btn">列表</a></li>
+        <li style="display:none"><a href="/admin/{{current}}/edit/{{oid}}" class="btn">修改</a></li>
+        <li style="display: none"><a href="/admin/{{current}}/append">添加</a></li>
+    </ul>
+    <br />
+    <div class="table-responsive">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+        <tr>
+            <th>用户：</th>
+            <td> {{item.user.name}}</td>
+        </tr>
+       
+        <tr>
+            <th>描述：</th>
+            <td> {{item.content}}</td>
+        </tr>
+    </table>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,257 @@
+body {
+    font-family: "黑体-简";
+    font-size: 18px;
+    font-weight: 500;
+    color: #374256;
+    background-color: transparent;
+}
+
+.nav-active-orange .nav-link.active,
+.nav-active-orange .nav > li.active > a {
+    color: rgba(255, 255, 255, 0.87) !important;
+    background-color: #ff7315 !important;
+}
+
+.navbar {
+    height: 66px;
+    background-color: #374256;
+}
+
+.navbar-nav .nav-item + .nav-item {
+    margin-left: 110px;
+}
+
+.navbar-nav > .nav-item > .nav-link {
+    padding: 5px 32px;
+}
+
+footer {
+    background-color: #374256;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.p-r-10 {
+    padding-right: 10px;
+}
+
+.p-r-12 {
+    padding-right: 12px;
+}
+
+.p-l-10 {
+    padding-left: 10px;
+}
+
+.p-l-12 {
+    padding-left: 12px;
+}
+
+.text-small {
+    font-size: 14px;
+}
+
+.text-md-small {
+    font-size: 16px;
+}
+
+.text-middle {
+    font-size: 24px;
+}
+
+.text-large {
+    font-size: 36px;
+}
+
+.text-orange {
+    color: #ff7315;
+}
+
+.text-grey-lt {
+    color: #c3c6cc;
+}
+
+.b-orange {
+    border-color: #ff7315;
+}
+
+.card {
+    width: 240px;
+    height: 320px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background: #fafafa;
+    z-index: 1;
+}
+
+.card-icon {
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+
+.card-icon img {
+    width: 100px;
+    height: 100px;
+}
+
+.card-title {
+    margin: 15px auto;
+}
+
+.card-desc {
+    margin-bottom: 5px;
+}
+
+.card-download {
+    margin: 20px 25px;
+}
+
+.b-black-custom {
+    border-color: #2a2b3c;
+}
+
+.card-download .btn.b-black-custom:hover,
+.card-download .btn.b-black-custom:focus {
+    color: #ff7315;
+    background: transparent;
+    border-color: #ff7315;
+}
+
+#app-downloads {
+    margin-top: 180px;
+}
+
+#city-sketch {
+    position: fixed;
+    bottom: 120px;
+    width: 100%;
+    height: 450px;
+    background-image: url("/static/website/img/city_sketch.png");
+    background-size: cover;
+    z-index: -1;
+}
+
+#clickGoDown {
+    position: fixed;
+    left: 50%;
+    margin-left: -29px;
+    top: 87%;
+}
+
+#clickGoDown .button {
+    width: 58px;
+    height: 58px;
+    background-image: url("/static/website/img/btn_arrow.png");
+    background-size: cover;
+}
+
+#clickGoDown .button:focus {
+    background-image: url("/static/website/img/btn_arrow_click.png");
+    background-size: cover;
+}
+
+.intro .title {
+    padding-top: 50px;
+    padding-bottom: 25px;
+    color: #c1c2c5;
+    opacity: 0.6;
+    letter-spacing: 0.3rem;
+}
+
+.intro .desc {
+    padding: 20px 8px;
+    border: 1px solid #c6c6c6;
+    letter-spacing: 0.1rem;
+    line-height: 150%;
+}
+
+.intro .content {
+    font-family: "华文宋体";
+    font-size: 14px;
+    color: #878c9a;
+    text-indent: 2em;
+}
+
+#partner {
+    padding-top: 70px;
+    padding-bottom: 75px;
+}
+
+.func-intro-text {
+    position: absolute;
+    letter-spacing: 0.1rem;
+    margin-left: 88px;
+    margin-top: 160px;
+}
+
+.func-intro-text .en {
+    margin-top: 15px;
+}
+
+.func-intro-card {
+    width: 255px;
+    height: 340px;
+    padding: 18px 30px;
+}
+
+.func-intro-card .icon img {
+    width: 35%;
+}
+
+.func-intro-card hr {
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+.func-intro-card .detail {
+    line-height: 150%;
+}
+
+.process-title {
+    background-color: #374256;
+}
+
+footer .title {
+    padding: 45px 27px 36px 27px;
+    color: #565e6d;
+    letter-spacing: 0.1rem;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+footer .content {
+    padding: 36px 27px;
+}
+
+footer .icon {
+    float: left;
+}
+
+footer .icon img{
+    width: 45%;
+}
+
+footer .text-grey-dk {
+    color: #878e9a;
+}
+
+footer .email {
+    padding-top: 36px;
+}
+
+footer .email-text {
+    line-height: 43px;
+}
+
+footer .text-big {
+    font-size: 20px;
+}
+
+footer #boss {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f9f9f9;
+}

@@ -1,0 +1,50 @@
+{% extends "store/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#id_scrap_time').click(function(){
+            WdatePicker();
+        });
+    });
+</script>
+<style type="text/css">  
+    
+
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">账号管理</a> >账号</span>  </div>
+    <div class="box clearfix">
+    <div class="content"  style="width: 100%">
+             <table width="100%" class="table3">
+                <tr>
+                <th style="width: 25%" class="tr">类别</th><td>{{res.category_name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                    <a href="/store/{{current}}/edit/{{res.id}}" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 编辑
+                    </a>
+                </td>
+                </tr>
+                <tr><th class="tr">姓名</th><td colspan="2">{{res.name}}</td></tr>
+                <tr><th class="tr">手机号码</th><td colspan="2">{{res.mobile}}</td></tr>
+                {%ifequal res.category '1' %}
+                <tr><th class="tr">负责餐厅</th><td colspan="2">{{res.store.name}}({{res.store.no}})</td></tr>
+                <tr><th class="tr">区域</th><td colspan="2">{{res.area}}</td></tr>
+                <tr><th class="tr">地址</th><td colspan="2">{{res.store.address}}</td></tr>
+                {%endifequal%}
+                {%ifequal res.category '3' %}
+                <tr><th class="tr">区域</th><td colspan="2">{{res.area}}</td></tr>
+                {%endifequal%}
+                {%ifequal res.category '4' %}
+                <tr><th class="tr">负责餐厅</th><td colspan="2">
+                    {%for s in res.store%}
+                    <p>{{s.city}}-{{s.name}}({{s.no}})</p>
+                    {%endfor%}
+                </td></tr>
+                {%endifequal%}
+            </table>
+    </div>
+    </div>
+</div> 
+
+{% endblock %}

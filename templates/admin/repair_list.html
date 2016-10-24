@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content" style="margin:0;padding:0">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:void(0);" class="btn">列表</a></li>
+        <li><a href="/admin/{{current}}/append" target="_self" class="btn fr">添加</a></li>
+    </ul>
+    <br />
+    <div class="table-responsive">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+            <tr>
+                <td class="brline" width="13">
+                    <input name="" type="checkbox" value="" 
+                    onclick=$("input[class='c']").prop("checked",this.checked);>
+                </td>
+                <td><span class="cblue">全部</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="brline" width="13"></td>
+                <td>商家</td>
+                <td>供应商</td>
+                <td>维修品</td>
+                <td>维修品序列号</td>
+                <td>生产日期</td>
+                <td>安装日期</td>
+                <td>过期日期</td>
+                <td>创建日期</td>
+                <td>操作</td>
+            </tr>
+            {% if res %} {% for re in res %}
+            <tr>
+                <td class="brline">
+                    <input name="" type="checkbox" class="c" value="{{re.id}}">
+                </td>
+                <td><a target="_self" href="/admin/{{current}}/detail/{{ re.id }}"> {{ re.user.name }}</a></td>
+                <td>{{ re.supplier.name }}</td>
+                <td>{{ re.product.name }}</td>
+                <td>{{ re.product_code }}</td>
+                <td>{{ re.production_date }}</td>
+                <td>{{ re.installation_date }}</td>
+                <td>{{ re.expiration_date }}</td>
+                <td>{{ re.create_time }}</td>
+                <td>
+                    <a href="/admin/{{current}}/edit/{{ re.id }}" target="_self">修改</a> &nbsp;
+                    <a href="/admin/{{current}}/delete/{{ re.id }}" class="del" onclick="return confirm('Are you sure you want to delete this item?');">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="9">{% include "admin/pager.html" %}</td>
+                <td></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9" style="text-align:center">暂无</td>
+                <td></td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{%endblock%}

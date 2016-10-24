@@ -1,0 +1,115 @@
+{% extends "store/base.html" %}
+{% block header %}
+<script src="/static/js/kfilter.js"></script>
+<script src="/static/js/dropdown.js"></script>
+<script src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+{% endblock %}
+{% block head %} 
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_start_time,#id_end_time').click(function(){
+            WdatePicker();
+        });
+
+        $(".nice-select").kfilter(function(title){
+            jump('store', title, 'page')
+
+        }) 
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+    })
+</script>
+{% endblock %}
+{%block content%}
+{% load helpers %} 
+<div class="wrapper">
+    <h1 class="f4">新建盘点任务</h1>
+    <div class="append">
+        <form action="" method="POST" id="task_append_form">
+            <div class="clearfix">
+                <span class="fl">标题<input type="text" name="title"> </span>
+                <span class="fr">共计<span class="f1" id="store_total">{{stores.count}}</span>家</span>
+            </div>
+            <div class="clearfix">
+                任务时效 <input type="text" name="start_time" id="id_start_time"> - 
+                <input type="text" name="end_time" id="id_end_time">
+                <input type="hidden" value="{{oid}}" name="oid" id="id_oid"/>
+            </div>
+        </form>
+    </div> 
+     {{form}}
+     <div class="result">
+            <div class="sub_nav">{{request.GET|search_box}} </div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td onclick="ctoggle('.targetp')" class="center">城市 <img src="/static/images/icon_Triangle.png"></td>
+            <td>编号</td>
+            <td>商户</td>
+            <td>开业时间</td>
+            <td>餐厅经理</td>
+            <td></td>
+            <td width="50px;"></td>
+        </tr>
+        </thead>
+        <tbody> 
+        <tr class="targetp" style="display:none">
+            <td colspan="7">
+                <div class="ccity active">
+                <div class="cheader">
+                    <a href="javascript:void(0)" class="tag_X" v='FIRST'>常用</a>
+                    <a href="javascript:void(0)" class="tag_X" v="ABCD">ABCD</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="EFGH">EFGH</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="IJKL">IJKL</a>
+                    <a href="javascript:void(0)" class="tag_X" v="MNOP">MNOP</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="QRST">QRST</a>  
+                    <a href="javascript:void(0)" class="tag_X" v="UVWX">UVWX</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="YZ">YZ</a>
+                </div>
+                <div class="cbody"><a href="?">全部</a> {{request.GET|city}}</div>
+                </div>
+            </td>
+        </tr>
+        {% if stores %} {% for re in stores %}
+        <tr id="bk_{{re.id}}" onmouseover="this.style.backgroundColor='#e1e1e1'" onmouseout="this.style.backgroundColor='#fff'">
+            <td style="width:80px" class="center"><input type="hidden" value="{{re.id}}"  class="c"><a href="/store/assets/store/{{re.id}}">{{ re.city }}</a></td>
+            <td style="width:80px"><a href="/store/assets/store/{{re.id}}">{{ re.no|fix_none }}</a></td>
+            <td class="tip1"><a href="/store/assets/store/{{re.id}}">{{ re.name }}</a><p><a href="/store/assets/store/{{re.id}}">{{re.address}}</a></p></td>
+            <td>{{ re.opening_time|date:'Y年m月d日' }}</td>
+            <td  style="line-height: 20px;">{{ re.store_manager }}<p class="f3">{{re.mobile|fix_none}}</p></td>
+            <td>待盘点{{ re.device_count }}项</td>
+            <td style="text-align: center"><img onclick="$('#bk_{{re.id}}').remove();$('#store_total').html($('.c').length)" src="/static/images/icon_close.png"/></td>
+        </tr>
+        {% endfor %}
+      
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align:center">暂无</td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+<div id="cpanle">
+    <div class="wrapper">
+        <input type="button" class="b2" value="申请盘点" onclick="query_inventory()" />
+        <input type="button" class="b2" value="取消"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-25;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

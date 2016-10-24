@@ -1,0 +1,54 @@
+{% extends "store/base.html" %} {%block content%}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#id_expiration_date').click(function(){
+            WdatePicker();
+        });
+    });
+</script>
+<style type="text/css">
+
+
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">固定资产</a> >资产卡片</span>  <span class="fr">编号:{{device.uid}}</span></div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form">
+             <table width="100%">
+                {% for field in form %}
+                <tr>
+                    <th>{{ field.label_tag }}</th>
+                    <td style="width: 180px;">{{ field }} </td>
+                </tr>
+                {% endfor %}
+                <tr><td></td><td class="tl"> <input type="submit" class="b2" value="保存" /></td></tr>
+            </table>
+    </form>
+    <div class="siderbar center">
+        <div class="w1">
+            <h3><img src="/static/img/store/{{device.store.head_type}}.png" width="60px;"></h3>
+            <p>{{device.store.name}} </p>
+            <p class="f3">{{device.store.no}}</p>
+            <p class="f3">{{device.store.tel}}</p>
+            <p class="f3">{{device.store.address}}</p>
+        </div>
+         <div class="w3">
+            <table id="timeline">
+                {% for ti in timers %}
+                <tr>
+                    <td style="width: 60px"><img src="/static/images/time_dot.png"/></td>
+                    <td class="tl">
+                    <p class="f3">{{ti.create_time}}</p>
+                    <p>{{ti.error}}</p>
+                    <p class="f3">{{ti.name}}({{ti.company}} {{ti.city}})</p>
+                    <p class="f3">{{ti.mobile}}</p>
+                    </td>
+                    <td class="f3 tr" valign="top">{{ti.status}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div> 
+{% endblock %}

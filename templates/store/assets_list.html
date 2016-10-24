@@ -1,0 +1,183 @@
+{% extends "store/base.html" %}
+{% block header %}
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+{% endblock %}
+{% block head %} 
+<script type="text/javascript">
+    $(document).ready(function(){ 
+        $(".nice-select").kfilter(function(title){
+            jump('store', title, 'page')
+
+        })
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('brand', title, 'page')
+            })
+        })
+         $('#dropdown_2').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('product', title, 'page')
+            })
+        })
+         $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+    })
+</script>
+{% endblock %}
+{%block content%}
+{% load helpers %} 
+{{'brand'|nav_box}}
+{{'product'|nav_box}}
+<div class="sub_nav"> </div>
+<div class="wrapper">
+    <table class="search">
+        <tr><td></td><td class="eng" colspan="2">
+                <a href="javascript:void(0)" class="tag_X" v="A">A</a> 
+                <a href="javascript:void(0)" class="tag_X" v="B">B</a> 
+                <a href="javascript:void(0)" class="tag_X" v="C">C</a> 
+                <a href="javascript:void(0)" class="tag_X" v="D">D</a> 
+                <a href="javascript:void(0)" class="tag_X" v="E">E</a> 
+                <a href="javascript:void(0)" class="tag_X" v="F">F</a> 
+                <a href="javascript:void(0)" class="tag_X" v="G">G</a>
+                <a href="javascript:void(0)" class="tag_X" v="H">H</a>
+                <a href="javascript:void(0)" class="tag_X" v="I">I</a>
+                <a href="javascript:void(0)" class="tag_X" v="J">J</a>
+                <a href="javascript:void(0)" class="tag_X" v="K">K</a> 
+                <a href="javascript:void(0)" class="tag_X" v="L">L</a>
+                <a href="javascript:void(0)" class="tag_X" v="M">M</a> 
+                <a href="javascript:void(0)" class="tag_X" v="N">N</a> 
+                <a href="javascript:void(0)" class="tag_X" v="O">O</a> 
+                <a href="javascript:void(0)" class="tag_X" v="P">P</a> 
+                <a href="javascript:void(0)" class="tag_X" v="Q">Q</a> 
+                <a href="javascript:void(0)" class="tag_X" v="R">R</a>
+                <a href="javascript:void(0)" class="tag_X" v="S">S</a> 
+                <a href="javascript:void(0)" class="tag_X" v="T">T</a> 
+                <a href="javascript:void(0)" class="tag_X" v="U">U</a> 
+                <a href="javascript:void(0)" class="tag_X" v="V">V</a>
+                <a href="javascript:void(0)" class="tag_X" v="W">W</a>
+                <a href="javascript:void(0)" class="tag_X" v="X">X</a> 
+                <a href="javascript:void(0)" class="tag_X" v="Y">Y</a> 
+                <a href="javascript:void(0)" class="tag_X" v="Z">Z</a>
+        </td></tr>
+        <tr>
+            <td class="brline" width="60">城市</td>
+            <td width="50"> <a class="f1" href="?">全部</a></td>
+            <td>{{request.GET|city}}</td></tr>
+            <tr><td class="brline">类别</td>
+            <td>
+                <a href="?" class="f1">全部</a></td><td>
+                {% for d in device_type %}
+                 <a href="javascript:void(0)" onclick="jump('category', '{{d}}', 'page')">{{d}}</a> 
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td class="brline">品类</td>
+            <td> <a href="?" class="f1">全部</a> </td><td>
+                {% for d in device_category %}
+                    <a href="javascript:void(0)" onclick="jump('efcategory', '{{d}}', 'page')">{{d}}</a>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td class="brline">餐厅</td>
+            <td> <a href="?" class="f1">全部</a></td><td>
+                <div class="nice-select">
+                    <input type="text" value="请选择餐厅">
+                    <ul>
+                        {%for s in request.GET|store%}
+                        <li id="{{s.id}}">{{s.no}}-{{s.name}}</li>
+                        {%endfor%}
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="sub_nav wrapper">{{request.GET|search_box}} </div>
+<div class="wrapper">
+    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+                {%for b in brand %}
+                <li><a href="?brand={{b}}">{{b}}</a></li>
+                {% endfor %}
+            </ul>
+    </div>
+ 
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td class="brline"><input type="checkbox" id="select_all" onclick="check_all('#select_all','.c')"> 全选</td>
+            <td>固定资产编号</td>
+            <td id="dropdown_1" ref="brand">品牌 <img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_2", ref="product">设备/设施名称 <img src="/static/images/icon_Triangle.png"></td>
+            <td>型号</td>
+            <td>规格</td>
+            <td onclick="">使用状态 <img src="/static/images/icon_Triangle.png"></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if res %} {% for re in res %}
+        {%ifequal re.table_name 'store'%}
+        <tr class="store">
+            <td colspan="4">
+            <input type="checkbox" id="p_{{re.id}}" class="sid" value="{{re.id}}" onclick="check_all('#p_{{re.id}}', '.c_{{re.id}}')"> 
+            <a class="f1" href="/store/{{current}}/store/{{re.id}}">{{re.city}} {{re.name}} </a>{{re.no}}</td>
+            <td colspan="3" style="text-align: right"><input type="button" onclick="bcheck_all('#p_{{re.id}}', '.c_{{re.id}}')" class="b1" value="全选"></td>
+        </tr>
+        {% else %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}" onclick="show_control('{{re.id}}')">
+            <td class="brline">
+                <input name="" type="checkbox" class="c c_{{re.store.id}}" value="{{re.id}}">
+            </td>
+            <td>{{ re.no|fix_none }}</td>
+            <td>{{ re.brand }}</td>
+            <td>{{ re.name }}</td>
+            <td>{{ re.model }}</td>
+            <td>{{ re.specifications }}</td>
+            <td>{{ re.state|fix_none }}</td>
+        </tr>
+        <tr id="bkc_{{re.id}}" class="center none"><td colspan="7">
+            <a href="/store/assets/detail/{{re.id}}">编辑</a> | 
+            <a href="javascript:void(0)">挑拨</a> | 
+            <a href="javascript:void(0)">买卖</a> | 
+            <a href="javascript:void(0)">租借</a> | 
+            <a href="javascript:void(0)">报废</a> |  
+            <a href="javascript:void(0)">闲置</a></td></tr>
+        {% endifequal %}
+        {% endfor %}
+        <tr>
+            <td colspan="7">{% include "pager.html" %}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align:center">暂无</td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+<div id="cpanle">
+    <a href="javascript:void(0)">盘点</a>   |   
+    <a href="javascript:void(0)">生成二维码</a> |   
+    <a href="javascript:void(0)" onclick="dump_export();">导出</a>
+    <form id="dump_idc" action="/store/assets/dump" method="POST" style="display:none">
+        <input type="hidden" name="oid" id="dump_idc_oid" value="">
+    </form>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-60;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

@@ -1,0 +1,21 @@
+.nav-active-primary .nav-link.active, .nav-active-primary .nav > li.active > a {
+    color: rgba(255, 255, 255, 0.87) !important;
+    background-color: #ff7043 !important;
+}
+
+.nav .nav-item {
+    font-size: 1.125em;
+}
+
+#search input{
+    border: 2px solid #ff7043;
+
+}
+
+#search .input-group-btn>.btn {
+    border: 2px solid #ff7043;
+}
+
+#date-filter input {
+    border: none;
+}

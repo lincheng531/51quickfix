@@ -1,0 +1,115 @@
+ {% extends "store/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#id_scrap_time').click(function(){
+            WdatePicker();
+        });
+
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+
+        $('#dropdown_0').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('supplier', title, 'page')
+            })
+        })
+
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('brand', title, 'page')
+            })
+        })
+        $('#dropdown_2').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('product', title, 'page')
+            })
+        })
+        $('#dropdown_3').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('status', title, 'page')
+            })
+        })
+
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+
+    });
+</script>
+<style type="text/css">
+
+</style>
+{{'supplier'|nav_box}}
+{{'brand'|nav_box}}
+{{'product'|nav_box}}
+{{'use_status'|nav_box}}
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > 
+    <a href="/store/{{current}}/list">标准设备管理</a> >设备明细</span>  </div>
+    <div class="box clearfix">
+    <div class="content">
+             <table width="100%">
+                <tr>
+                <th style="width: 25%" class="tr">名称</th><td>{{product.name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                    <a href="/store/{{current}}/edit/{{product.id}}" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 编辑
+                    </a>
+                </td>
+                </tr>
+                <tr><th class="tr">类别</th><td> {{product.category}} </td></tr>
+                <tr><th class="tr">设备设施类别</th><td> {{product.efcategory}} </td></tr>
+                <tr><th class="tr">品牌</th><td> {{product.brand.name}} </td></tr>
+                <tr><th class="tr">供应商</th><td> {{product.supplier.name}} </td></tr>
+                <tr><th class="tr">编号</th><td> {{product.no|fix_none}} </td></tr>
+                <tr><th class="tr">采购码</th><td> {{product.purchase_code}} </td></tr>
+                <tr><th class="tr">设备名称</th><td> {{product.name}} </td></tr>
+                <tr><th class="tr">型号</th><td> {{product.model|fix_none}} </td></tr>
+                <tr><th class="tr">规格</th><td> {{product.specification|fix_none}} </td></tr>
+                <tr><th class="tr">保固期(月)</th><td> {{product.repair_time}} </td></tr>
+                <tr><th class="tr">描述</th><td> {{product.description}} </td></tr>
+            </table>
+    </div>
+</div> 
+</div>
+<div class="wrapper" style='margin-bottom: 60px;'>
+        <div class="device_search clearfix">
+            <h3>零件清单<span class="f2">({{spares|count}})</span></h3>
+            {{'查询|请输入编号,名称,或者品牌'|search_squar}} 
+        </div>
+         <div class="result">
+            <div class="f2">共找到<b>{{p.object_list|count}}</b>个符合条件的结果</div>
+            <div class="sub_nav">{{request.GET|search_box}} </div>
+        </div>
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table center">
+        <thead>
+        <tr>
+            <td>编号</td>
+            <td>名称</td>
+            <td>品牌</td>
+            <td>型号</td>
+            <td>单价</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if spares %} {% for re in spares %}
+        <tr onclick="window.location.href='/store/{{current}}/spare/detail/{{product.id}}/{{re.id}}'">
+            <td class="brline" style="width: 200px">{{ re.no }}</td>
+            <td>{{ re.name }}</td>
+            <td>{{ re.brand_name|fix_none }}</td>
+            <td>{{ re.model|fix_none }}</td>
+            <td>{{ re.price }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody></table>
+</div>
+
+{% endblock %}

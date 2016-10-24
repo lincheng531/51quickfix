@@ -1,0 +1,44 @@
+{% extends "provider/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#id_scrap_time').click(function(){
+            WdatePicker();
+        });
+    });
+</script>
+<style type="text/css">  
+    
+
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/provider/repair/list?q=0">首页</a> > 
+    <a href="/provider/{{current}}/list?q=2">账号管理</a> >账号</span>  </div>
+    <div class="box clearfix">
+    <div class="content"  style="width: 100%">
+             <table width="100%" class="table3">
+                <tr>
+                <th style="width: 25%" class="tr">类别</th><td>{{res.category_name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                    <a href="/provider/{{current}}/edit/{{res.id}}" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 编辑
+                    </a>
+                </td>
+                </tr>
+                <tr><th class="tr">城市</th><td colspan="2">{{res.city}}</td></tr>
+                <tr><th class="tr">姓名</th><td colspan="2">{{res.name}}</td></tr>
+                <tr><th class="tr">手机号码</th><td colspan="2">{{res.mobile}}</td></tr>
+                {%ifequal res.category '2'%}
+                <tr><th class="tr">下属维修工</th><td colspan="2">
+                {%for u in res.repair_user %}
+                    <a href="/provider/account/detail/{{u.user.id}}">{{u.user.name}}({{u.user.username}})</a>
+                {%endfor%}
+                </td></tr>
+                {%endifequal%}
+            </table>
+    </div>
+    </div>
+</div> 
+
+{% endblock %}

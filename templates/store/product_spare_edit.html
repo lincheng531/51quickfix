@@ -1,0 +1,39 @@
+{% extends "store/base.html" %}
+{%block content%}
+{% load helpers %} 
+<script type='text/javascript' src='/static/js/sfilter.js'></script>
+<link rel="stylesheet" href='/static/css/sfilter.css' type="text/css" />
+<script type="text/javascript">
+    $(function(){
+        $("#id_brand").sfilter(function(){});
+
+    });
+</script>
+
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > 
+    <a href="/store/{{current}}/list">标准设备管理</a> >新增标准设备</span> </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" style="width: 100%">
+            <table width="100%">
+
+                <tr><th>设备品牌</th><td> {{form.brand}} </td></tr>
+                <tr><th>设备名称</th><td> {{form.product_name}} </td></tr>
+                <tr><th>型号</th><td> {{form.model}} </td></tr>
+                <tr><th>零件编号</th><td> {{form.no}} </td></tr>
+                <tr><th>零件名称</th><td> {{form.name}} </td></tr>
+                <tr><th>零件品牌</th><td> {{form.brand_name}} </td></tr>
+                <tr><th>零件单价</th><td> {{form.price}} </td></tr>
+                <tr><th>整机保固周期（月）零件</th><td> {{form.warranty1}} </td></tr>
+                <tr><th>整机保固周期（月）人工</th><td> {{form.warranty2}} </td></tr>
+                <tr><th>零件更换后保固周期（月）</th><td> {{form.warranty3}} </td></tr>
+                <tr><th>备注</th><td> {{form.content}} </td></tr>
+                <tr><td></td><td class="tl"> 
+                                <input type="submit" class="b2" value="更新"  /> 
+                                
+                            </td></tr>
+            </table>
+    </form>
+</div> 
+
+{%endblock%}

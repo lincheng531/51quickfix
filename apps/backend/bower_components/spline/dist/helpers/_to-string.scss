@@ -1,0 +1,33 @@
+// To String
+// ===
+//
+// Takes a list and returns a string that's been comma seperated
+//
+// @param $list [List] : list to be converted into comma seperated string
+// @param $separator [String] : the preferred separator placed inbetween list items
+// @return [String]
+
+@function to-string($list, $separator: ', ') {
+    $index: 0;
+    $result: '';
+    @if type-of($list) != "list" {
+        @warn "`to-string` function expecting a list for $list; #{type-of($list)} given.";
+        @return false;
+    }
+
+    @if type-of($separator) != "string" {
+        @warn "`to-string` function expecting a string for $separator; #{type-of($separator)} given.";
+        @return false;
+    }
+
+    @each $nth in $list {
+        $index: $index + 1;
+        @if $index > 0 {
+            $result: $result + $separator + $nth;
+        } @else if $index == 0 {
+            $result: $nth;
+        }
+    }
+
+    @return $result;
+}

@@ -1,0 +1,16 @@
+{% load bootstrap_tags %}
+<div id="search_order_form">
+    {{ form|as_bootstrap_horizontal }}
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var groups = $('#search_order_form').children(".form-group");
+        var groups_len = groups.length;
+        $.each(groups, function(i, ele){
+            $(ele).find('.col-md-2').css({'padding':'8px 0','text-align':'center'})
+            $(ele).find('.col-md-10').css('padding', '0')
+            $(ele).find('.col-md-10').find('input, select').css('width', '70%')
+            $(ele).css({'width':'50%', 'float':'left'})
+        })
+    })
+</script>

@@ -1,0 +1,121 @@
+<style>
+    #maintenance-info .box {
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="row" id="maintenance-info">
+    <div class="col-md-12">
+        <div ui-include="'/static/views/htmls/detail-breadcrumb.html'"></div>
+    </div>
+    <div class="col-md-3 pull-right">
+        <div ui-include="'/static/views/htmls/detail-sidebar.html'"></div>
+    </div>
+    <div class="col-md-9">
+        <div class="box">
+            <div class="box-header dker">
+                <h3>报修信息</h3>
+            </div>
+            <div class="box-body m-t clearfix">
+                <div class="row" ng-repeat="row in infoTable">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted" ng-bind="row.label"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="row.text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-md-push-4 m-t-sm m-b">
+                    <div>
+                    <span ng-repeat="img in images">
+                        <img class="img-rounded" alt="" ng-src="{{img}}" width="64" height="64"
+                             data-toggle="modal" data-target="#img-{{$index}}" ui-toggle-class="zoom"
+                             ui-target="#animate">
+                        &nbsp;&nbsp;
+
+                        <!-- .modal -->
+                        <div id="img-{{$index}}" class="modal fade animate">
+                          <div class="modal-dialog" id="animate">
+                            <div class="modal-content">
+
+                              <div class="modal-body text-center p-lg">
+                                <img class="img-rounded" alt="" ng-src="{{img}}">
+                              </div>
+                            </div><!-- /.modal-content -->
+                          </div>
+                        </div>
+                        <!-- / .modal -->
+
+                    </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header dker">
+                <h3>维修情况</h3>
+            </div>
+            <div class="box-body">
+                <div class="row padding">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <span class="avatar w-64">
+                                <img ng-src="{{fixer.avatar_img}}" alt="...">
+                                <i class="busy b-white right"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <span>
+                                <h5 ng-bind="fixer.screen_name">
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <span class="text-muted">维修</span>
+                                </h5>
+                                <span class="text-muted p-t" ng-bind="fixer.mobile"></span>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header dker">
+                <h3>商户</h3>
+            </div>
+            <div class="box-body">
+                <div class="row padding">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <span class="avatar w-64">
+                                <img ng-src="{{reporter.avatar_img}}" alt="...">
+                                <i class="busy b-white right"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <span>
+                                <h5 ng-bind="reporter.screen_name">
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <span class="text-muted">报修</span>
+                                </h5>
+                                <span class="text-muted p-t" ng-bind="reporter.mobile">
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

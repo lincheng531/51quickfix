@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="/static/styles/store.css" type="text/css"/>
+
+<div class="row mynav">
+    <div class="row">
+        <div class="col-md-4">
+            <form class="m-t-md m-b-sm ng-pristine ng-valid">
+                <div class="input-group input-group-sm" id="search">
+                    <span class="input-group-btn">
+                        <a class="btn no-shadow deep-orange-400 text-white" type="button">商户</a>
+                    </span>
+                    <input type="text" class="form-control" placeholder="请输入商户名称或编号" ng-model="search_q">
+                    <span class="input-group-btn">
+                        <a class="btn no-shadow deep-orange-400 text-white" type="button"
+                           ui-sref="app.store.search({search_q: search_q})"><i class="fa fa-search"></i></a>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <div class="b-b-2x b-primary nav-active-primary">
+        <div class="row row-sm">
+            <form class="form-inline" role="form">
+                <div class="pull-right p-t-xs p-r" id="date-filter">
+                    <label class="p-r-xs text-muted">开业时间</label><input type="datetime">
+                    <label> 至 </label><input type="datetime">
+                </div>
+                <div class="form-group col-xs-4">
+                    <label class="form-control-label text-muted">城市</label>
+                    <select class="form-control">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label text-muted">品牌</label>
+                    <select class="form-control">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="m-t m-b-md">
+        <div ui-view="store"></div>
+    </div>
+</div>

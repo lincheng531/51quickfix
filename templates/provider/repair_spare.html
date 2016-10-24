@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="never">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">  
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.dropdown.min.js"></script>
+    <script src="/static/js/jquery.blockui.js"></script>
+    <script src="/static/js/store.js"></script>
+    <link href="/static/css/jquery.dropdown.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    <link href="/static/css/store.css" rel="stylesheet">
+    {% block header %}{% endblock %} 
+    <title>Dashboard</title>
+    {% block head %}{% endblock %}
+</head> 
+<body>
+<style type="text/css">
+   .content{
+        padding: 10px;
+   } 
+
+
+</style>
+<script type="text/javascript">
+    
+    var select_spare = function(obj){
+                                        var counter = $('#bill_spare', $(window.parent.document)).children('tr').length + 1;
+                                        var objs    = obj.split('|');
+                                        var oid     = objs[0];
+                                        var no      = objs[1];
+                                        var name    = objs[2];
+                                        var price   = objs[3];
+                                        var status  = objs[4];
+                                        var parent  = $(window.parent.document);
+                                        var tr    = '<tr>'+
+                                                    '    <td>'+name+'</td>'+
+                                                    '    <td>'+no+'</td>'+
+                                                    '    <td>'+
+                                                    '<div class="button_group">'+ 
+                                                    '    <div class="button active" onclick="active_button(this)">'+
+                                                    '    自然<input type="radio" class="none" name="spare_category" value="1" checked="checked"/>'+
+                                                    '   </div>'+
+                                                    '    <div class="button" onclick="active_button(this)">'+
+                                                    '    人为<input type="radio" class="none" name="spare_category" value="0" />'+
+                                                    '   </div>'+
+                                                    '</div>'+
+                                                    '    </td>'+
+                                                    '    <td>{{device.expiration_date|date:"Y-m-d"}}</td>'+
+                                                    '    <td>'+
+                                                    
+                                                    ' <div class="button_group">'+
+                                                    '        <div class="button active" onclick="active_button(this)">'+
+                                                    '            保固<input class="none" type="radio" name="spare_status" '+
+                                                    'value="1"  checked="checked"/>'+
+                                                    '        </div>'+
+                                                    '        <div class="button"  onclick="active_button(this)">'+
+                                                    '            非保<input class="none" type="radio" name="spare_status"'+
+                                                    '            value="0" />'+
+                                                    '        </div>'+
+                                                    '    </div>'+
+                                                    '   </td>'+
+                                                    '    <td><input type="hidden" name="spare_price" value="'+price+'">'+
+                                                    '<span class="price">'+price+'</span></td>'+
+                                '<td><input class="count input3"'+
+                                    'onpropertychange="spare_change(this);sum_charge(\'.charge\', \'#sum_total2\')" '+
+                                    'oninput="spare_change(this);sum_charge(\'.charge\', \'#sum_total2\')" '+
+                                    'value="1" name="spare_count" value="1"/></td>'+
+                                    '<td><span class="spare_total">0</span>'+
+                                '<input class="charge" type="hidden" name="spare_charge" value="0">'+
+                                                    '</td>'+
+                                                    '    <td>'+
+                                '<input type="hidden" class="spare_id" name="spare_id" value="'+oid+'" />'+
+                                '<a href="javascript:void(0)" onclick="tr_delete(this);ctrigger(\'.charge\')">X</a>'+
+                                                    '   </td>'+
+                                                    '</tr>'; 
+                                        var total = 0;
+                                        $('#bill_spare', parent).append(tr);
+                                        $.each($('.charge', parent), function(index, item){
+                                            if($(item).attr('name')=='spare_charge'){
+                                                total += parseFloat($(item).val());  
+                                            }
+                                            
+                                        });
+                                        
+                                        $('#spare_total2', parent).html(total.toFixed(2));
+                                        var onpropertychange = jQuery.Event("onpropertychange");
+                                        var oninput = jQuery.Event("oninput");
+
+                                        $('.charge', parent).trigger(onpropertychange).trigger(oninput);
+                                        
+
+                                    } 
+
+</script>
+{% load helpers %}
+<div class="content">
+
+<div style="width:300px;line-height:32px;;height:32px;background-color:#878E9A;border-radius: 3px;margin: 0 auto">
+    <form action="" method="GET">
+        <input type="text"  value="请输入设备名称或者编号" onfocus="this.value=''" onblur="if(this.value==''){this.value='请输入设备名称或者编号'}"  name="tag" id="store" style="margin-left: 3px;width:268px;border:none;height:23px;line-height:23px;margin-bottom:2px;margin-right:3px;"/>
+        <input type="image" src="/static/images/icon_search.png" value="查询"/>
+    </form>
+</div>
+
+<br />
+<table class="table2" style="text-align: center;">
+    <thead>
+    <tr>
+        <td style="width:80px">编号</td>
+        <td style="width:300px;">零配件</td>
+        <td style="width:120px;">单价</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><td colspan="3" >
+        <div style="height: 400px;overflow: auto;">
+        <table>
+            {% for d in spares %}
+                <tr onmouseover="this.style.border='1px solid #ff7315';" onmouseout="this.style.border='0';" 
+                        onclick="select_spare('{{d.id}}|{{d.no}}|{{d.name}}|{{d.price}}|{{d.status}}')">
+                    <td style="width:80px;height:30px">{{d.no}}</td>
+                    <td style="width:300px;">{{d.name}}</td>
+                    <td style="width:120px;">{{d.price}}</td>
+                </tr>
+                {% endfor %}
+        </table>
+        </div>
+    </td></tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

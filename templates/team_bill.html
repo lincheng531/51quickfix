@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>球队账单</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/xls.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row">
+                {% for sheet  in sheets %}
+          <div class="panel panel-primary">
+              <div class="panel-heading">{{ sheet.name }}</div>
+              <div class="panel-body my-content">
+                <div class="table-responsive">
+                <table class="table table-hover">
+                    {% for row in sheet.rows %}
+                    <tr>
+                        {% for field in row %}
+                        <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                </div>
+
+              </div>
+           </div> 
+        {% endfor %}
+        </div>
+      </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>

@@ -1,0 +1,131 @@
+ {% extends "admin/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="http://www.mindat.org/js/jqzoom_v2.2/js/jquery.js"></script>
+<script src="http://www.mindat.org/js/jqzoom_v2.2/js/jquery.jqzoom.min.js" type="text/javascript" ></script>
+<link href="http://www.mindat.org/js/jqzoom_v2.2/style/jqzoom.css"  type="text/css" media="screen">
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    verify_account('input[name="licence_type"]');
+    verify_account('input[name="certificate_type"]');
+    $("#id_card, #id_card1").jqueryzoom({
+                xzoom: 300, 
+                yzoom: 300, 
+                offset: 10, 
+                position: "right", 
+                preload:1,
+                lens:1
+            })
+
+    $('#id_licence_day,#id_licence_day1,#id_certificate_day,#id_certificate_day1').click(function(){
+            WdatePicker();
+    });
+
+
+
+});
+</script>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">商户</a> >商户详细</span>  <span class="fr">{%if store.no %}编号:{{store.no}}{% endif %}</span></div>
+    <div class="box clearfix">
+    <div class="content" style="width: 100%">
+            <form action="" method="POST" id="form1" style="width: 100%">
+                 <table class="table" style="width: 100%">
+                    <tr><td colspan="2">
+                        <table style="width: 100%"> 
+                            <tr><td style="text-align: right;width: 190px">
+                                {%if store.logo %}
+                                    {%for logo in store.logo%}
+                                        <img src="{{logo}}" style="max-width: 200px;border:2px solid #e1e1e1;border-radius:25px;">
+                                    {%endfor%}
+                                {%endif%}
+                            </td><td style="width: 300px">
+                                    <p>编号:{{store.no|fix_none}}</p>
+                                    <p>品牌:{{store.category_name}}</p>
+                                    <p>名称:{{store.name}}</p>
+                                    <p>电话:{{store.tel|fix_none}}</p>
+                                    <p>位置:{{store.area|fix_none}} {{store.city|fix_none}}  {{store.district|fix_none}} {{store.address|fix_none}}</p>
+                            </td><td>
+                                {% if users %}
+                                <div class="cbox fl">
+                                    <table style="width:100%">
+                                    {%for user in users %}
+                                        <tr>
+                                            <td valign="top">主管</td>
+                                            <td style="line-height: 20px;">
+                                                <p> <a href="/admin/account/detail/{{user.id}}" class="f1">{{user.name|fix_none}} </a></p>
+                                                <p>{{user.username}}</p>
+                                            </td>
+                                        </tr>
+                                    {%endfor%}
+                                    </table>
+                                </div>
+                                {%endif%}
+                            </td></tr>
+                        </table>
+                    </td></tr>
+                    <tr><td colspan="2"><div class="hr"></div>营业执照</td></tr>
+                    <tr>
+                        <td style="width: 500px;">
+                        <img src="{{store.licence}}" id="id_card" style="max-width: 470px"></td>
+                        <td valign="top">
+                            <div class="cbox">
+                                <p>{{form.licence_type.0}}</p>
+                                <p>有效期:{{form.licence_day}}-{{form.licence_day1}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p> {{form.licence_type.1}}</p>
+                                <p>失败原因:</textarea>{{form.licence_msg}}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2">税务登记证<div class="hr"></div></td></tr>
+                    <tr>
+                        <td>
+
+                        <img src="{{store.certificate}}" id="id_card1" style="max-width: 470px"></td>
+                        <td valign="top">
+                            <div class="cbox">
+                                <p>{{form.certificate_type.0}}</p>
+                                <p>有效期:{{form.certificate_day}}-{{form.certificate_day1}}</p>
+                            </div>
+                            <div class="cbox">
+                                <p>{{form.certificate_type.1}}</p>
+                                <p>失败原因:{{form.certificate_msg}}</textarea></p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" align="center"> <input type="button" value="提交" onclick="valid_forms('#form1')" class="b2"></td></tr>
+                </table>
+               
+            </form>
+    </div>
+ 
+</div> 
+</div>
+
+
+<div id="cpanle" style="display:none">
+            <div class="wrapper">
+                <span class="fl">已选择<span class="f1" id="choose">0</span>个固定资产</span>
+                <a href="javascript:dump_qrcode();" >生成二维码</a>   |
+                <a href="javascript:void(0)">调拨</a>   |  
+                 <a href="javascript:void(0)">买卖</a>   |  
+                 <a href="javascript:void(0)">租赁</a>   |  
+                 <a href="javascript:void(0)">报废</a>   |  
+                 <a href="javascript:void(0)">闲置</a>
+                 <span class="fr" style="display:none"><a href="/store/assets/append/{{res.id}}">+新增资产</a></span>
+                 <form id="cdump_qrcode" action="/store/assets/qrcode" method="POST">
+                     <input type="hidden" name="oid" id="dump_qrcode_oid" value="">
+                </form>
+            </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-25;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{% endblock %}

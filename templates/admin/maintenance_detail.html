@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content">
+    <ul class="nav nav-tabs">
+        <li class="active"><a target="_self" href="/admin/{{current}}/list" class="btn">列表</a></li>
+        {%if item.bill %}
+        <li style="display: none"><a href="/admin/bill/detail/{{item.bill.id}}" class="btn">维修单</a></li>
+        {% endif %}
+    </ul>
+    <br />
+    <div class="table-responsive">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+            <tr>
+                <td>名称：</td>
+                <td>{{ item.user.name }}</td>
+            </tr>
+            <tr style="display:none">
+                <td>公司：</td>
+                <td>{{ item.user.company }}</td>
+            </tr>
+            <tr>
+                <td>门店名称：</td>
+                <td>{{ item.user.store }}</td>
+            </tr>
+            <tr>
+                <td>维修机器：</td>
+                <td>{{ item.product }}</td>
+            </tr>
+            <tr>
+                <td>区域：</td>
+                <td>{{ item.area }}</td>
+            </tr>
+            <tr>
+                <td>供应商：</td>
+                <td>{{ item.supplier }}</td>
+            </tr>
+            <tr>
+                <td>呼叫人：</td>
+                <td>{{ item.user_count }}（人）</td>
+            </tr>
+            <tr>
+                <td>回应人：</td>
+                <td>{{ item.apply_count }}（人）</td>
+            </tr>
+            <tr>
+                <td>确认人：</td>
+                <td>{{ item.confirm_count }}（人）</td>
+            </tr>
+            <tr>
+                <td>状态：</td>
+                <td>
+                    {% ifequal item.status 0%}
+                    <span class="label label-default">呼叫中</span> {%else%} {% ifequal item.status 1%}
+                    <span class="label label-primary">有回应</span> {% endifequal %} {% ifequal item.status 2%}
+                    <span class="label label-success">已确认</span> {% endifequal %} {% ifequal item.status -1%}
+                    <span class="label label-danger">取消</span> {% endifequal %} {%endifequal%}
+                </td>
+            </tr>
+            <tr>
+                <td>创建时间：</td>
+                <td>{{ item.create_time }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <ul class="nav nav-tabs">
+        <li class="active"><a target="_self" href="javascript:void(0)" class="btn">回应人：</a></li>
+    </ul>
+    <br />
+
+    <div class="table-responsive clear">
+        <table class="imagetable" style="width: 100%">
+            <tr>
+                <th>姓名</th>
+                <th>手机</th>
+                <th>技能</th>
+                <th>培训厂家</th>
+                <th>状态</th>
+                <th>更新时间</th>
+            </tr>
+            {% for d in item.details %}
+            <tr>
+                <td>{{d.user.name}}</td>
+                <td>{{d.user.username}}</td>
+                <td>{% for w in d.user.works%}{{w}} {% endfor %}</td>
+                <td>{% for j in d.user.train_desc%}{{j}}&nbsp;&nbsp;{%endfor%}</td>
+                <td>
+                {% ifequal d.status 0%}
+                    <span class="label label-default">呼叫中</span> {%else%} {% ifequal d.status 1%}
+                    <span class="label label-primary">有回应</span> {% endifequal %} {% ifequal d.status 2%}
+                    <span class="label label-success">已确认</span> {% endifequal %} {% ifequal d.status -1%}
+                    <span class="label label-danger">取消</span> {% endifequal %} {%endifequal%}
+                </td>
+                <td>{{d.update_time}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br />
+    </div>
+</div>
+{%endblock%}

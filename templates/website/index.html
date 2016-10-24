@@ -1,0 +1,32 @@
+{% extends "website/base.html" %}
+
+{% block content %}
+<div id="app-downloads">
+    <div class="row">
+        <div class="container">
+            <div class="col-md-6">
+                <div class="card text-center pull-right">
+                    <div class="card-icon"><img src="/static/website/img/icon_rest.png"></div>
+                    <div class="card-title">51快修·商户版</div>
+                    <div class="card-desc text-muted text-small">一切都是那么方便</div>
+                    <div class="card-download"><a href="http://www.51quickfix.com/app/install/index.html" target="_blank"
+                            class="btn btn-outline btn-sm rounded form-control b-black-custom p-x-md text-black text-md-small">我是商家</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-icon"><img src="/static/website/img/icon_repair_man.png"></div>
+                    <div class="card-title">51快修·维修版</div>
+                    <div class="card-desc text-muted text-small">哪里有需要, 我就在哪里</div>
+                    <div class="card-download"><a href="http://www.51quickfix.com/app/install/index.html" target="_blank"
+                            class="btn btn-outline btn-sm rounded form-control b-black-custom p-x-md text-black text-md-small">我是维修员</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="city-sketch"></div>
+<div id="clickGoDown"><a class="block button" href="home/intro"></a></div>
+{% endblock %}

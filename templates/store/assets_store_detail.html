@@ -1,0 +1,181 @@
+ {% extends "store/base.html" %} {%block content%}
+{% load helpers %}
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#id_scrap_time').click(function(){
+            WdatePicker();
+        });
+
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+
+        $('#dropdown_0').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('supplier', title, 'page')
+            })
+        })
+
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('brand', title, 'page')
+            })
+        })
+        $('#dropdown_2').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('product', title, 'page')
+            })
+        })
+        $('#dropdown_3').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('status', title, 'page')
+            })
+        })
+
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+
+    });
+</script>
+<style type="text/css">
+
+</style>
+{{'supplier'|nav_box}}
+{{'brand'|nav_box}}
+{{'product'|nav_box}}
+{{'use_status'|nav_box}}
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">固定资产</a> >餐厅卡片</span>  <span class="fr">编号:{{res.no}}</span></div>
+    <div class="box clearfix">
+    <div class="content">
+             <table width="100%">
+                <tr>
+                <th style="width: 25%" class="tr">名称</th><td>{{res.name}}</td>
+                <td class="tr" style="padding-right: 100px">
+                    <a href="/store/{{current}}/store/edit/{{res.id}}" style="padding: 10px">
+                        <img src="/static/images/icon_edit.png"> 编辑
+                    </a>
+                    {%if res.close_time %}
+                        <a href="javascript:void(0)" style="background-color:#FF3715;color:#fff">该店铺已经关闭</a>
+                    {%endif%}
+                </td>
+                </tr>
+                <tr><th class="tr">编号</th><td colspan="2">{{res.no|fix_none}}</td></tr>
+                <tr><th class="tr">固定电话</th><td colspan="2">{{res.tel|fix_none}}</td></tr>
+                <tr><th class="tr">传真</th><td colspan="2">{{res.fax|fix_none}}</td></tr>
+                <tr><td colspan="3"><div class="hr"></div></td></tr>
+                <tr><th class="tr">公司</th><td colspan="2">{{res.company|fix_none}}</td></tr>
+                <tr><th class="tr">位置</th><td colspan="2">{{res.area|fix_none}} {{res.city|fix_none}} {{res.district|fix_none}}</td></tr>
+                <tr><th class="tr">详细地址</th><td colspan="2">{{res.address|fix_none}}</td></tr>
+                <tr><th class="tr">交店时间</th><td colspan="2">{{res.delivery_time|date:'Y-m-d'}}</td></tr>
+                <tr><th class="tr">开业时间</th><td colspan="2">{{res.opening_time|date:'Y-m-d'}}</td></tr>
+                <tr><td colspan="3"><div class="hr"></div></td></tr>
+                <tr><th class="tr">门店经理</th><td colspan="2">{{res.store_manager|fix_none}}</td></tr>
+                <tr><th class="tr">电话</th><td colspan="2">{{res.mobile|fix_none}}</td></tr>
+            </table>
+    </div>
+    <div class="siderbar center">
+       
+        <div class="w3">
+            <div class="w3">
+            <table id="timeline">
+                 <tr>
+                    <td style="width: 60px"><img src="/static/images/time_dot.png"/></td>
+                    <td class="tl">今日</td>
+                    <td class="f3 tr" valign="top"></td>
+                </tr>
+                {% for ti in timers %}
+                <tr>
+                    <td style="width: 60px"><img src="/static/images/time_dot.png"/></td>
+                    <td class="tl">
+                    <p class="f3">{{ti.create_time}}</p>
+                    <p>{{ti.product}}({{ti.brand}}){{ti.error}}</p>
+                    <p class="f3">{{ti.name}}({{ti.company}} {{ti.city}})</p>
+                    <p class="f3">{{ti.mobile}}</p>
+                    </td>
+                    <td class="f3 tr" valign="top">{{ti.status}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        </div>
+    </div>
+</div> 
+</div>
+<div class="wrapper" style='margin-bottom: 60px;'>
+        <div class="device_search clearfix">
+            <h3>商户资产清单<span class="f2">({{devices.count}})</span></h3>
+            {{request.GET|search_deivce}} 
+        </div>
+        <div class="assets_search_form">{{form}}  {{request.GET|search_box}} </div>
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table center">
+        <thead>
+        <tr>
+            <td class="brline"><input type="checkbox" id="select_all" onclick="check_all('#select_all','.c')"> 全选</td>
+            <td id="dropdown_0" ref="supplier">供应商 <img src="/static/images/icon_Triangle.png"></td>
+            <td>固定资产编号</td>
+            <td id="dropdown_1" ref="brand">品牌 <img src="/static/images/icon_Triangle.png"></td>
+            <td id="dropdown_2", ref="product">设备/设施名称 <img src="/static/images/icon_Triangle.png"></td>
+            <td>型号</td>
+            <td>规格</td>
+            <td id="dropdown_3", ref="use_status">使用状态 <img src="/static/images/icon_Triangle.png"></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if devices %} {% for re in devices %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}" onclick="show_control('{{re.id}}')">
+            <td class="brline">
+                <input name="" type="checkbox" class="c c_{{re.store.id}}" onclick="check_one('.c')" value="{{re.id}}">
+            </td>
+            <td>{{ re.supplier.name }}</td>
+            <td>{{ re.no|fix_none }}</td>
+            <td>{{ re.brand }}</td>
+            <td>{{ re.name }}</td>
+            <td>{{ re.model|fix_none }}</td>
+            <td>{{ re.specifications|fix_none }}</td>
+            <td>{% if not re.state %}使用中{%else%}{{re.state}}{%endif%}</td>
+        </tr>
+        <tr id="bkc_{{re.id}}" class="center none">
+            <td colspan="8">
+            <a href="/store/assets/detail/{{re.id}}">编辑</a> | 
+            <a href="javascript:void(0)">挑拨</a> | 
+            <a href="javascript:void(0)">买卖</a> | 
+            <a href="javascript:void(0)">租借</a> | 
+            <a href="javascript:void(0)">报废</a> |  
+            <a href="javascript:void(0)">闲置</a>
+            </td></tr>
+        {% endfor %}
+        {% endif %}
+        </tbody></table>
+</div>
+
+<div id="cpanle">
+            <div class="wrapper">
+                <span class="fl">已选择<span class="f1" id="choose">0</span>个固定资产</span>
+                <a href="javascript:dump_qrcode();" >生成二维码</a>   |
+                <a href="javascript:void(0)">调拨</a>   |  
+                 <a href="javascript:void(0)">买卖</a>   |  
+                 <a href="javascript:void(0)">租赁</a>   |  
+                 <a href="javascript:void(0)">报废</a>   |  
+                 <a href="javascript:void(0)">闲置</a>
+                 <span class="fr" style="display:none"><a href="/store/assets/append/{{res.id}}">+新增资产</a></span>
+                 <form id="cdump_qrcode" action="/store/assets/qrcode" method="POST">
+                     <input type="hidden" name="oid" id="dump_qrcode_oid" value="">
+                </form>
+            </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-25;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{% endblock %}

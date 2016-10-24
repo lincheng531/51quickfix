@@ -1,0 +1,35 @@
+<div id="timeline">
+  <ul class="timeline" ng-repeat="(t, dataList) in timeline">
+    <li class="tl-header">
+      <a class="text-warn"><h6>{{t}}</h6></a>
+    </li>
+
+    <li class="tl-item" ng-repeat="item in dataList">
+      <div class="tl-wrap b-info">
+        <span class="tl-date text-muted">{{item.label}}</span>
+        <div class="tl-content">
+          <div ng-if="item.user">
+              {{item.user}}
+              <span ng-if="item.title">({{item.title}})</span>
+          </div>
+            <div ng-if="item.text">
+                {{item.text}}
+            </div>
+            <div class="text-muted" ng-if="item.mobile">
+                {{item.mobile}}
+            </div>
+            <div class="text-muted" ng-if="item.time">
+                {{item.time}}
+            </div>
+
+        </div>
+      </div>
+    </li>
+  </ul>
+    <div class="form-group m-t-md">
+        <a class="btn form-control dark"><span class="lt">签到</span></a>
+    </div>
+    <div class="form-group">
+        <a class="btn form-control dark"><span class="lt">暂停维修</span></a>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+#id_league_id,#id_type,#id_guest_name,#id_guest_mobile,#id_weixin,#id_c_hcap,#id_c_out,#id_c_in,#id_c_total,#id_c_result,#id_password,#id_password_re,#id_initials,#id_top,#id_category_id,#id_slug,#id_price_vip,#id_price_general,#id_city,#id_zip_code,#id_sec_name,#id_sec_mobile,#id_mobile,#id_tel,#id_name,#id_team,#id_tel,#id_ranking{width:20%;}
+
+#id_url,#id_digest,#id_title,#id_content,#id_bill_file,#id_logo,#id_cover_image,#id_address,#id_description{width:90%;}
+
+#id_starts_at,#id_ends_at{width:30%;}
+input[type="number"]{width:20%;}
+fieldset{
+    border: 1px solid #cecece !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+    }
+legend.scheduler-border{
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    border:none; !important;
+
+}
+
+a.del{margin-left:10px;}
+
+.wrapper{
+    width: 80% !important;
+}

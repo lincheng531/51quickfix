@@ -1,0 +1,73 @@
+{% extends "store/base.html" %}
+
+{%block content%}
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+
+        $('#dropdown_1').cdropdown(function(dropid){
+            dropid.kfilter(function(title){
+                jump('inventory_status', title)
+            })
+        })
+
+    });
+</script>
+
+{% load helpers %}
+{{'inventory_status'|nav_box}}
+
+<div class="wrapper">
+    <div class="sub_nav">首页 > <span class="f2">历史盘点</span></div>
+    <h1 class="f4">历史盘点 <span class="fr">
+        {% if request.user.roles.apps_store_inventory_append %}
+        <input type="button" class="b3" value="+ 创建盘点任务" onclick="window.location.href='/store/inventory/append'" />
+        {% endif %}
+        </span></h1>
+     <div class="wrapper clearfix" style="margin-bottom: 10px;">{{request.GET|search_box}}</div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td style="padding-left:20px">标题</td>
+            <td>盘点范围</td>
+            <td>发布时间</td>
+            <td>结束时间</td>
+            <td id="dropdown_1" ref="inventory_status" >状态 <img src="/static/images/icon_Triangle.png"></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if res %} {% for re in res %}
+        <tr class="{{re.row_class}}" id="bk_{{re.id}}">
+            <td style="padding-left:20px">
+            <a href="/store/inventory/detail/{{re.id}}">{{re.title}}</a> </span></td>
+            <td>{{re.scope|truncatewords:20}}</td>
+            <td>{{re.create_time|date:'Y年m月d日'}}</td>
+            <td>{{re.end_time|date:'Y年m月d日'}}</td>
+            <td>
+                {% ifequal re.status 0%}未开始{%endifequal%}
+                {% ifequal re.status 1%}盘点中{%endifequal%}
+                {% ifequal re.status 2%}已完成{%endifequal%}
+
+            </td>
+            <td class="f2"> 已经完成<span class="f1">{{re.complete}}</span>家共计{{re.total}}家</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5">{% include "pager.html" %}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align:center">暂无</td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+
+{%endblock%}

@@ -1,0 +1,19 @@
+
+{% extends "admin/base.html" %}
+{% block content %}
+
+            <table class="table table-hover">
+                <tr>
+                    <th>名字</th>
+                    <th>数值</th>
+                </tr>
+                {% for re in res %}
+                <tr>
+                    <td>{{ re.name }}</td>
+                    <td>{{ re.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+  
+{%endblock%}
+

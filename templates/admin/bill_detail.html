@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %} {%block content%}
+<div class="content">
+    <ul class="nav nav-tabs">
+        <li class="active"><a target="_self" href="/admin/{{current}}/list" class="btn">列表</a></li>
+        <li style="display:none"><a href="/admin/{{current}}/edit/{{oid}}" class="btn">修改</a></li>
+        <li style="display: none"><a href="/admin/{{current}}/append">添加</a></li>
+    </ul>
+    <br />
+    <div class="table-responsive">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped">
+        <tr>
+            <th>状态：</th>
+            <td>
+                {%ifequal item.status 1 %}
+                    <span class="label label-success" >商家已确认</span>
+                {%else%}
+                    <span class="label label-warning" >商家未确认</span>
+                {%endifequal%}
+            </td>
+        </tr>
+        <tr>
+            <td>设备状态</td><td>
+                {%ifequal item.quality 0 %}
+                    <span class="label label-success" >保质期内</span>
+                {%else%}
+                    <span class="label label-warning" >保质期外</span>
+                {%endifequal%}
+            </td>
+        </tr>
+        <tr>
+            <th>商家：</th>
+            <td>{{item.opt_user.name}}</td>
+        </tr>
+        <tr>
+            <th>维修员：</th>
+            <td>{{item.user.name}}</td>
+        </tr>
+        <tr>
+            <th>ODM号：</th>
+            <td>{{item.odm}}</td>
+        </tr>
+        <tr>
+            <th>Error Code：</th>
+            <td> <span class="label label-success" >{{item.error_code.no}} </span>&nbsp;&nbsp;
+                 <span class="label label-success" >价格：{{item.error_code.price}}(元)</span>
+                 </td>
+        </tr>
+        <tr><td>供应商：</td><td>{{ item.supplier.name }}</td></tr>
+        <tr><td>设备名：</td><td>{{ item.product.name }}</td></tr>
+        <tr><td>生产日期：</td><td>{{ item.production_date }}</td></tr>
+        <tr><td>安装日期：</td><td>{{ item.installation_date }}</td></tr>
+        <tr><td>保质期：</td><td>{{ item.expiration_date }}</td></tr>
+        <tr><td>设备序列号：</td><td>{{ item.product_code }}</td></tr>
+        <tr><td>备件：</td><td>
+            <table style="width: 100%;" cellpadding="5" cellspacing="5">
+                <tr><td>配件名</td><td>单价</td><td>数量</td><td>总价</td></tr>
+                {% for spar in item.spare%}
+                <tr><td>{{spar.name}}</td><td>{{spar.price}}(元)</td><td>{{spar.count}}</td><td>{{spar.total}}(元)</td></tr>
+                {% endfor %}
+            </table>
+        </td></tr>
+        <tr><td>备件价格：</td><td>{{ item.spare_price }}(元)</td></tr>
+        <tr><td>人工费：</td><td>{{ item.labor }}(元)</td></tr>
+        <tr><td>出差费</td><td>{{ item.travel}}(元)</td></tr>
+        <tr><td>总和：</td><td><span class="label label-success" >{{item.total}}(元)</span></td></tr>
+        <tr>
+            <th>创建时间：</th>
+            <td>{{item.update_time}}</td>
+        </tr>
+    </table>
+    </div>
+</div>
+{%endblock%}

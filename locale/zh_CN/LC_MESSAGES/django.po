@@ -1,0 +1,321 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-10 14:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: apps/base/forms.py:30
+msgid "user"
+msgstr "用户"
+
+#: apps/base/forms.py:31 apps/base/forms.py:134
+msgid "course"
+msgstr "球场"
+
+#: apps/base/forms.py:32 apps/base/forms.py:89 apps/base/forms.py:205
+#: apps/base/forms.py:230 apps/base/forms.py:244
+msgid "team"
+msgstr "球队"
+
+#: apps/base/forms.py:73 apps/base/forms.py:120 apps/base/forms.py:216
+#: apps/base/forms.py:225 templates/sec/competition_list.html:15
+msgid "title"
+msgstr "标题"
+
+#: apps/base/forms.py:74
+msgid "content"
+msgstr "内容"
+
+#: apps/base/forms.py:75 apps/base/forms.py:125 apps/base/forms.py:247
+msgid "cover image"
+msgstr "背景图"
+
+#: apps/base/forms.py:76
+msgid "digest"
+msgstr "摘要"
+
+#: apps/base/forms.py:88
+msgid "category"
+msgstr "分类"
+
+#: apps/base/forms.py:90
+msgid "slug"
+msgstr ""
+
+#: apps/base/forms.py:91
+msgid "ranking(top)"
+msgstr "排序"
+
+#: apps/base/forms.py:121 apps/base/forms.py:217 apps/base/forms.py:249
+msgid "desc"
+msgstr "描述"
+
+#: apps/base/forms.py:122 apps/base/forms.py:218 apps/base/forms.py:248
+#: apps/base/forms.py:263 templates/sec/eventmember_list.html:29
+msgid "address"
+msgstr "通讯地址"
+
+#: apps/base/forms.py:123
+msgid "sec name"
+msgstr "球队秘书姓名"
+
+#: apps/base/forms.py:124
+msgid "sec mobile"
+msgstr "球队手机号码"
+
+#: apps/base/forms.py:126 apps/base/forms.py:226
+#: templates/sec/competition_list.html:16
+msgid "starts at"
+msgstr "开始时间"
+
+#: apps/base/forms.py:128
+msgid "process"
+msgstr "流程"
+
+#: apps/base/forms.py:130 apps/base/forms.py:215
+msgid "city"
+msgstr ""
+
+#: apps/base/forms.py:131
+msgid "price(VIP)"
+msgstr "VIP价格"
+
+#: apps/base/forms.py:132
+msgid "price(general)"
+msgstr "普通价格"
+
+#: apps/base/forms.py:133
+msgid "remark(price)"
+msgstr "价格说明"
+
+#: apps/base/forms.py:135
+msgid "route"
+msgstr "线路"
+
+#: apps/base/forms.py:136
+msgid "sponsors"
+msgstr "赞助方"
+
+#: apps/base/forms.py:219 apps/base/forms.py:245
+msgid "tel"
+msgstr "联系电话"
+
+#: apps/base/forms.py:220
+msgid "zip code"
+msgstr ""
+
+#: apps/base/forms.py:221 apps/base/forms.py:246
+msgid "LOGO"
+msgstr ""
+
+#: apps/base/forms.py:234
+msgid "姓名"
+msgstr ""
+
+#: apps/base/forms.py:235
+msgid "HCAP"
+msgstr ""
+
+#: apps/base/forms.py:236
+msgid "OUT"
+msgstr ""
+
+#: apps/base/forms.py:237
+msgid "IN"
+msgstr ""
+
+#: apps/base/forms.py:238
+msgid "TOTAL"
+msgstr ""
+
+#: apps/base/forms.py:239
+msgid "RESULT"
+msgstr ""
+
+#: apps/base/forms.py:250
+msgid "bill file"
+msgstr "账单文件"
+
+#: apps/base/forms.py:254
+msgid "ranking"
+msgstr "排序"
+
+#: apps/base/forms.py:258 templates/sec/eventmember_list.html:27
+msgid "mobile"
+msgstr "手机号码"
+
+#: apps/base/forms.py:259 apps/base/forms.py:280 apps/base/forms.py:319
+#: apps/base/forms.py:324
+msgid "password"
+msgstr "密码"
+
+#: apps/base/forms.py:260 templates/sec/competition_detail.html:17
+#: templates/sec/eventmember_list.html:26
+msgid "name"
+msgstr "名称"
+
+#: apps/base/forms.py:261
+msgid "gender"
+msgstr "性别"
+
+#: apps/base/forms.py:262 templates/sec/eventmember_list.html:28
+msgid "birthday"
+msgstr "生日"
+
+#: apps/base/forms.py:264
+msgid "email"
+msgstr ""
+
+#: apps/base/forms.py:272
+msgid "initials"
+msgstr "首字母"
+
+#: apps/base/forms.py:273
+msgid "is secretary?"
+msgstr "秘书"
+
+#: apps/base/forms.py:281
+msgid "password repeat"
+msgstr "再输入一次密码"
+
+#: apps/base/forms.py:298
+msgid "text"
+msgstr ""
+
+#: apps/base/forms.py:299
+msgid "photos"
+msgstr ""
+
+#: apps/base/forms.py:318
+msgid "admin username"
+msgstr "管理员账号"
+
+#: apps/base/forms.py:323
+msgid "sec tsername"
+msgstr "球队秘书账号"
+
+#: apps/base/models.py:349
+msgid "first name"
+msgstr "名"
+
+#: apps/base/models.py:350
+msgid "last name"
+msgstr "姓"
+
+#: apps/base/models.py:352
+msgid "Email"
+msgstr ""
+
+#: apps/base/models.py:353
+msgid "Password"
+msgstr "密码"
+
+#: apps/base/models.py:354
+msgid "Staff Status"
+msgstr ""
+
+#: apps/base/models.py:355
+msgid "Active"
+msgstr ""
+
+#: apps/base/models.py:356
+msgid "Superuser Status"
+msgstr ""
+
+#: apps/base/models.py:357
+msgid "Last Login"
+msgstr ""
+
+#: apps/base/models.py:358
+msgid "Last Logout"
+msgstr ""
+
+#: templates/i18n.html:2
+msgid "man"
+msgstr "男"
+
+#: templates/i18n.html:3
+msgid "woman"
+msgstr "女"
+
+#: templates/i18n.html:4
+msgid "description"
+msgstr "描述"
+
+#: templates/i18n.html:5 templates/i18n.html.py:7
+msgid "cover_image"
+msgstr "背景图"
+
+#: templates/i18n.html:6
+msgid "bill_file"
+msgstr "账单文件"
+
+#: templates/sec/article_list.html:16
+msgid "Title"
+msgstr "标题"
+
+#: templates/sec/article_list.html:17
+msgid "Category"
+msgstr "分类"
+
+#: templates/sec/article_list.html:18
+msgid "Updated At"
+msgstr "更新时间"
+
+#: templates/sec/article_list.html:19
+msgid "Actions"
+msgstr "操作"
+
+#: templates/sec/competition_list.html:17
+msgid "actions"
+msgstr "操作"
+
+#: templates/sec/eventmember_list.html:25
+msgid "group"
+msgstr ""
+
+#: templates/sec/member_list.html:16
+msgid "Name"
+msgstr "姓名"
+
+#: templates/sec/member_list.html:17
+msgid "Mobile"
+msgstr "手机号码"
+
+#: templates/sec/member_list.html:18
+msgid "Birthday"
+msgstr "生日"
+
+#: templates/sec/member_list.html:19
+msgid "Address"
+msgstr "通讯地址"
+
+#: templates/sec/member_list.html:20
+msgid "Action"
+msgstr "操作"
+
+#: apps/base/forms.py:593
+msgid "Order"
+msgstr "排序"
+
+#: apps/base/forms.py:589
+msgid "Grade"
+msgstr "积分"
+
+#: apps/base/forms.py:605
+msgid "Name"
+msgstr "名称"

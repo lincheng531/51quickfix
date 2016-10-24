@@ -1,0 +1,74 @@
+{% extends "store/base.html" %} {%block content%}
+{% load helpers %} 
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function(){
+        init_region();
+        $('#id_delivery_time,#id_opening_time').click(function(){
+            WdatePicker();  
+        });
+    });
+</script>
+<style type="text/css">
+    
+
+</style>
+<div class="wrapper">
+    <div class="sub_nav clearfix f2"><span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">固定资产</a> >资产卡片</span> </div>
+    <div class="box clearfix">
+    <form method="POST" action="" id="form" style="width: 100%">
+                 <table width="100%">
+                <tr>
+                    <th>名称</th>
+                    <td> {{form.name}} </td>
+                </tr>
+                <tr>
+                    <th>编号</th>
+                    <td> {{form.no}}</td>
+                </tr>
+                 <tr>
+                    <th>固定电话</th>
+                    <td>{{form.tel}}</td>
+                </tr>
+                 <tr>
+                    <th>传真</th>
+                    <td>{{form.fax}} </td>
+                </tr>
+                <tr><td colspan="2"><div class="hr"></div></td></tr>
+                <tr>
+                    <th>公司</th>
+                    <td>{{form.company}}</td>
+                </tr>
+                 <tr>
+                    <th>位置</th>
+                    <td> {{form.area}} {{form.city}} {{form.district}}</td>
+                </tr>
+                 <tr>
+                    <th>详细地址</th>
+                    <td>{{form.address}}</td>
+                </tr>
+                 <tr>
+                    <th>交店时间</th>
+                    <td>{{form.delivery_time}}</td>
+                </tr>
+                 <tr>
+                    <th>开业时间</th>
+                    <td>{{form.opening_time}}</td>
+                </tr>
+                <tr><td colspan="2"><div class="hr"></div></td></tr>
+                <tr>
+                    <th>门店经理</th>
+                    <td>{{form.store_manager}}</td>
+                </tr>
+                <tr>
+                    <th>手机号</th>
+                    <td>{{form.mobile}}</td>
+                </tr>
+                <tr><td></td><td class="tl"> 
+                                <input type="submit" class="b2" value="保存"  /> 
+                                
+                            </td></tr>
+            </table>
+    </form>
+</div> 
+{% endblock %}

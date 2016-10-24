@@ -1,0 +1,26 @@
+状态 [报修序号，报修时间]:汉堡王 江苏路店(店编号) 设施 故障 通知时间。已通知负责人电话，请尽快处理。
+
+{
+    "status": 1,
+    "info": {
+        "status": 1,
+        "loc": "",
+        "product": "562b418c421aa90534c18aca",
+        "name": "烤炉",
+        "no": null,
+        "type": "2",
+        "brand": "洗衣机",
+        "restaurant": "562b076e421aa902a12103f2",
+        "restaurant_status": 1,
+        "must_time": 2,
+        "address": "上海市长宁区1503号",
+        "assets_status": 1,
+        "rid": "5625ef6c0da60b032da34605",
+        "assets": "562b0bda421aa902b4fd69fc",
+        "head_type": 1,
+        "id": "562b0bda421aa902b4fd69fc",
+        "store": "肯德基沪深店",
+        "guarantee": 1
+    },
+    "alert": ""
+}

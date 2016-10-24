@@ -1,0 +1,76 @@
+<style>
+    .nav-active-primary .nav-link.active, .nav-active-primary .nav > li.active > a {
+        color: rgba(255, 255, 255, 0.87) !important;
+        background-color: #ff7043 !important;
+    }
+
+    .nav .nav-item {
+        font-size: 1.125em;
+    }
+
+    #search input{
+        border: 2px solid #ff7043;
+
+    }
+
+     #search .input-group-btn>.btn {
+        border: 2px solid #ff7043;
+    }
+
+    #date-filter input {
+        border: none;
+    }
+</style>
+
+<div class="row mynav">
+    <div class="row">
+        <div class="col-md-4">
+            <form action="#" class="m-t-md ng-pristine ng-valid">
+                <div class="input-group input-group-sm" id="search">
+                    <input type="text" class="form-control" placeholder="请输入编号、商户或资产等" ng-model="search_q">
+                    <span class="input-group-btn">
+                        <a class="btn no-shadow deep-orange-400 text-white" type="button" ui-sref="app.fix.search({search_q: search_q})"><i class="fa fa-search"></i></a>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="b-b-2x b-primary nav-active-primary">
+        <ul class="nav nav-tabs">
+            <li class="nav-item p-t" ng-repeat="tab in tabs">
+                <a href class="nav-link" data-toggle="tab" data-target="#tab-{{tab.name}}" ui-sref="{{tab.sref}}">
+                    {{tab.title}}
+                </a>
+            </li>
+
+            <li class="pull-right p-t p-r" id="date-filter">
+                <label class="p-r-xs text-muted">时间</label><input type="datetime">
+                <label> 至 </label><input type="datetime">
+            </li>
+            <!--<li class="nav-item">-->
+            <!--<a class="nav-link" href data-toggle="tab" data-target="#tab4">Pages</a>-->
+            <!--</li>-->
+            <!--<li class="nav-item">-->
+            <!--<a class="nav-link active" href data-toggle="tab" data-target="#tab5">Components</a>-->
+            <!--</li>-->
+            <!--<li class="nav-item">-->
+            <!--<a class="nav-link" href data-toggle="tab" data-target="#tab6">UI Kits</a>-->
+            <!--</li>-->
+        </ul>
+    </div>
+    <div class="tab-content m-b-md">
+        <div class="tab-pane animated fadeIn" ng-class="{active: tab.name=='pending'}" id="tab-{{tab.name}}"
+             ng-repeat="tab in tabs">
+            <div ui-view="{{tab.name}}"></div>
+        </div>
+        <!--<div class="tab-pane animated fadeIn text-muted" id="tab4">-->
+        <!--Pages-->
+        <!--</div>-->
+        <!--<div class="tab-pane animated fadeIn text-muted active" id="tab5">-->
+        <!--Components-->
+        <!--</div>-->
+        <!--<div class="tab-pane animated fadeIn text-muted" id="tab6">-->
+        <!--UI kits-->
+        <!--</div>-->
+    </div>
+</div>

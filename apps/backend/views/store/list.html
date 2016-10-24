@@ -1,0 +1,60 @@
+<style>
+    /*.box .dataTables_wrapper {*/
+        /*padding-top: 0;*/
+    /*}*/
+
+    table.dataTable {
+        margin-top: 0;
+    }
+
+    /*#stores .dataTables_wrapper .row:first-child {*/
+        /*display: none;*/
+    /*}*/
+
+    .table-bg-gray {
+        background: #878E9A;
+    }
+</style>
+
+<div class="box" id="stores">
+    <div class="table-responsive">
+        <table ui-jp="dataTable" ui-options="{
+          ajax: 'maintenance/list?status={{status}}&search_q={{search_q}}',
+          processing: true,
+          serverSide: true,
+          aoColumns: [
+            { mData: 'code', mRender: function(data, type, full){return  '<input type=checkbox>'} },
+            { mData: 'city' },
+            { mData: 'head_type_' },
+            { mData: 'store_name' },
+            { mData: 'brand' },
+            { mData: 'product' },
+            { mData: 'product' },
+            { mData: 'product' },
+          ],
+          language: {
+            paginate: {
+              previous: '上一页',
+              next: '下一页',
+              First: '首页',
+              Last: '末页'
+            }
+          }
+        }" class="table table-striped b-t b-b">
+            <thead>
+            <tr class="table-bg-gray text-white">
+                <th><input type="checkbox"></th>
+                <th>城市</th>
+                <th>品牌</th>
+                <th>编号</th>
+                <th>商户</th>
+                <th>开业时间</th>
+                <th>商户负责人</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>

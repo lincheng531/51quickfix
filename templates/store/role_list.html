@@ -1,0 +1,110 @@
+{% extends "store/base.html" %}
+{% block header %}
+<link rel="stylesheet" href="/static/js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="/static/js/ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="/static/js/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+{% endblock %}
+
+{% block head %} 
+<style  type="text/css">
+    #id_role li{
+        display: block;
+        float:left;
+        line-height: 30px;
+        margin-right: 10px;
+    }
+</style>
+<script type="text/javascript">
+        function update_role(){
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getCheckedNodes(true);
+            var p = [];
+            var r = [];
+            $.each($("input[name='role']:checked"), function(){
+                r.push($(this).val())
+            })
+            $.each(nodes, function(index, node){
+                if(node.name.indexOf('(') > -1){
+                    p.push(node.name.split('(')[1].replace(')',''))
+                }
+            })
+            loading()
+            if(p.length > 0){
+                $.post("/store/role/edit",{q:p.join('|'), 'r':r.join('|')},function(data){
+                    balert('修改权限成功')
+                     
+                });
+            }
+
+        }
+        function zTreeOnCheck(event, treeId, treeNode) {
+            var p = []
+            if(!treeNode.checked){
+                $.each($('input[name="role"]'), function(){
+                    $(this).prop('checked', false);
+                })
+            }
+            if(treeNode.checked && treeNode.name.indexOf('(') > -1){
+                var name = treeNode.name.split('(')[1].replace(')', '');
+                p.push(name)
+
+            }
+            if(p.length > 0){
+                $.post("/store/role/detail",{q:p.join('|')},function(data){
+                    $.each(data, function(index, val){
+                        console.log(index, val);
+                        $('input[name="role"][value="'+val+'"]').prop('checked', true)
+                    })
+                });
+            }
+        };
+        var setting = {
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                autoCheckTrigger:true,
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                    onCheck: zTreeOnCheck
+            }
+        };
+
+        var zNodes ={{nodes|safe}};
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
+    </script>
+{% endblock %}
+
+{%block content%}
+
+<div class="wrapper">
+    <div class="sub_nav clearfix f2">
+        <span class="fl"><a href="/store/">首页</a> > <a href="/store/{{current}}/list">权限管理</a> </span> 
+    </div>
+    <div class="box">
+            <div class="content" style="width: 100%">
+                <div class="zTreeDemoBackground left" style="width: 25%;float:left;border-right: 1px dashed #e1e1e1">
+                    <ul id="treeDemo" class="ztree"></ul></li></ul>
+                </div>
+                <div class="right" style="width: 74%;float:right">
+                    <form method="POST" action="" id="form1">
+                   {{form.role}}
+                   </form>
+                </div> 
+                <div class="clearfix">&nbsp;</div>
+               
+            </div>
+             <div class="wrapper center"><input type="button"  onclick="update_role()" class="b2" value="保存" /></div>
+         </form> 
+    </div>
+
+</div>
+<div class="clearfix"></div>
+{%endblock%}

@@ -1,0 +1,121 @@
+{% extends "store/base.html" %}
+{% block header %}
+<script src="/static/js/kfilter.js"></script>
+<script src="/static/js/dropdown.js"></script>
+<script src="/static/js/ksearch.js"></script>
+<script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+{% endblock %}
+{% block head %} 
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_start_time,#id_end_time').click(function(){
+            WdatePicker();
+        });
+
+        $(".nice-select").kfilter(function(title){
+            jump('store', title, 'page')
+
+        }) 
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+        $('.tag_X').click(function(){
+            var v = $(this).attr('v');
+            $('.citys').removeAttr('style').css('display','none');
+            $('#'+v).removeAttr('style')
+        })
+    })
+</script>
+{% endblock %}
+{%block content%}
+{% load helpers %} 
+<div class="wrapper">
+<div class="sub_nav">首页 > <a href="/store/inventory/list">盘点</a> > <span class="f2">{{header.title}}</span></div>
+    <div class="tbox">
+        <div class="title clearfix">
+                <h3 class="f4 fl" style="line-height: 40px">{{header.title}}</h3>
+                <span class="f2 fr" style="line-height: 40px;padding-right: 20px">已经完成
+                    <span class="f1" id="store_total">{{header.complete}}</span>家
+                    共计{{header.total}}家 
+                </span>
+        </div>
+        <div class="content">任务时效 {{header.start_time|date:'Y年m月d日'}}-{{header.end_time|date:'Y年m月d日'}}</div>
+    </div> 
+    <br />
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+        <tr>
+            <td class="brline"><input type="checkbox" id="select_all" onclick="check_all('#select_all','.c')"> 全选</td>
+            <td onclick="ctoggle('.targetp')" class="center">城市 <img src="/static/images/icon_Triangle.png"></td>
+            <td>编号</td>
+            <td style="width: 400px;">商户</td>
+            <td>开业时间</td>
+            <td>餐厅经理</td>
+            <td>进度</td>
+            <td>状态</td>
+            <td></td>
+            
+        </tr>
+        </thead>
+        <tbody> 
+        <tr class="targetp" style="display:none">
+            <td colspan="9">
+                <div class="ccity active">
+                <div class="cheader">
+                    <a href="javascript:void(0)" class="tag_X" v='FIRST'>常用</a>
+                    <a href="javascript:void(0)" class="tag_X" v="ABCD">ABCD</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="EFGH">EFGH</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="IJKL">IJKL</a>
+                    <a href="javascript:void(0)" class="tag_X" v="MNOP">MNOP</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="QRST">QRST</a>  
+                    <a href="javascript:void(0)" class="tag_X" v="UVWX">UVWX</a> 
+                    <a href="javascript:void(0)" class="tag_X" v="YZ">YZ</a>
+                </div>
+                <div class="cbody"><a href="?">全部</a> {{request.GET|city}} </div>
+                </div>
+            </td>
+        </tr>
+
+        {% for re in header.stores %}
+        <tr id="bk_{{re.id}}" onmouseover="this.style.backgroundColor='#e1e1e1'" onmouseout="this.style.backgroundColor='#fff'">
+            <td class="brline">
+                <input name="" type="checkbox" onclick="check_one('.c')" class="c c_{{re.id}}" value="{{re.id}}">
+            </td>
+            <td style="width:80px" class="center"><input type="hidden" value="{{re.id}}"  class="c"><a href="/store/inventory/detail2/{{header.id}}/{{re.id}}">{{ re.city }}</a></td>
+            <td style="width:80px"><a href="/store/inventory/detail2/{{header.id}}/{{re.id}}">{{ re.no|fix_none }}</a></td>
+            <td class="tip1"><a href="/store/inventory/detail2/{{header.id}}/{{re.id}}">{{ re.name }}</a><p><a href="/store/inventory/detail2/{{header.id}}/{{re.id}}" >{{re.address}}</a></p></td>
+            <td>{{ re.opening_time|date:'Y年m月d日' }}</td>
+            <td  style="line-height: 20px;">{{ re.store_manager }}<p class="f3">{{re.mobile|fix_none}}</p></td>
+            <td>{{re.complete}} / {{re.total}}</td>
+            <td>
+                {%ifequal re.status 0 %}未盘点{%endifequal%}
+                {%ifequal re.status 1 %}进行中{%endifequal%}
+                {%ifequal re.status 2 %}已完成{%endifequal%}
+            </td>
+            <td style="width: 80px;text-align: center" class="f1">{%if re.miss %}{{re.miss}}项缺失{%else%}
+            <span style="cursor:pointer" href="javascript:void(0)" onclick="notify_inventory('{{header.id}}','{{re.id}}')">提醒</span>
+            {%endif%}</td>
+        </tr>
+        {% endfor %}
+
+          </tbody>
+    </table>
+</div>
+<div id="cpanle">
+    <div class="wrapper">
+        <form action="/store/inventory/dump" method="post" id="inventory_form1">
+            <input type="hidden" id="oid" name="oid" value="">
+            <input type="hidden" name="header" value="{{header.id}}" />
+        </form>
+        <input type="button" class="b3" value="导出盘点表" onclick="dump_inventory()" />
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-25;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

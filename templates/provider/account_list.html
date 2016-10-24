@@ -1,0 +1,91 @@
+{% extends "provider/base.html" %}
+{% block header %}
+<script type="text/javascript" src="/static/js/kfilter.js"></script>
+<script type="text/javascript" src="/static/js/dropdown.js"></script>
+<script type="text/javascript" src="/static/js/ksearch.js"></script>
+
+{% endblock %}
+
+{% block head %} 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.search_box').ksearch(function(a,b,c){
+            jump(a,b,c)
+        })
+    })
+</script>
+{% endblock %}
+
+{%block content%}
+{% load helpers %}
+<di class="sub_nav">&nbsp;</di>
+<div class="wrapper">
+    <div class="nav">
+        <ul>
+            <li {% ifequal q '2'%}class="active" {% endifequal %}><a href="?q=2">维修主管</a></li>
+            <li {% ifequal q '0' %}class="active" {% endifequal %}><a href="?q=0">维修工</a></li>
+        </ul>
+    </div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table center">
+        <thead>
+        <tr>
+            <td>城市</td>
+            {% ifequal q '3'%}
+            <td>负责区域</td>
+            {% endifequal %}
+            {% ifequal q '4'%}
+            <td width="300px">负责餐厅</td>
+            {% endifequal %}
+            <td>姓名</td>
+            <td>手机号码</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if res %} {% for re in res %}
+        <tr id="bk_{{re.id}}">
+            <td><a href="/provider/account/detail/{{re.id}}">{{ re.city }}</a></td>
+        {%ifequal q '3'%}
+            <td>{{re.area}}</td>
+        {% endifequal %}
+        {%ifequal q '4'%}
+            <td>{{re.store}}</td>
+        {% endifequal %}
+            <td><a href="/provider/account/detail/{{re.id}}">{{ re.name }}</a></td>
+            <td><a href="/provider/account/detail/{{re.id}}">{{ re.username}}</a></td>
+            <td>
+                {% if re.is_active %}
+                <a href="/provider/account/active/{{re.id}}/0">冻结</a>
+                {%else%} 
+                <a href="/provider/account/active/{{re.id}}/1">激活</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="11">{% include "pager.html" %}</td>
+            <td></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="11" style="text-align:center">暂无</td>
+            <td></td>
+        </tr>
+        {% endif %}
+          </tbody>
+    </table>
+</div>
+
+<div id="cpanle">
+    <div class="wrapper">
+        <a href="/provider/account/append/2">+添加用户</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).resize(function(){
+             var h_doc = $(document).height();
+             var h_foo = h_doc-60;
+             $('#cpanle').offset({top:h_foo,left:0});
+    });  
+</script>
+{%endblock%}

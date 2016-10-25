@@ -898,6 +898,30 @@ def update_device(request, oid):
 
 
 @login_required('1')
+def delete_device(request, rid):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    user = get_user(request)
+    if not user.head_type:
+        resp['status'], resp['alert'] = 0, u'没有权限，请联系管理员'
+        return json_response(resp)
+    data = get_json_data(request) or request.POST.dict()
+
+    if request.method == 'DELETE':
+        try:
+            device = Device.objects.get(rid=rid)
+        except:
+            resp['status'], resp['alert'] = 0, u'设备不存在'
+            return json_response(resp)
+
+        if str(device.store.id) != user.store_id:
+            resp['status'], resp['alert'] = 0, u'不是该店店员, 无法清空设备'
+            return json_response(resp)
+
+        print device.delete()
+        return json_response(resp)
+
+
+@login_required('1')
 def confirm_bill(request, oid):
     """  确认报价单 (餐厅适用标准版和连锁版)
 

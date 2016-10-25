@@ -84,6 +84,7 @@ urlpatterns = patterns('',
     ('^merchant/update_assets/(?P<oid>\S{24})$','apps.api.merchant.update_assets'),
     ('^merchant/update_qrcode/(?P<rid>\S+)$','apps.api.merchant.update_qrcode'),
     ('^merchant/update_device/(?P<oid>\S{24})$','apps.api.merchant.update_device'),
+    ('^merchant/delete_device/(?P<rid>\S{24})$','apps.api.merchant.delete_device'),
 
     ('^merchant/maintenances$','apps.api.merchant.maintenances'),
     ('^merchant/maintenance/(?P<oid>\S{24})$','apps.api.merchant.maintenance'),

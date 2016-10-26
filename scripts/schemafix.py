@@ -17,6 +17,7 @@ def migrate_collection():
             'create_time': item.create_time,
             'update_time': item.update_time,
             'source': 'migrate',
+            'members': item.members,
         }).save()
 
         mcid = MaintenanceCollection(**{
@@ -33,6 +34,7 @@ def migrate_collection():
             'address': item.address,
             'state': item.state,
             'must_time': item.must_time,
+            'members': item.members,
         }).save()
 
 

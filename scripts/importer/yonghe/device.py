@@ -1,9 +1,14 @@
 # -*- encoding: utf-8 -*-
+import copy
 import os, sys
-sys.path.append(os.path.abspath(os.path.dirname(__file__)+'../../..'))
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+BASEDIR = os.path.dirname(__file__)
+sys.path.append(os.path.abspath(BASEDIR + '../../../..'))
 
 from bson.objectid import ObjectId
 from apps.base.utils import to_excel
+from apps.base.models.store_schemas import *
 import xlrd
 
 def generate_rid():
@@ -67,4 +72,92 @@ def generate_rid():
     with open('设备二维码打印20160928.xls', 'wb') as f:
         f.write(f_object.read())
 
-generate_rid()
+
+def create_products():
+    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    table = sheet.sheets()[5]
+    nrows = table.nrows
+    ncols = table.ncols
+
+    product_field_map = {}
+    no_brands = set()
+    no_suppliers = set()
+
+    for i in xrange(nrows):
+        print 'row: ', i
+        if i < 2:
+            continue
+
+        brand_name = table.cell(i, 6).value
+        supplier_name = table.cell(i, 10).value
+        brand = None
+        supplier = None
+
+        try:
+            if brand_name:
+                brand = Brand.objects.get(Q(name=brand_name) or Q(name2=brand_name))
+        except:
+            no_brands.add(brand_name)
+            brand = Brand(**{
+                'name': brand_name,
+                'name2': brand_name,
+            }).save()
+
+        try:
+            if supplier_name:
+                supplier = Supplier.objects.get(Q(name=supplier_name) or Q(name2=supplier_name))
+        except:
+            no_suppliers.add(supplier_name)
+            supplier = Supplier(**{
+                'name': supplier_name,
+                'name2': supplier_name,
+            }).save()
+
+        item = {
+            'head_type': 4,
+            'category': table.cell(i, 1).value.replace('类', ''),
+            'efcategory': table.cell(i, 2).value,
+            'ecategory': table.cell(i, 3).value,
+            'name': table.cell(i, 4).value,
+            'description': table.cell(i, 5).value,
+            'brand_name': brand_name,
+            'brand': brand,
+            # initial             = StringField() #首字母
+            'model': str(table.cell(i, 7).value),
+            'specification': str(table.cell(i, 8).value),
+            'supplier': supplier,
+            'repair_time': int(table.cell(i, 12).value),
+        }
+
+        for k, v in item.iteritems():
+            print k, v
+
+        product = Product(**item).save()
+        print product.id
+        print
+
+        Call(**{
+            'head_type': 4,
+            'city': '上海市',
+            'product': product,
+            'name': product.name,
+            'brand': product.brand,
+            'model': product.model,
+            'specification': product.specification,
+            'warranty_in': u'乐辛',
+            'warranty_out1': u'乐辛',
+        }).save()
+
+    print 'no brands:'
+    for item in no_brands:
+        print item
+    print
+    print 'no suppliers:'
+    for item in no_suppliers:
+        print item
+
+
+if __name__ == '__main__':
+    #generate_rid()
+    create_products()
+    #TODO initial

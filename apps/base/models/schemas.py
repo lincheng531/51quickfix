@@ -386,16 +386,18 @@ class Maintenance(Document):
 
 
 class MaintenanceHistory(Document):
-    grab_users = ListField(ReferenceField(User))
     maintenances = ListField(ReferenceField(Maintenance))
+    members = ListField(StringField())
+    grab_users = ListField(ReferenceField(User))
     user = ReferenceField(User)
     create_time = DateTimeField(default=dt.now)  # 叫修时间
     update_time = DateTimeField(default=dt.now)
 
 
 class MaintenanceCollection(Document):
-    grab_users = ListField(ReferenceField(User))
     histories = ListField(ReferenceField(MaintenanceHistory))
+    members = ListField(StringField())
+    grab_users = ListField(ReferenceField(User))
     user = ReferenceField(User)
     create_time = DateTimeField(default=dt.now)  # 叫修时间
     update_time = DateTimeField(default=dt.now)
@@ -413,11 +415,18 @@ class MaintenanceCollection(Document):
         status = {1: u'紧急', 2: u'非紧急'}
         return status.get(int(self.state))
 
-    def get_result(self, grab_user=None):
-        collections = [ \
-            item.maintenances[-1].get_result1() \
-                if item.maintenances[-1].head_type == 1 else item.maintenances[-1].get_result() \
-            for item in (filter(lambda x: grab_user in x.grab_users, self.histories) if grab_user else self.histories)]
+    def get_result(self, grab_user=None, members=[]):
+        if members:
+            member_set = set(members)
+            collections = [ \
+                item.maintenances[-1].get_result1() \
+                    if item.maintenances[-1].head_type == 1 else item.maintenances[-1].get_result() \
+                for item in filter(lambda x: set(x.members) & member_set, self.histories)]
+        else:
+            collections = [ \
+                item.maintenances[-1].get_result1() \
+                    if item.maintenances[-1].head_type == 1 else item.maintenances[-1].get_result() \
+                for item in (filter(lambda x: grab_user in x.grab_users, self.histories) if grab_user else self.histories)]
 
         return {
             'id': self.id,

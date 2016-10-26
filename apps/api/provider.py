@@ -14,7 +14,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth import authenticate
 from apps.base.common import json_response, get_json_data, get_user
 from apps.base.common import base_login_required as login_required
-from apps.base.models import User, Maintenance, MaintenanceUsers, Member
+from apps.base.models import User, Maintenance, MaintenanceCollection, MaintenanceUsers, Member
 from apps.base.messages import *
 from apps.base.push import push_message
 from apps.base.logger import getlogger
@@ -105,13 +105,18 @@ def repairs(request):
     data = get_json_data(request) or request.POST.dict()
     p    = int(data.get('p', 1))
     result  = []
-    members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
-    mtce = Maintenance.objects.filter(members__in=members, status__gte=0,head_type=user.head_type).order_by('-create_time').skip((p-1)*20).limit(20)
-    for m in mtce:
-        result.append(m.get_result())
-    resp['info']['results'] = result
-    return json_response(resp)
 
+    members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
+    # mtce = Maintenance.objects.filter(members__in=members, status__gte=0,head_type=user.head_type).order_by('-create_time').skip((p-1)*20).limit(20)
+    # for m in mtce:
+    #     result.append(m.get_result())
+    # resp['info']['results'] = result
+    # return json_response(resp)
+    mc = MaintenanceCollection.objects(members__in=members).order_by('-create_time').skip((p-1)*20).limit(20)
+    collections = [collection.get_result(members=members) for collection in mc]
+
+    resp['info']['results'] = collections
+    return json_response(resp)
 
 @login_required('2')
 def repair(request, oid):
@@ -127,6 +132,22 @@ def repair(request, oid):
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
     mtce = Maintenance.objects.filter(id = ObjectId(oid), status__gte=0, members__in=members).first()
     resp['info'],resp['status'] = mtce.get_result(), 1
+    return json_response(resp)
+
+
+@login_required('2')
+def collection(request, id):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    user = get_user(request)
+    members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
+
+    try:
+        mtce = MaintenanceCollection.objects.get(id=ObjectId(id), members__in=members)
+    except:
+        resp['alert'] = u'订单合集不存在'
+        return json_response(resp)
+
+    resp['info'] = mtce.get_result(members=members)
     return json_response(resp)
 
 

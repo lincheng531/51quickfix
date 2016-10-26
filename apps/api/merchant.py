@@ -418,6 +418,8 @@ def call(request):
         # 推送短信规则
         send_time = now.strftime('%H:%M')
 
+        members = [str(i.id) for i in users]
+
         maintenance = {
             'user': loggend_user.id,
             'store_name': store.name,
@@ -442,7 +444,7 @@ def call(request):
             'error_code': eid,
             'create_time': dt.now(),
             'update_time': dt.now(),
-            'members': [str(i.id) for i in users]
+            'members': members
         }
         if loggend_user.head_type > 1:
 
@@ -492,6 +494,7 @@ def call(request):
         mhid = MaintenanceHistory(**{
             'user': loggend_user,
             'maintenances': [mtceid],
+            'members': members,
         }).save()
 
         mc_data = {
@@ -501,6 +504,7 @@ def call(request):
             'store': str(store.id),
             'store_no': store.no,
             'address': store.address,
+            'members': members,
         }
 
         if loggend_user.head_type > 1:

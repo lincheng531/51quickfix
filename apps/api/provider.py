@@ -46,11 +46,12 @@ def opinion(request, oid):
     content = data.get('content')
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
     try:
-        mtce = MaintenanceCollection.objects(id=ObjectId(oid), members__in=members).first()
+        mtce = MaintenanceCollection.objects.filter(id=ObjectId(oid), members__in=members).first()
     except:
         resp['alert'] = u'该维修单不存在或者无该权限'
         return json_response(resp)
 
+    mtce.manager_content = content
     mtce.save()
     resp['status'] = 1
     # bill = Bill.objects.filter(maintenance=ObjectId(oid), status__gt=0, user__in=members).first()

@@ -45,15 +45,23 @@ def opinion(request, oid):
     data = get_json_data(request) or request.POST.dict()
     content = data.get('content')
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
-    bill = Bill.objects.filter(maintenance=ObjectId(oid), status__gt=0, user__in=members).first()
-    if not bill:
+    try:
+        mtce = MaintenanceCollection.objects(id=ObjectId(oid), members__in=members).first()
+    except:
         resp['alert'] = u'该维修单不存在或者无该权限'
         return json_response(resp)
-    if not content:
-        resp['alert'] = u'意见不得为空'
-        return json_response(resp)
-    bill.manager_content = content
-    bill.save()
+
+    mtce.save()
+    resp['status'] = 1
+    # bill = Bill.objects.filter(maintenance=ObjectId(oid), status__gt=0, user__in=members).first()
+    # if not bill:
+    #     resp['alert'] = u'该维修单不存在或者无该权限'
+    #     return json_response(resp)
+    # if not content:
+    #     resp['alert'] = u'意见不得为空'
+    #     return json_response(resp)
+    # bill.manager_content = content
+    # bill.save()
     return json_response(resp)
 
     

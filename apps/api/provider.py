@@ -46,8 +46,12 @@ def opinion(request, oid):
     content = data.get('content')
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
     try:
-        mtce = MaintenanceCollection.objects.filter(id=ObjectId(oid), members__in=members).first()
+        mtce = Maintenance.objects.filter(id=ObjectId(oid), members__in=members).first()
     except:
+        resp['alert'] = u'该维修单不存在或者无该权限'
+        return json_response(resp)
+
+    if not mtce:
         resp['alert'] = u'该维修单不存在或者无该权限'
         return json_response(resp)
 

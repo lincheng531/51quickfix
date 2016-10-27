@@ -11,11 +11,12 @@ from apps.base.utils import to_excel
 from apps.base.models.store_schemas import *
 import xlrd
 
+
 def generate_rid():
-    sheet   = xlrd.open_workbook(u'10家餐厅固定资产记录-160921.xlsx')
-    table  = sheet.sheets()[2]
-    nrows  = table.nrows
-    ncols  = table.ncols
+    sheet = xlrd.open_workbook(u'10家餐厅固定资产记录-160921.xlsx')
+    table = sheet.sheets()[2]
+    nrows = table.nrows
+    ncols = table.ncols
 
     col_map = {
         '1': '固定资产编号',
@@ -157,7 +158,75 @@ def create_products():
         print item
 
 
+def create_devices():
+    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    table = sheet.sheets()[2]
+    nrows = table.nrows
+    ncols = table.ncols
+
+    no_products = []
+
+    for i in xrange(nrows):
+        print 'row: ', i
+        if i < 1:
+            continue
+
+        no = table.cell(i, 1).value
+        if not no:
+            continue
+
+        category = table.cell(i, 4).value
+        category = category.replace('类', '')
+        store_no = table.cell(i, 0).value
+        store = Store.objects(head_type=4, no=store_no).first()
+        supplier = None
+        supplier_name = table.cell(i, 3).value
+        if supplier_name:
+            supplier = Supplier.objects.get(Q(name=supplier_name) | Q(name2=supplier_name))
+
+        item = {
+            'head_type': 4,
+            'store': store,
+            'no': no,
+            'restaurant_name': store.name,
+            'restaurant_no': store.no,
+            'name': table.cell(i, 7).value,
+            'area': store.area,
+            'city': store.city,
+            'description': table.cell(i, 8).value,
+            'price': str(table.cell(i, 14).value),
+            'provider': u'乐辛',  # 注意修改,
+            'model': str(table.cell(i, 10).value),
+            'category': category,
+            'efcategory': table.cell(i, 5).value,
+            'ecategory': table.cell(i, 6).value,
+            'brand': table.cell(i, 9).value,
+            'manufacturer': table.cell(i, 13).value,
+            'specifications': table.cell(i, 11).value,
+            'scrap_time': u'5年',  # 注意修改
+            'supplier': supplier,
+        }
+
+        product = Product.objects.filter(name=item['name'], head_type=4, category=item['category'], efcategory=item['efcategory'],
+                                         ecategory=item['ecategory'], specification=item['specifications'])
+
+        if product.count() < 1:
+            import pdb;pdb.set_trace()
+            no_products.append(item)
+
+        item['product'] = product
+        # print Product(**item).save().id
+        for k, v in item.iteritems():
+            print k, v
+        print
+
+    print 'error products count: ', len(no_products)
+    from pprint import pprint;import ipdb;ipdb.set_trace();
+    pass
+
+
 if __name__ == '__main__':
-    #generate_rid()
-    create_products()
-    #TODO initial
+    # generate_rid()
+    #create_products()
+    create_devices()
+    # TODO brand, supplier, product, device initial

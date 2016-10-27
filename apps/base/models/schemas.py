@@ -262,6 +262,7 @@ class Maintenance(Document):
             'can_be_fixed': self.can_be_fixed,
             'is_collect': self.is_collect,
             'collected': self.collected,
+            'manager_content': self.manager_content,
         }
 
         if self.grab_user:
@@ -335,6 +336,7 @@ class Maintenance(Document):
             'can_be_fixed': self.can_be_fixed,
             'is_collect': self.is_collect,
             'collected': self.collected,
+            'manager_content': self.manager_content,
         }
 
         item['count'] = len(self.members)

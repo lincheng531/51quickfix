@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from apps.base.common import json_response, get_json_data, get_user
 from apps.base.common import base_login_required as login_required
 from apps.base.models import User, Maintenance, MaintenanceCollection, MaintenanceUsers, Member
+from apps.base.models.schemas import Bill
 from apps.base.messages import *
 from apps.base.push import push_message
 from apps.base.logger import getlogger

@@ -303,6 +303,7 @@ class Product(Document):
         return list(Spare.objects(__raw__={'product_name':self.name, 'brand':self.brand.id}))
 
 class Spare(Document):
+    head_type       = IntField() #餐厅的类别
     no              = StringField() #编号
     name            = StringField() #名称
     product_name    = StringField() #标准设备名称
@@ -339,6 +340,8 @@ class ErrorCode(Document):
     error           = StringField() #故障名称
     code            = StringField() #故障代码
     phen            = StringField() #故障现象说明
+    measure         = StringField() #维修措施
+    method          = StringField() #餐厅处理方法
     spare           = StringField() #更换零配件名称
     spare_code      = StringField() #零配件编号
     status          = IntField()    #1：紧急 2：一般

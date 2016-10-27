@@ -132,6 +132,7 @@ def repair(request, oid):
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
     mtce = Maintenance.objects.filter(id = ObjectId(oid), status__gte=0, members__in=members).first()
     resp['info'],resp['status'] = mtce.get_result(), 1
+    resp['info']['reset_fix_maintenances'] = mtce.get_reset_fixes(user)
     return json_response(resp)
 
 

@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import collections
 import copy
 import os, sys
 
@@ -8,6 +9,7 @@ sys.path.append(os.path.abspath(BASEDIR + '../../../..'))
 
 from bson.objectid import ObjectId
 from apps.base.utils import to_excel
+from apps.base.models.base import *
 from apps.base.models.store_schemas import *
 import xlrd
 
@@ -202,31 +204,159 @@ def create_devices():
             'ecategory': table.cell(i, 6).value,
             'brand': table.cell(i, 9).value,
             'manufacturer': table.cell(i, 13).value,
-            'specifications': table.cell(i, 11).value,
+            'specifications': str(table.cell(i, 11).value),
             'scrap_time': u'5年',  # 注意修改
             'supplier': supplier,
         }
 
-        product = Product.objects.filter(name=item['name'], head_type=4, category=item['category'], efcategory=item['efcategory'],
+        product = None
+        products = Product.objects.filter(name=item['name'], head_type=4, category=item['category'], efcategory=item['efcategory'],
                                          ecategory=item['ecategory'], specification=item['specifications'])
 
-        if product.count() < 1:
-            import pdb;pdb.set_trace()
+        if products.count() < 1:
             no_products.append(item)
+        else:
+            product = products.first()
 
         item['product'] = product
-        # print Product(**item).save().id
+        print Device(**item).save().id
         for k, v in item.iteritems():
             print k, v
         print
 
     print 'error products count: ', len(no_products)
-    from pprint import pprint;import ipdb;ipdb.set_trace();
     pass
+
+
+def create_spares():
+    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    table = sheet.sheets()[3]
+    nrows = table.nrows
+    ncols = table.ncols
+
+    brand_error = set()
+    product_error = set()
+    product_error_count = collections.defaultdict(int)
+
+    for i in xrange(nrows):
+        print 'row: ', i
+        if i < 2:
+            continue
+
+        brand = None
+        brand_name = name=table.cell(i, 1).value
+        if brand_name == '南方厨具':
+            brand_name = '南厨'
+        try:
+            brand = Brand.objects.get(name=brand_name)
+        except:
+            brand_error.add(brand_name)
+            brand = Brand(**{
+                'name': brand_name,
+                'name2': brand_name,
+            }).save()
+
+        item = {
+            'head_type': 4,
+            'no': table.cell(i, 6).value,
+            'name': table.cell(i, 7).value,
+            'product_name': table.cell(i, 3).value,
+            'brand': brand,
+            'brand_name': table.cell(i, 8).value,
+            'content': table.cell(i, 10).value,
+            'model': table.cell(i, 9).value,
+            'price': table.cell(i, 11).value,
+            'warranty1': int(table.cell(i, 12).value or 0),
+            'warranty2': int(table.cell(i, 13).value or 0),
+            'warranty3': int(table.cell(i, 14).value or 0),
+        }
+
+        product_names = item['product_name']
+        if '，' in product_names:
+            namelist = product_names.split('，')
+        else:
+            namelist = [product_names]
+
+        for product_name in namelist:
+            products = Product.objects.filter(name=product_name, ecategory=table.cell(i, 2).value, brand_name=brand_name)
+            if not products.count():
+                if product_name == u'磨煮一体机，磨浆机':
+                    product_name = u'磨煮一体机'
+                products = Product.objects.filter(name=product_name, brand_name=brand_name)
+                if not products.count():
+                    products = Product.objects.filter(name=product_name)
+                    if not products.count():
+                        key = '{}-{}-{}'.format(item['product_name'], table.cell(i, 2).value, brand_name)
+                        product_error.add(key)
+                        product_error_count[key] += 1
+
+            for product in products:
+                item['product'] = product
+                print Spare(**item).save().id
+
+        for k, v in item.iteritems():
+            print k, v
+
+        print
+
+    print 'no products========>'
+    for item in product_error:
+        print item, product_error_count[item]
+        print
+    print 'no brand ==========>'
+    for item in brand_error:
+        print item
+
+
+def create_errorcodes():
+    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    table = sheet.sheets()[4]
+    nrows = table.nrows
+    ncols = table.ncols
+    product_error_count = collections.defaultdict(int)
+
+    for i in xrange(nrows):
+        print 'row: ', i
+        if i < 1:
+            continue
+
+        item = {
+            'head_type': 4,
+            'error': table.cell(i, 7).value.strip(),
+            'phen': table.cell(i, 9).value.strip(),
+            'measure': table.cell(i, 10).value.strip(),
+            'method': table.cell(i, 11).value.strip(),
+            'status': 2,
+        }
+
+        brand_name = table.cell(i, 2).value
+        product_ecat = table.cell(i, 3).value
+        product_name = table.cell(i, 4).value
+
+        products = Product.objects.filter(name=product_name, ecategory=product_ecat, brand_name=brand_name)
+        if not products.count():
+            products = Product.objects.filter(name=product_name, ecategory=product_ecat)
+            if not products.count():
+                key = '{}->{}->{}'.format(product_name, product_ecat, brand_name)
+                product_error_count[key] += 1
+
+        for product in products:
+            item['product'] = product
+            print ErrorCode(**item).save().id
+
+        for k, v in item.iteritems():
+            print k, v
+        print
+
+    print 'no products========>'
+    for k, v in product_error_count.iteritems():
+        print k, v
 
 
 if __name__ == '__main__':
     # generate_rid()
     #create_products()
-    create_devices()
-    # TODO brand, supplier, product, device initial
+    #create_devices()
+    #create_spares()
+    #create_errorcodes()
+    # TODO brand, supplier, product, device initial, device product重合

@@ -9,6 +9,7 @@ sys.path.append(os.path.abspath(BASEDIR + '../../../..'))
 from bson.objectid import ObjectId
 from apps.base.utils import to_excel
 from apps.base.models.store_schemas import *
+from apps.base.models.schemas import *
 import xlrd
 
 sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
@@ -211,7 +212,8 @@ def create_provider_user():
     area_manager['username'] = '13061732239'
     area_manager['mobile'] = '13061732239'
     area_manager['category'] = '2'
-    print 'area_manager:', User(**area_manager).save().id
+    manager = User(**area_manager).save()
+    print 'area_manager:', manager.id
 
     for repair_item in [(u'张青岭', '13764252825'), (u'张传超', '15901764709')]:
         repair = copy.deepcopy(item_template)
@@ -221,8 +223,35 @@ def create_provider_user():
         repair['mobile'] = repair_item[1]
         repair['category'] = '0'
         del repair['is_superuser']
-        print 'repair:', User(**repair).save().id
+        repair_user = User(**repair).save()
+        print 'repair:', repair_user.id
 
+
+        print Member(**{
+            'opt_user': manager,
+            'user': repair_user,
+            'category': manager.head_type,
+            'area': manager.area,
+            'city': manager.city,
+            'company': manager.company,
+            'head_type': manager.head_type,
+            'store': '永和大王',
+        }).save().id
+
+def create_push():
+    head_type = 4
+    # area_manager = User.objects.filter(head_type=head_type, category=3).first()
+    # area = area_manager.area
+    # city = area_manager.city
+    # provider_user = User.objects.filter(head_type=head_type, category=2).first()
+    # provider = str(provider_user.id)
+    # company = provider_user.company
+    # manager =
+    #
+    # for service in User.objects.filter(head_type=head_type, category=0):
+    #
+    # area_manager        = ListField(StringField()) #二级推送
+    # manager             = ListField(StringField())  #汉堡王区域负责人
 
 # USER_CATEGORY = {
 #     '0': u'维修员',

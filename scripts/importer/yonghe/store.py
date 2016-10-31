@@ -272,8 +272,8 @@ def create_push():
 
 if __name__ == '__main__':
     # generate_rid()
-    #create_stores()
-    #create_provider_user()
+    create_stores()
+    create_provider_user()
     create_push()
 
 # db.store.update({head_type:4,name:'广元店'}, {$set:{rid:'57eb2ae452d8ff5b389255e4'}}, false, true);

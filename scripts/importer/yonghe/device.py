@@ -153,11 +153,11 @@ def create_products():
 
     print 'no brands:'
     for item in no_brands:
-        print item
+        pass#print item
     print
     print 'no suppliers:'
     for item in no_suppliers:
-        print item
+        pass#print item
 
 
 def create_devices():
@@ -301,11 +301,11 @@ def create_spares():
 
     print 'no products========>'
     for item in product_error:
-        print item, product_error_count[item]
+        pass#print item, product_error_count[item]
         print
     print 'no brand ==========>'
     for item in brand_error:
-        print item
+        pass#print item
 
 
 def create_errorcodes():

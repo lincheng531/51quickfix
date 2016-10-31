@@ -90,6 +90,8 @@ class Maintenance(Document):
     collected = IntField(default=0)  # 是否合辑分单
     collect_maintenance = StringField()  # 合辑标的
 
+    dispatched = IntField(default=0) #是否改派
+
     verify_status = IntField(default=-1)  # 为未导入审核状态 0为新的 1为审核失败 2为审核中
 
     create_time = DateTimeField(default=dt.now)  # 叫修时间

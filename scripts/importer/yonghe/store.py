@@ -2,9 +2,9 @@
 import copy
 import os, sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.setdefaultencoding('utf-8')
 BASEDIR = os.path.dirname(__file__)
 sys.path.append(os.path.abspath(BASEDIR + '../../../..'))
 
@@ -14,7 +14,7 @@ from apps.base.models.store_schemas import *
 from apps.base.models.schemas import *
 import xlrd
 
-sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'yonghe10-160921.xlsx'))
+sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'yonghe10-160921.xlsx'), encoding_override='utf-8')
 table = sheet.sheets()[0]
 nrows = table.nrows
 ncols = table.ncols

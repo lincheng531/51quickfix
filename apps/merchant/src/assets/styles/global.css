@@ -1,0 +1,21 @@
+body {
+    font-family: "黑体-简";
+    font-weight: 500;
+    background: #ffffff;
+}
+
+.app-footer:not(.hide)~.app-body {
+    padding-bottom: 5.125rem;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.b-orange {
+    border-color: #ff7043;
+}
+
+.text-orange {
+    color: #ff7043;
+}

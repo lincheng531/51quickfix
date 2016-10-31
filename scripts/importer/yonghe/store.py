@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 import copy
 import os, sys
+sys.setdefaultencoding('utf-8')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 BASEDIR = os.path.dirname(__file__)

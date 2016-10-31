@@ -92,7 +92,7 @@ def create_stores():
                 if not store.name.endswith(u'店'):
                     store.name += u'店'
             if field_map[j] == u'开业日期':
-                store.opening_time = xlrd.xldate.xldate_as_datetime(data, 0)
+                store.opening_time = datetime.datetime(*xlrd.xldate.xldate_as_tuple(data, 0))
             if field_map[j] == u'餐厅电话':
                 store.tel = str(int(data))
             if field_map[j] == u'营业时间':

@@ -14,7 +14,7 @@ from apps.base.models.store_schemas import *
 from apps.base.models.schemas import *
 import xlrd
 
-sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'yonghe10-160921.xlsx'), encoding_override='utf-8')
+sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'yonghe10-160921.xlsx'))
 table = sheet.sheets()[0]
 nrows = table.nrows
 ncols = table.ncols
@@ -77,7 +77,7 @@ def create_stores():
                 continue
 
             if data:
-                print j, data
+                print j
             else:
                 continue
 

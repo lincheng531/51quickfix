@@ -133,7 +133,7 @@ def create_products():
         }
 
         for k, v in item.iteritems():
-            print k, v
+            pass#pass#pass#pass#pass#pass#pass#pass#pass#print k, v
 
         product = Product(**item).save()
         print product.id
@@ -221,7 +221,7 @@ def create_devices():
         item['product'] = product
         print Device(**item).save().id
         for k, v in item.iteritems():
-            print k, v
+            pass#pass#pass#pass#pass#pass#pass#pass#print k, v
         print
 
     print 'error products count: ', len(no_products)
@@ -295,7 +295,7 @@ def create_spares():
                 print Spare(**item).save().id
 
         for k, v in item.iteritems():
-            print k, v
+            pass#pass#pass#pass#pass#pass#pass#pass#print k, v
 
         print
 
@@ -345,12 +345,12 @@ def create_errorcodes():
             print ErrorCode(**item).save().id
 
         for k, v in item.iteritems():
-            print k, v
+            pass#pass#pass#pass#pass#pass#pass#pass#pass#print k, v
         print
 
     print 'no products========>'
     for k, v in product_error_count.iteritems():
-        print k, v
+        pass#pass#pass#pass#pass#pass#pass#pass#print k, v
 
 
 if __name__ == '__main__':

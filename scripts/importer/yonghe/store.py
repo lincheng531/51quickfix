@@ -14,7 +14,7 @@ from apps.base.models.store_schemas import *
 from apps.base.models.schemas import *
 import xlrd
 
-sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'/yonghe10-160921.xlsx'))
+sheet = xlrd.open_workbook(os.path.join(BASEDIR, u'yonghe10-160921.xlsx'))
 table = sheet.sheets()[0]
 nrows = table.nrows
 ncols = table.ncols

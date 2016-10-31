@@ -77,7 +77,7 @@ def create_stores():
                 continue
 
             if data:
-                print j
+                print j#, data
             else:
                 continue
 
@@ -133,8 +133,8 @@ def create_stores():
         print
         print
 
-    for k, v in field_map.iteritems():
-        print k, v
+    # for k, v in field_map.iteritems():
+    #     print k, v
 
 
 def create_store_user(data, store):

@@ -242,18 +242,22 @@ def create_provider_user():
 
 def create_push():
     head_type = 4
-    # area_manager = User.objects.filter(head_type=head_type, category=3).first()
-    # area = area_manager.area
-    # city = area_manager.city
-    # provider_user = User.objects.filter(head_type=head_type, category=2).first()
-    # provider = str(provider_user.id)
-    # company = provider_user.company
-    # manager =
-    #
-    # for service in User.objects.filter(head_type=head_type, category=0):
-    #
-    # area_manager        = ListField(StringField()) #二级推送
-    # manager             = ListField(StringField())  #汉堡王区域负责人
+    oc = User.objects.filter(head_type=4, category='4').first()
+    area = oc.area
+    city = oc.city
+    area_manager = User.objects.filter(head_type=4, category='3').first()
+    provider_user = User.objects.filter(head_type=head_type, category='2').first()
+    provider = str(provider_user.id)
+
+    print Push(
+        area = area,
+        city = city,
+        head_type = head_type,
+        provider = provider,
+        company = provider_user.company,
+        area_manager = [oc.name, oc.mobile], #二级推送
+        manager = [area_manager.name, area_manager.mobile]
+    ).save().id
 
 # USER_CATEGORY = {
 #     '0': u'维修员',
@@ -268,8 +272,9 @@ def create_push():
 
 if __name__ == '__main__':
     # generate_rid()
-    create_stores()
-    create_provider_user()
+    #create_stores()
+    #create_provider_user()
+    create_push()
 
 # db.store.update({head_type:4,name:'广元店'}, {$set:{rid:'57eb2ae452d8ff5b389255e4'}}, false, true);
 # db.store.update({head_type:4,name:'万源店'}, {$set:{rid:'57eb2ae452d8ff5b389255e5'}}, false, true);

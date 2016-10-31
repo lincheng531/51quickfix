@@ -15,7 +15,7 @@ import xlrd
 
 
 def generate_rid():
-    sheet = xlrd.open_workbook(u'10家餐厅固定资产记录-160921.xlsx')
+    sheet = xlrd.open_workbook(u'yonghe10-160921.xlsx')
     table = sheet.sheets()[2]
     nrows = table.nrows
     ncols = table.ncols
@@ -77,7 +77,7 @@ def generate_rid():
 
 
 def create_products():
-    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    sheet = xlrd.open_workbook(BASEDIR + u'/yonghe10-160921.xlsx')
     table = sheet.sheets()[5]
     nrows = table.nrows
     ncols = table.ncols
@@ -161,7 +161,7 @@ def create_products():
 
 
 def create_devices():
-    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    sheet = xlrd.open_workbook(BASEDIR + u'/yonghe10-160921.xlsx')
     table = sheet.sheets()[2]
     nrows = table.nrows
     ncols = table.ncols
@@ -229,7 +229,7 @@ def create_devices():
 
 
 def create_spares():
-    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    sheet = xlrd.open_workbook(BASEDIR + u'/yonghe10-160921.xlsx')
     table = sheet.sheets()[3]
     nrows = table.nrows
     ncols = table.ncols
@@ -309,7 +309,7 @@ def create_spares():
 
 
 def create_errorcodes():
-    sheet = xlrd.open_workbook(BASEDIR + u'/10家餐厅固定资产记录-160921.xlsx')
+    sheet = xlrd.open_workbook(BASEDIR + u'/yonghe10-160921.xlsx')
     table = sheet.sheets()[4]
     nrows = table.nrows
     ncols = table.ncols

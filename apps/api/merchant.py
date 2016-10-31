@@ -1639,6 +1639,9 @@ def collect(request, id):
         return json_response(resp)
 
     mtce = collection.histories[0].maintenances[-1]
+    if mtce.status != 3:
+        resp['alert'] = u'初始工单未处于到店维修状态, 无法添加合集'
+        return json_response(resp)
 
     if mtce.collect_maintenance:
         resp['alert'] = u'叫修单已经被添加到{}中, 此新订单无法与其合并'.format(mtce.collect_maintenance)

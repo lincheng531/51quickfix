@@ -192,6 +192,39 @@ def create_store_user(data, store):
             pass
 
 
+def create_specials():
+    item_template = {
+        u'head_type': 4,
+        u'password': u'pbkdf2_sha256$12000$tRaMa5pqFWm6$2o4ZCrDiikNRsQ9YUs4ZD0P/aYjZjjf6Zm8v3Rb9mWs=',
+        u'source': u'永和大王',
+        u'city': u'上海市',
+        u'area': u'华东区',
+        u'company': u'永和大王',
+        u'is_staff': False,
+        u'is_active': 1,
+        u'is_superuser': 2,  # 注意替换
+        u'is_update': False,
+        u'create_time': dt.now(),
+        u'date_joined': dt.now(),
+    }
+
+    manager = copy.deepcopy(item_template)
+    manager['name'] = u'李毅'
+    manager['screen_name'] = u'李毅'
+    manager['username'] = '13917512883'
+    manager['mobile'] = '13917512883'
+    manager['category'] = '5'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
+
+    User(**manager).save().id
+
+    area_manager = copy.deepcopy(item_template)
+    area_manager['name'] = u'包丹丽'
+    area_manager['screen_name'] = u'包丹丽'
+    area_manager['username'] = '13816728991'
+    area_manager['mobile'] = '13816728991'
+    area_manager['category'] = '3'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
+    User(**area_manager).save().id
+
 def create_provider_user():
     item_template = {
         u'head_type': 4,
@@ -255,7 +288,7 @@ def create_push():
         head_type = head_type,
         provider = provider,
         company = provider_user.company,
-        area_manager = [oc.name, oc.mobile], #二级推送
+        area_manager = [u'包丹丽', '13816728991'], #二级推送
         manager = [area_manager.name, area_manager.mobile]
     ).save().id
 
@@ -272,8 +305,9 @@ def create_push():
 
 if __name__ == '__main__':
     # generate_rid()
-    create_stores()
-    create_provider_user()
+    # create_stores()
+    create_specials()
+    # create_provider_user()
     create_push()
 
 # db.store.update({head_type:4,name:'广元店'}, {$set:{rid:'57eb2ae452d8ff5b389255e4'}}, false, true);

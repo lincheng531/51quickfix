@@ -413,7 +413,7 @@ def collection(request, id):
         resp['alert'] = u'订单合集不存在'
         return json_response(resp)
 
-    resp['info'] = mtce.get_result()
+    resp['info'] = mtce.get_result(grab_user=user)
     return json_response(resp)
 
 

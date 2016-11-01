@@ -1761,6 +1761,7 @@ def collect(request, id):
         'user': mtce.user,
         'grab_users': [mtce.grab_user],
         'maintenances': [mtce],
+        'members': mtce.members,
     }).save()
     collection.histories.append(mhid)
     collection.save()

@@ -390,6 +390,7 @@ def repair(request, oid):
         mtce = Maintenance.objects.get(id=ObjectId(oid))
     else:
         resp['status'], resp['alert'] = 0, u'该维修工无法查看此工单'
+        return json_response(resp)
 
     if mtce.head_type == 1:
         resp['info'] = mtce.get_result1()

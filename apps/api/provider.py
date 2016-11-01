@@ -189,7 +189,7 @@ def dispatch(request, oid):
     if mtce.grab_user:
         resp['alert'] = u'已经有人接单,无法改派'
         return json_response(resp)
-    
+
     for key in ['grab_user', 'members']:
         delattr(mtce, key)
     data = {

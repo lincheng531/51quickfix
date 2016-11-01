@@ -385,7 +385,12 @@ def repair(request, oid):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     user = get_user(request)
     logger.info(oid)
-    mtce = Maintenance.objects.get(grab_user = user, id=ObjectId(oid))
+    mh = MaintenanceHistory.objects.filter(grab_users=user, maintenances=ObjectId(oid))
+    if mh.count():
+        mtce = Maintenance.objects.get(id=ObjectId(oid))
+    else:
+        resp['status'], resp['alert'] = 0, u'该维修工无法查看此工单'
+
     if mtce.head_type == 1:
         resp['info'] = mtce.get_result1()
     else:

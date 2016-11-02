@@ -221,6 +221,11 @@ class Maintenance(Document):
 
         return collections
 
+    @property
+    def collection_id(self):
+        mh = MaintenanceHistory.objects.get(maintenances=self)
+        return str(MaintenanceHistory.objects.get(histories=mh).id)
+
     def users(self, head_type=0):
         users = []
         details = [self.grab_user] if head_type else [User.objects.get(id=ObjectId(i)) for i in self.members]

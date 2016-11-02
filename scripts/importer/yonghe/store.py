@@ -19,7 +19,6 @@ table = sheet.sheets()[0]
 nrows = table.nrows
 ncols = table.ncols
 
-
 def generate_rid():
     col_map = {
         '6': '门店编号',

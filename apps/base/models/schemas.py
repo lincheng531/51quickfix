@@ -223,8 +223,8 @@ class Maintenance(Document):
 
     @property
     def collection_id(self):
-        mh = MaintenanceHistory.objects.get(maintenances=self)
-        return str(MaintenanceHistory.objects.get(histories=mh).id)
+        mh = MaintenanceHistory.objects.filter(maintenances=self).first()
+        return str(MaintenanceCollection.objects.filter(histories=mh).first().id)
 
     def users(self, head_type=0):
         users = []

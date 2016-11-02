@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath(BASEDIR + '../../../..'))
 
 from bson.objectid import ObjectId
 from apps.base.utils import to_excel
+from apps.base.models.base import Role, UserRole
 from apps.base.models.store_schemas import *
 from apps.base.models.schemas import *
 import xlrd
@@ -214,7 +215,7 @@ def create_specials():
     manager['mobile'] = '13917512883'
     manager['category'] = '5'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
 
-    User(**manager).save().id
+    manager_user = User(**manager).save()
 
     area_manager = copy.deepcopy(item_template)
     area_manager['name'] = u'包丹丽'
@@ -222,7 +223,11 @@ def create_specials():
     area_manager['username'] = '13816728991'
     area_manager['mobile'] = '13816728991'
     area_manager['category'] = '3'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
-    User(**area_manager).save().id
+    area_manager_user = User(**area_manager).save()
+
+    for role in Role.objects():
+        UserRole(user=manager_user, role=role).save()
+        UserRole(user=area_manager_user, role=role).save()
 
 def create_provider_user():
     item_template = {

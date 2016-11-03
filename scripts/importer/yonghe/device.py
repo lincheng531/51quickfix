@@ -340,7 +340,7 @@ def create_errorcodes():
         for product in products:
             item['product'] = product
             if ErrorCode.objects.filter(**item).count():
-                print item['error']
+                print 'duplicate'
                 continue
 
             print ErrorCode(**item).save().id

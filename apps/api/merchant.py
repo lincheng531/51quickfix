@@ -138,7 +138,13 @@ def fault(request):
         results = []
         ers = ErrorCode.objects.filter(head_type=user.head_type, product=ObjectId(product))
         for e in ers:
-            results.append(e.get_result())
+            item = e.get_result()
+
+            if user.head_type in MUST_TIME:
+                must_time = MUST_TIME[user.head_type] #永和要求到店维修时间在8小时内
+                item['must_time'] = must_time
+
+            results.append(item)
         resp['status'], resp['info']['results'] = 1, results
     return json_response(resp)
 

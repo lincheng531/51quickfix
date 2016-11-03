@@ -323,9 +323,6 @@ def create_errorcodes():
         item = {
             'head_type': 4,
             'error': table.cell(i, 7).value.strip(),
-            'phen': table.cell(i, 9).value.strip(),
-            'measure': table.cell(i, 10).value.strip(),
-            'method': table.cell(i, 11).value.strip(),
             'status': 2,
         }
 
@@ -342,6 +339,10 @@ def create_errorcodes():
 
         for product in products:
             item['product'] = product
+            if ErrorCode.objects.filter(**item).count():
+                print item['error']
+                continue
+
             print ErrorCode(**item).save().id
 
         for k, v in item.iteritems():

@@ -22,14 +22,13 @@ def generate_rid():
         rid = str(ObjectId())
 
         if getattr(model, 'objects').filter(rid=rid):
-            from pprint import pprint;import ipdb;ipdb.set_trace();
             continue
 
         rids.append(rid)
         total += 1
         print len(rids), rid
 
-    with open('空二维码.txt', 'wb') as f:
+    with open('blank_qrcode.txt', 'wb') as f:
         f.write('\n'.join(rids))
 
 

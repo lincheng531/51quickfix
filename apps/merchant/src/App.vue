@@ -9,27 +9,28 @@
                         <i class="material-icons"></i>
                     </a>
                     <ul class="nav navbar-nav pull-right m-r-md">
-                        <li class="nav-item"><a class="nav-link" ui-fullscreen=""><span><i
-                                class="fa fa-fw fa-arrows-v"></i></span></a></li>
+                        <!--<li class="nav-item"><a class="nav-link" ui-fullscreen=""><span><i-->
+                        <!--class="fa fa-fw fa-arrows-v"></i></span></a></li>-->
                         <li class="nav-item dropdown">
-                            <a href="" class="nav-link dropdown-toggle clear" data-toggle="dropdown">
+                            <a href="" class="nav-link clear" data-toggle="dropdown">
                                 <span class="avatar w-32">
-                                    <img src="./assets/images/a2.jpg">
+                                    <img v-bind:src="USER_PROFILE.avatar_img">
                                 </span>
+                                <span v-text="USER_PROFILE.name"></span>
                             </a>
                             <div class="dropdown-menu pull-right dropdown-menu-scale">
                                 <!--<a class="dropdown-item" ui-sref="app.page.setting" href="#/app/page/setting">-->
                                 <!--<span>设置</span> <span class="label primary m-l-xs"></span>-->
                                 <!--</a>-->
                                 <!--<div class="dropdown-divider"></div>-->
-                                <a class="dropdown-item" ui-sref="access.signin" href="#/access/signin">退出</a>
+                                <a class="dropdown-item" href="/admin/logout">退出</a>
                             </div>
                         </li>
                     </ul>
                     <div class="collapse navbar-toggleable-sm" id="navbar-left" data-pjax="">
                         <ul class="nav navbar-nav pull-left nav-active-border b-primary m-l-md">
                             <li class="nav-item">
-                                <a class="nav-link">
+                                <a class="nav-link" href="/">
                                     <h5 class="nav-text"><i class="material-icons md-24">&#xe88a;</i></h5>
                                 </a>
                             </li>
@@ -79,10 +80,15 @@
 </template>
 
 <script>
-//    import appNav from './components/app-nav.vue'
+    //    import appNav from './components/app-nav.vue'
     import appFooter from './components/app-footer.vue'
 
     export default {
+        data () {
+            return{
+                USER_PROFILE: USER_PROFILE,
+            }
+        },
         components: {
 //            appNav,
             appFooter,

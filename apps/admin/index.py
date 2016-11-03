@@ -53,5 +53,5 @@ def login(request):
     user.backend = 'mongoengine.django.auth.MongoEngineBackend'
     _login(request,user)
     messages.success(request,u'欢迎你，管理员 {}，请保护好你的账号密码切勿泄露'.format(user.name or user.username))
-    urls = {1:'/admin/', 2:'/store/', 3:'/provider/repair/list?q=0'}
+    urls = {1:'/admin/', -2:'/store/', 3:'/provider/repair/list?q=0', 2:'/merchant/'}
     return HttpResponseRedirect(urls.get(user.is_superuser))

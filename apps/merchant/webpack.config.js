@@ -4,7 +4,7 @@ var webpack = require('webpack')
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './merchant'),
     publicPath: '/merchant/',
     filename: 'build.js'
   },
@@ -62,3 +62,8 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
+
+//cp -r src/assets ../../static/merchant
+//cp -r src/libs ../../static/merchant
+//cp index.html ../../templates/merchant
+//cp -r merchant/build.js ../../static/merchant

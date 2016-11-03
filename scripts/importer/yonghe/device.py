@@ -566,9 +566,9 @@ def relate_device_rid():
 
 if __name__ == '__main__':
     # generate_rid()
-    create_products()
-    create_devices()
-    create_spares()
+    #create_products()
+    #create_devices()
+    #create_spares()
     create_errorcodes()
-    relate_device_rid()
+    #relate_device_rid()
     # TODO brand, supplier, product, device initial, device product重合

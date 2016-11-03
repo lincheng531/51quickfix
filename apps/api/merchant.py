@@ -24,7 +24,7 @@ from apps.base.messages import PUSH0, PUSH6, PUSH3, PUSH15, PUSH21
 from apps.base.push import push_message
 from apps.base.logger import getlogger
 from apps.base.utils import login, pf8, _send_count
-from settings import DEBUG, HOST_NAME, ENV, REDIS, DEVICE_TYPE, SERVICE_COMPANY, FIX_TIME
+from settings import DEBUG, HOST_NAME, ENV, REDIS, DEVICE_TYPE, SERVICE_COMPANY, FIX_TIME, MUST_TIME
 from apps.base.sms import send_sms
 
 logger = getlogger(__name__)
@@ -1669,6 +1669,9 @@ def collect(request, id):
                 return json_response(resp)
 
             must_time, fix_time = FIX_TIME[state]
+
+    if user.head_type in MUST_TIME:
+        must_time = MUST_TIME[user.head_type] #永和要求到店维修时间在8小时内
 
     device = Device.objects.filter(id=ObjectId(cid), head_type=user.head_type).first()
     if not device:

@@ -1496,7 +1496,7 @@ def confirm(request, oid):
     else:
         msg = u'餐厅同意了您的工单'
     resp['status'], resp['alert'] = 1, u'确认成功！维修员会接受到您的消息。'
-    sdata = {'type': 17, 'oid': oid, 'cid': cid, 'sub_type': head_type}
+    sdata = {'type': 17, 'oid': oid, 'bid': cid, 'sub_type': head_type, 'cid': mtce.collection_id}
     push_message(mtce.grab_user.id, msg, sdata)
     return json_response(resp)
 

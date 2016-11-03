@@ -325,13 +325,13 @@ if __name__ == '__main__':
 # db.store.update({head_type:4,name:'莲花南路店'}, {$set:{rid:'57eb2ae452d8ff5b389255ec'}}, false, true);
 # db.store.update({head_type:4,name:'锦江乐园店'}, {$set:{rid:'57eb2ae452d8ff5b389255ed'}}, false, true);
 
-# db.store.update({head_type:4, no: 'SH031'}, {$set:{loc: [121.441037,31.202989]}})
-# db.store.update({head_type:4, no: 'SH046'}, {$set:{loc: [121.40361,31.143962]}})
-# db.store.update({head_type:4, no: 'SH048'}, {$set:{loc: [121.444419,31.183288]}})
-# db.store.update({head_type:4, no: 'SH052'}, {$set:{loc: [121.460733,31.198203]}})
-# db.store.update({head_type:4, no: 'SH055'}, {$set:{loc: [121.407469,31.13809]}})
-# db.store.update({head_type:4, no: 'SH059'}, {$set:{loc: [121.405156,31.16607]}})
-# db.store.update({head_type:4, no: 'SH074'}, {$set:{loc: [121.435877,31.161157]}})
-# db.store.update({head_type:4, no: 'SH077'}, {$set:{loc: [121.436033,31.160385]}})
-# db.store.update({head_type:4, no: 'SH079'}, {$set:{loc: [121.414994,31.113993]}})
-# db.store.update({head_type:4, no: 'SH092'}, {$set:{loc: [121.419957,31.147911]}})
+# db.store.update({head_type:4, no: 'SH031'}, {$set:{loc: [31.202989, 121.441037]}})
+# db.store.update({head_type:4, no: 'SH046'}, {$set:{loc: [31.143962, 121.40361]}})
+# db.store.update({head_type:4, no: 'SH048'}, {$set:{loc: [31.183288, 121.444419]}})
+# db.store.update({head_type:4, no: 'SH052'}, {$set:{loc: [31.198203, 121.460733]}})
+# db.store.update({head_type:4, no: 'SH055'}, {$set:{loc: [31.13809, 121.407469]}})
+# db.store.update({head_type:4, no: 'SH059'}, {$set:{loc: [31.16607, 121.405156]}})
+# db.store.update({head_type:4, no: 'SH074'}, {$set:{loc: [31.161157, 121.435877]}})
+# db.store.update({head_type:4, no: 'SH077'}, {$set:{loc: [31.160385, 121.436033]}})
+# db.store.update({head_type:4, no: 'SH079'}, {$set:{loc: [31.113993, 121.414994]}})
+# db.store.update({head_type:4, no: 'SH092'}, {$set:{loc: [31.147911, 121.419957]}})

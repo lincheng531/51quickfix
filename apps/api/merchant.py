@@ -346,6 +346,9 @@ def call(request):
 
             must_time, fix_time = FIX_TIME[state]
 
+    if loggend_user.head_type in MUST_TIME:
+        must_time = MUST_TIME[loggend_user.head_type] #永和要求到店维修时间在8小时内
+
     device = Device.objects.filter(id=ObjectId(cid), head_type=loggend_user.head_type).first()
     if not device:
         resp['status'], resp['alert'] = 0, u'没有找到该设备'
@@ -1742,9 +1745,9 @@ def collect(request, id):
         mt = lambda x: dt.now() + datetime.timedelta(hours=x)
         mtce['state'] = int(state)
         mtce['is_buy'] = int(is_buy or 0)
-        mtce['must_time'] = mt(must_time)
-        mtce['work_range'] = fix_time
-        mtce['must_range'] = must_time
+        mtce['must_time'] = mtce.must_time
+        mtce['work_range'] = mtce.work_range
+        mtce['must_range'] = mtce.must_range
         new_id = mtce.save().id
     else:
         mtce['start_time'] = pf8(start_time)

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>商户后台</title>
+
+    <meta name="description" content="store, merchant admin"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Flatkit">
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- style -->
+    <link rel="stylesheet" href="/static/merchant/assets/animate.css/animate.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/merchant/assets/glyphicons/glyphicons.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/merchant/assets/font-awesome/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/merchant/assets/material-design-icons/material-design-icons.css"
+          type="text/css"/>
+    <link rel="stylesheet" href="/static/merchant/assets/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/merchant/assets/styles/app.min.css" type="text/css"/>
+    <!--<link rel="stylesheet" href="/static/merchant/assets/styles/font.css" type="text/css" />-->
+
+    <link rel="stylesheet" href="/static/merchant/assets/styles/global.css" type="text/css"/>
+
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+    var USER_PROFILE = {
+        'id': '{{request.user.id}}',
+        'name': '{{request.user.name}}',
+        'avatar_img': '{{request.user.avatar_img}}',
+        'category': '{{request.user.category}}',
+        'source': '{{request.user.source}}',
+        'area': '{{request.user.area}}',
+        'mobile': '{{request.user.mobile}}',
+        'address': '{{request.user.address}}',
+        'screen_name': '{{request.user.screen_name}}',
+        'is_active': '{{request.user.is_active}}',
+    };
+</script>
+
+<!-- build:js /static/merchant/assets/scripts/app.html.js -->
+<!-- jQuery -->
+<script src="/static/merchant/libs/jquery/jquery/dist/jquery.js"></script>
+<!-- Bootstrap -->
+<script src="/static/merchant/libs/jquery/tether/dist/js/tether.min.js"></script>
+<script src="/static/merchant/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
+<!-- core -->
+<script src="/static/merchant/libs/jquery/underscore/underscore-min.js"></script>
+<script src="/static/merchant/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+<script src="/static/merchant/libs/jquery/PACE/pace.min.js"></script>
+
+<script src="/static/merchant/assets/scripts/config.lazyload.js"></script>
+
+<script src="/static/merchant/assets/scripts/palette.js"></script>
+<script src="/static/merchant/assets/scripts/ui-load.js"></script>
+<script src="/static/merchant/assets/scripts/ui-jp.js"></script>
+<script src="/static/merchant/assets/scripts/ui-include.js"></script>
+<script src="/static/merchant/assets/scripts/ui-device.js"></script>
+<script src="/static/merchant/assets/scripts/ui-form.js"></script>
+<script src="/static/merchant/assets/scripts/ui-nav.js"></script>
+<script src="/static/merchant/assets/scripts/ui-screenfull.js"></script>
+<script src="/static/merchant/assets/scripts/ui-scroll-to.js"></script>
+<script src="/static/merchant/assets/scripts/ui-toggle-class.js"></script>
+
+<script src="/static/merchant/assets/scripts/app.js"></script>
+
+<!-- ajax -->
+<!--<script src="/static/merchant/libs/jquery/jquery-pjax/jquery.pjax.js"></script>-->
+<script src="/static/merchant/assets/scripts/ajax.js"></script>
+<!-- endbuild -->
+
+<script src="/static/merchant/build.js"></script>
+</body>
+</html>

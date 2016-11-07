@@ -1172,10 +1172,10 @@ def stop(request, oid):
     stop_day = dt.strptime(day, '%Y%m%d%H%M%S')
 
     mobile = AREA_CONNECTOR[maintenance.head_type][maintenance.area][1]
-    # send_sms(mobile, u'【51快修】餐厅:{},设备:{},编号:{},需要暂停至:{},申请暂停,原因:{},申请人:{}({}),确认请回:编号 Y,拒绝请回:编号 N,请尽快处理！'.format(
-    #         maintenance.store_name, maintenance.product, maintenance.code, stop_day.strftime(u'%Y年%m月%d日 %H:%M'),
-    #         reason,
-    #         user.name, user.username), maintenance.code)
+    send_sms(mobile, u'【51快修】餐厅:{},设备:{},编号:{},需要暂停至:{},申请暂停,原因:{},申请人:{}({}),确认请回:编号 Y,拒绝请回:编号 N,请尽快处理！'.format(
+            maintenance.store_name, maintenance.product, maintenance.code, stop_day.strftime(u'%Y年%m月%d日 %H:%M'),
+            reason,
+            user.name, user.username), maintenance.code)
     return json_response(resp)
 
 

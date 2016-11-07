@@ -50,8 +50,8 @@ def download(request):
         href1 = 'http://bk.gaofriend.com/static/app/bk_51quickfix_business_v1.2.1.apk'
         href2 = 'http://bk.gaofriend.com/static/app/bk_51quickfix_quickfix_v1.2.1.apk'
     else:
-        href1 = 'http://51quickfix.gaofriend.com/static/app/develop_51quickfix_business_v1.2.1.apk'
-        href2 = 'http://51quickfix.gaofriend.com/static/app/develop_51quickfix_quickfix_v1.2.1.apk'
+        href1 = 'http://51quickfix.gaofriend.com/static/app/release_business_7_v1.2.3.apk'
+        href2 = 'http://51quickfix.gaofriend.com/static/app/release_quickfix_7_v1.2.3.apk'
     if category == 1:
         resp = {'status':1, 'info':{'versionCode':7,'versionName':'51快修商户版V1.2.3','desc':u'', 'downloadUrl':href1}}
     else: 

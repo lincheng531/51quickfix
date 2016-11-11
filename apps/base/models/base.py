@@ -32,7 +32,7 @@ USER_CATEGORY = {
 }
 
 class User(BaseUser):
-    head_type           = IntField(default=0) #1为不是连锁，2:连锁, 3为达美乐
+    head_type           = IntField(default=0) #1为不是连锁，2:连锁, 3为达美乐, 4永和
     username            = StringField(max_length=100, required=True)
     password            = StringField(verbose_name=_('Password'))
     name                = StringField(required=True)

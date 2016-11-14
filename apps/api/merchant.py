@@ -389,8 +389,10 @@ def call(request):
             return json_response(resp)
 
         # 获取Push数据
-        ca = Call.objects.filter(name=product.name, brand=product.brand, city=store.city, model=product.model,
-                                 head_type=device.head_type).first()
+        ca = Call.objects.filter(device=device, head_type=device.head_type).first()
+
+        if not ca:
+            ca = Call.objects.filter(name=product.name, brand=product.brand, city=store.city, model=product.model, head_type=device.head_type).first()
 
         if not ca:
             ca = Call.objects.filter(name=product.name, brand=product.brand, city=store.city,

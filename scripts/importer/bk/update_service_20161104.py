@@ -227,6 +227,46 @@ def update_sh_provider():
     print 'new:', count
 
 
+def create_push():
+    head_type = 2
+    oc = User.objects.get(username='13671995028')
+    area = oc.area
+    city = oc.city
+    area_manager = User.objects.get(username='18918726265')
+    provider_user = User.objects.get(username='13671995028')
+    provider = str(provider_user.id)
+
+    print Push(
+        area = area,
+        city = city,
+        head_type = head_type,
+        provider = provider,
+        company = provider_user.company,
+        area_manager = [area_manager.name, area_manager.mobile], #二级推送
+        manager = [provider_user.name, provider_user.mobile],
+        hq = ["周文辉","13585753381"]
+    ).save().id
+
+    head_type = 2
+    oc = User.objects.get(username='18916765521')
+    area = oc.area
+    city = oc.city
+    area_manager = User.objects.get(username='13916020737')
+    provider_user = User.objects.get(username='18916765521')
+    provider = str(provider_user.id)
+
+    print Push(
+        area = area,
+        city = city,
+        head_type = head_type,
+        provider = provider,
+        company = provider_user.company,
+        area_manager = [area_manager.name, area_manager.mobile], #二级推送
+        manager = [provider_user.name, provider_user.mobile],
+        hq = ["周文辉","13585753381"]
+    ).save().id
+
 if __name__ == '__main__':
     main()
     update_sh_provider()
+    create_push()

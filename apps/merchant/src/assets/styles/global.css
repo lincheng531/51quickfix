@@ -19,3 +19,31 @@ body {
 .text-orange {
     color: #ff7043;
 }
+
+.theme-blue {
+    background-color: #374256;
+}
+
+.theme-text-blue {
+    color: #374256;
+}
+
+.theme-box {
+    background-color: rgb(249, 249, 249);
+}
+
+.theme-grey {
+    background-color: rgb(244, 244, 244);
+}
+
+.theme-grey-dark {
+    background-color: rgb(228, 228, 228);
+}
+
+.theme-title-grey {
+    background-color: rgb(135, 142, 154);
+}
+
+.theme-table-selected {
+    background-color: rgb(255, 241, 232);
+}

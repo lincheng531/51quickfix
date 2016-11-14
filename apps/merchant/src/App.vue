@@ -13,10 +13,10 @@
                         <!--class="fa fa-fw fa-arrows-v"></i></span></a></li>-->
                         <li class="nav-item dropdown">
                             <a href="" class="nav-link clear" data-toggle="dropdown">
-                                <span class="avatar w-32">
-                                    <img v-bind:src="USER_PROFILE.avatar_img">
-                                </span>
-                                <span v-text="USER_PROFILE.name"></span>
+                                <!--<span class="avatar w-32">-->
+                                    <!--<img v-bind:src="USER_PROFILE.avatar_img">-->
+                                <!--</span>-->
+                                <!--<span v-text="USER_PROFILE.name"></span>-->
                             </a>
                             <div class="dropdown-menu pull-right dropdown-menu-scale">
                                 <!--<a class="dropdown-item" ui-sref="app.page.setting" href="#/app/page/setting">-->
@@ -86,7 +86,6 @@
     export default {
         data () {
             return{
-                USER_PROFILE: USER_PROFILE,
             }
         },
         components: {

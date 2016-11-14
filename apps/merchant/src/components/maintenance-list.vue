@@ -1,6 +1,11 @@
 <template>
     <div class="padding">
         <div class="row">
+            <div class="pull-right">
+                <router-link to="/maintenance/call">
+                    <a class="p-l-lg p-r-lg btn btn-sm theme-blue text-white">+ 报修</a>
+                </router-link>
+            </div>
             <div style="width: 30%">
                 <form>
                     <div class="input-group input-group-sm b-a b-orange box-radius-2x" id="search">

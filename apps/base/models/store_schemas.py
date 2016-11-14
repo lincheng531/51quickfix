@@ -281,6 +281,7 @@ class Call(Document):
     head_type       = IntField() #2为汉堡王 3为打达美乐
     city            = StringField() #城市
     product         = ReferenceField(Product)
+    device          = ReferenceField(Device)
     name            = StringField() #产品名称
     brand           = ReferenceField(Brand) #产品型号
     model           = StringField() 

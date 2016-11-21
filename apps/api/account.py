@@ -341,7 +341,7 @@ def signin(request):
     _user = mobile_user or email_user
     user =  authenticate(username=_user.username, password=password)
     if user:
-        if user.is_active or user.category in ['1', '0']:
+        if user.is_active:
             user.backend = 'mongoengine.django.auth.MongoEngineBackend'
             login(request, user)
             user.save()

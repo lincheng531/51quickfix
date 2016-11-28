@@ -1615,7 +1615,7 @@ def collection(request, id):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def collect(request, id):
     """  合集
     维修工添加合集

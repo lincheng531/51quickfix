@@ -393,7 +393,7 @@ def repairs(request):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def repair(request, oid):
     """  修单详细（适用标准和连锁版）标准版多进程
 
@@ -422,7 +422,7 @@ def repair(request, oid):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def collection(request, id):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     user = get_user(request)
@@ -590,7 +590,7 @@ def bill1(request, oid):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def bill(request, oid):
     """  填写(修改)维修单-维修成功工单 (适用连锁版)
 

@@ -1125,7 +1125,7 @@ def review(request, oid):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def stop(request, oid):
     """  暂停服务 
 

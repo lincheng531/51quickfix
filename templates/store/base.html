@@ -44,9 +44,9 @@
     <div class="header">
         <div class="wrapper">
                 <a id="home" href="/store/" style="padding-left: 30px;"><img src="/static/images/icon_home.png"/>&nbsp;</a>
-                 {% if request.user.roles.apps_store_repair_list %}
+
                 <a href="javascript:void(0)" data-jq-dropdown="#jq-dropdown-5" {% ifequal current 'repair'%}class="active"{% endifequal %}>维修</a> 
-                {% endif %}
+
                 {% if request.user.roles.apps_store_inventory_list %}
                 <a href="/store/inventory/list" {% ifequal current 'inventory'%}class="active"{% endifequal %}>盘点</a> 
                 {% endif %}

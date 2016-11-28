@@ -1,0 +1,333 @@
+pre {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    font-size: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.dataTables_length {
+    margin-top: .5rem;
+}
+
+.no_pd {
+    text-align: center;
+    padding-bottom: 0 !important;
+}
+
+.w-xxxl {
+    width: 360px;
+}
+
+.table td, .table th {
+    padding: .5rem;
+    line-height: 1.5;
+    vertical-align: middle;
+    border-top: 1px solid #eceeef;
+}
+
+table.dataTable tbody tr.selected, table.dataTable tbody th.selected, table.dataTable tbody td.selected {
+    color: white !important;
+}
+
+table.dataTable tbody > tr.selected, table.dataTable tbody > tr > .selected {
+    background-color: #bdbdbd !important;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.xs_mp {
+    margin-top: .5rem;
+}
+
+.dataTables_wrapper.form-inline .form-control {
+    padding: 0 0.5rem 0 0.5rem;
+    min-height: 2rem;
+}
+
+div.dataTables_filter label {
+    padding-top: .25rem;
+    margin-bottom: 0;
+}
+
+.form-control {
+    font-size: 14px;
+}
+
+.label-lte {
+    display: inline-block;
+}
+
+.box-header .label {
+    vertical-align: text-bottom;
+    margin-left: .3rem;
+}
+
+.dashed {
+    border: 2px dashed black !important;
+}
+
+.r_img {
+    width: 64px;
+    height: 64px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    max-height: 700px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.flex-vertical-center {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wba {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.font-mono {
+    font-family: Menlo, Consolas, "Source Code Pro", Inconsolata, Monaco, "Courier New", Times, Georgia;
+}
+
+.table-p-xs td, .table-p-xs th {
+    padding: .25rem;
+}
+
+.center-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bell-shake {
+    -webkit-animation: bellshake 2s linear 0s infinite;
+    -moz-animation: bellshake 2s linear 0s infinite;
+    -ms-animation: bellshake 2s linear 0s infinite;
+    animation: bellshake 2s linear 0s infinite;
+    -webkit-transform-origin: top center;
+    -moz-transform-origin: top center;
+    -ms-transform-origin: top center;
+    transform-origin: top center;
+}
+
+@-webkit-keyframes bellshake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    5% {
+        transform: rotate(12deg)
+    }
+
+    15% {
+        transform: rotate(-10deg)
+    }
+
+    25% {
+        transform: rotate(8deg)
+    }
+
+    35% {
+        transform: rotate(-6deg)
+    }
+
+    45% {
+        transform: rotate(4deg)
+    }
+
+    55% {
+        transform: rotate(-2deg)
+    }
+
+    60% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+@-moz-keyframes bellshake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    5% {
+        transform: rotate(12deg)
+    }
+
+    15% {
+        transform: rotate(-10deg)
+    }
+
+    25% {
+        transform: rotate(8deg)
+    }
+
+    35% {
+        transform: rotate(-6deg)
+    }
+
+    45% {
+        transform: rotate(4deg)
+    }
+
+    55% {
+        transform: rotate(-2deg)
+    }
+
+    60% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+@-ms-keyframes bellshake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    5% {
+        transform: rotate(12deg)
+    }
+
+    15% {
+        transform: rotate(-10deg)
+    }
+
+    25% {
+        transform: rotate(8deg)
+    }
+
+    35% {
+        transform: rotate(-6deg)
+    }
+
+    45% {
+        transform: rotate(4deg)
+    }
+
+    55% {
+        transform: rotate(-2deg)
+    }
+
+    60% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+@keyframes bellshake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    5% {
+        transform: rotate(12deg)
+    }
+
+    15% {
+        transform: rotate(-10deg)
+    }
+
+    25% {
+        transform: rotate(8deg)
+    }
+
+    35% {
+        transform: rotate(-6deg)
+    }
+
+    45% {
+        transform: rotate(4deg)
+    }
+
+    55% {
+        transform: rotate(-2deg)
+    }
+
+    60% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+.note-btn.dropdown-toggle::after {
+    display: none;
+}
+
+.note-popover {
+    display: none;
+}
+
+.p-b-0 {
+    padding-bottom: 0;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.b-deep-orange {
+    border-color: #ff5722 !important;
+}
+
+.text-deep-orange {
+    color: #ff5722;
+}
+
+.text-lime {
+    color: #827717;
+}
+
+.bg-warn-expires {
+    background: #fff7ea;
+}
+
+.b-warn-expires {
+    border-color: #fff7ea;
+}
+
+.b-info-lt {
+    border-color: #03a9f4;
+}
+
+.auto-overflow {
+    overflow: auto;
+}
+
+.rotate90 {
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -moz-transform: rotate(90deg); /* Firefox */
+    -webkit-transform: rotate(90deg); /* Safari 和 Chrome */
+    -o-transform: rotate(90deg); /* Opera */
+}

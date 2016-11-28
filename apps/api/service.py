@@ -66,7 +66,7 @@ def scan(request):
             else:
                 store = device.store
             mu = Maintenance.objects.filter(grab_user=user, store=str(store.id), status__in=[1, 6]).order_by(
-                    '-create_time').first()
+                '-create_time').first()
 
             if mu:
                 resp['status'] = 1
@@ -105,7 +105,7 @@ def scan(request):
                 content = REDIS.hget('control_pool', str(mu.id))
                 if content:
                     befor_time3, code, grab_user_name, company_name, store_name, store_no, oid, opt_user_id, user_id, parent_user_id, come_time, come_time_status, work_time, work_time_status = content.split(
-                            '|')
+                        '|')
                     REDIS.hset('control_pool', oid,
                                '{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}'.format(befor_time3, code, grab_user_name,
                                                                                   company_name, store_name, store_no,
@@ -217,18 +217,18 @@ def grabs(request):
     head_type = int(data.get('head_type', 2))
     if head_type > 1:
         maintenances = Maintenance.objects(
-                __raw__={'status': 0, 'head_type': {'$gt': 1}, 'members': {'$all': [str(user.id)]}}).order_by(
-                '-create_time')
+            __raw__={'status': 0, 'head_type': {'$gt': 1}, 'members': {'$all': [str(user.id)]}}).order_by(
+            '-create_time')
         results = [i.get_result() for i in maintenances]
     elif head_type == 1:
         maintenances = Maintenance.objects(
-                __raw__={'status': 0, 'head_type': 1, 'members': {'$all': [str(user.id)]}}).order_by('-create_time')
+            __raw__={'status': 0, 'head_type': 1, 'members': {'$all': [str(user.id)]}}).order_by('-create_time')
         results = [i.get_result1() for i in maintenances]
     resp['info']['results'] = results
     return json_response(resp)
 
 
-@login_required('0')
+@login_required('0', '2')
 def grab(request, oid):
     """  接单或者抢单(适用标准版和连锁版)
 
@@ -244,7 +244,10 @@ def grab(request, oid):
     resp = {'status': 0, 'info': {}, 'alert': ''}
     data = get_json_data(request) or request.POST.dict()
     user = get_user(request)
-    maintenance = Maintenance.objects.filter(
+    if user.category == '2':
+        maintenance = Maintenance.objects.filter(id=ObjectId(oid), status=0).first()
+    else:
+        maintenance = Maintenance.objects.filter(
             __raw__={'_id': ObjectId(oid), 'status': 0, 'members': {'$all': [str(user.id)]}}).first()
     if maintenance:
         come_time = data.get('come_time')
@@ -332,7 +335,7 @@ def grab(request, oid):
                                                                                              maintenance.code,
                                                                                              maintenance.grab_user.name,
                                                                                              SERVICE_COMPANY.get(
-                                                                                                     maintenance.head_type),
+                                                                                                 maintenance.head_type),
                                                                                              maintenance.store_name,
                                                                                              store.no,
                                                                                              maintenance.id,
@@ -340,9 +343,9 @@ def grab(request, oid):
                                                                                              user.id,
                                                                                              parent_user_id,
                                                                                              time.mktime(
-                                                                                                     come_time.timetuple()),
+                                                                                                 come_time.timetuple()),
                                                                                              time.mktime(
-                                                                                                     work_time.timetuple())))
+                                                                                                 work_time.timetuple())))
 
         title = PUSH1.format(maintenance.title, user.name)
         push_message(maintenance.user.id, title, {
@@ -1083,7 +1086,7 @@ def bill3(request, oid):
         item.update(mtce.get_result())
     else:
         repairs = DB.repair.find(
-                {'user': mtce.opt_user.id, 'product': mtce.product_id.id, 'supplier': mtce.supplier_id.id})
+            {'user': mtce.opt_user.id, 'product': mtce.product_id.id, 'supplier': mtce.supplier_id.id})
         rps = []
         pf = lambda x: dt.strftime(x, '%Y-%m-%d') if x else ''
         for rep in repairs:
@@ -1173,9 +1176,9 @@ def stop(request, oid):
 
     mobile = AREA_CONNECTOR[maintenance.head_type][maintenance.area][1]
     send_sms(mobile, u'【51快修】餐厅:{},设备:{},编号:{},需要暂停至:{},申请暂停,原因:{},申请人:{}({}),确认请回:编号 Y,拒绝请回:编号 N,请尽快处理！'.format(
-            maintenance.store_name, maintenance.product, maintenance.code, stop_day.strftime(u'%Y年%m月%d日 %H:%M'),
-            reason,
-            user.name, user.username), maintenance.code)
+        maintenance.store_name, maintenance.product, maintenance.code, stop_day.strftime(u'%Y年%m月%d日 %H:%M'),
+        reason,
+        user.name, user.username), maintenance.code)
     return json_response(resp)
 
 

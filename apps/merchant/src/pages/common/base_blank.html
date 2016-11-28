@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8"/>
+    <title>HR</title>
+    <meta name="description" content="Admin"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <link rel="apple-touch-icon" href="/static/assets/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="Flatkit">
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" sizes="196x196" href="/static/assets/images/logo.png">
+
+    <!-- style -->
+    <link rel="stylesheet" href="/static/assets/animate.css/animate.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/assets/glyphicons/glyphicons.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/assets/font-awesome/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/assets/material-design-icons/material-design-icons.css" type="text/css"/>
+
+    <link rel="stylesheet" href="/static/assets/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <!-- build:css /static/assets/styles/app.min.css -->
+    <link rel="stylesheet" href="/static/assets/styles/app.css" type="text/css"/>
+    <!-- endbuild -->
+    <link rel="stylesheet" href="/static/assets/styles/font.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/assets/styles/base.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/libs/jquery/toastr/toastr.min.css">
+    <link rel="stylesheet" href="/static/libs/jquery/editable-select/source/jquery.editable-select.min.css">
+
+    {% block extendcss %}
+
+    {% endblock %}
+
+    <!-- jQuery -->
+    <script src="/static/libs/jquery/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/libs/jquery/tether/dist/js/tether.min.js"></script>
+    <script src="/static/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- core -->
+    <script src="/static/libs/jquery/underscore/underscore-min.js"></script>
+    <script src="/static/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+    <script src="/static/libs/jquery/PACE/pace.min.js"></script>
+</head>
+<body>
+
+<div style="margin:0;padding:0;display:inline">
+    <input type="hidden" id="profile_hidden" value='{{ profile }}'>
+</div>
+
+<script src="/static/js/base.js"></script>
+<!-- build:js /static/js/app.html.js -->
+<script src="/static/js/config.lazyload.js"></script>
+<script src="/static/js/palette.js"></script>
+<script src="/static/js/ui-load.js"></script>
+<script src="/static/js/ui-jp.js"></script>
+<script src="/static/js/ui-include.js"></script>
+<script src="/static/js/ui-device.js"></script>
+<script src="/static/js/ui-form.js"></script>
+<script src="/static/js/ui-nav.js"></script>
+<script src="/static/js/ui-screenfull.js"></script>
+<script src="/static/js/ui-scroll-to.js"></script>
+<script src="/static/js/ui-toggle-class.js"></script>
+<script src="/static/libs/jquery/toastr/toastr.min.js"></script>
+<script src="/static/libs/jquery/editable-select/source/jquery.editable-select.js"></script>
+<script src="/static/libs/jquery/fullscreen/screenfull.min.js"></script>
+<!--
+<script src="/static/libs/jquery/jquery-validation/jquery.validate.min.js"></script>
+<script src="/static/libs/jquery/jquery-validation/additional-methods.min.js"></script>
+<script src="/static/libs/jquery/jquery-validation/localization/messages_zh.min.js"></script>
+-->
+
+<!-- Global Config -->
+{% if debug %}
+    <script src="/static/js/global_config_dev.js"></script>
+{% else %}
+    <script src="/static/js/global_config.js"></script>
+{% endif %}
+
+<div class="app" id="app">
+
+    <!-- ############ LAYOUT START-->
+
+    <!-- aside -->
+    <div id="aside" class="app-aside modal fade sm nav-dropdown hide">
+        <div class="left navside grey dk" layout="column">
+            <div class="navbar no-radius">
+                <div ui-include="'/static/views/brand.html'"></div>
+            </div>
+            <div flex class="hide-scroll">
+                <nav class="scroll nav-border b-primary">
+                    <ul class="nav" ui-nav id="system_nav">
+                    </ul>
+                </nav>
+            </div>
+            <div flex-no-shrink>
+                <div ui-include="'/static/views/aside_bottom.html'"></div>
+            </div>
+        </div>
+    </div>
+    <!-- / aside -->
+
+    <script src="/static/js/app.js"></script>
+
+    <!-- content -->
+    <div id="content" class="app-content box-shadow-z2 box-radius-1x" role="main">
+        <div ui-view class="app-body" id="view">
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+    </div>
+    <!-- / content -->
+
+    <!-- ############ LAYOUT END-->
+
+</div>
+
+
+<!-- ajax -->
+<script src="/static/libs/jquery/jquery-pjax/jquery.pjax.js"></script>
+<script src="/static/js/ajax.js"></script>
+<!-- endbuild -->
+
+</body>
+</html>

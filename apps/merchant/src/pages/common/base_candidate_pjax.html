@@ -1,0 +1,67 @@
+<!-- content -->
+<div id="view" class="app-content box-shadow-z2 box-radius-1x" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar">
+            <!-- brand -->
+            <a class="navbar-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24">
+                    <path d="M 4 4 L 44 4 L 44 44 Z" fill="#a88add"></path>
+                    <path d="M 4 4 L 34 4 L 24 24 Z" fill="rgba(0,0,0,0.15)"></path>
+                    <path d="M 4 4 L 24 4 L 4  44 Z" fill="#0cc2aa"></path>
+                </svg>
+                <span class="hidden-folded inline">Hi</span>
+            </a>
+            <!-- / brand -->
+
+            <!-- navbar right -->
+            <ul class="nav navbar-nav pull-right">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle clear" href data-toggle="dropdown">
+                        {{ request.session.user.user.username }}
+                    </a>
+
+                    <div class="dropdown-menu pull-right dropdown-menu-scale">
+                        <a class="dropdown-item" href="/" data-pjax>
+                            <span>个人信息</span>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">退出</a>
+                    </div>
+
+                </li>
+                <li class="nav-item hidden-md-up">
+                    <a class="nav-link" data-toggle="collapse" data-target="#collapse">
+                        <i class="material-icons">&#xe5d4;</i>
+                    </a>
+                </li>
+            </ul>
+            <!-- / navbar right -->
+            <!-- navbar collapse -->
+            <div class="collapse navbar-toggleable-sm" id="navbar-1">
+                <!-- link and dropdown -->
+                <ul class="nav navbar-nav nav-active-border b-primary">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" ui-nav>
+                            <span class="nav-text">首页</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view/candidate/paper.html" ui-nav>
+                            <span class="nav-text">我的测试</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- / link and dropdown -->
+            </div>
+            <!-- / navbar collapse -->
+        </div>
+    </div>
+    <div ui-view class="app-body">
+        {% block extendcss %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block extendscript %}{% endblock %}
+    </div>
+</div>
+<!-- / content -->

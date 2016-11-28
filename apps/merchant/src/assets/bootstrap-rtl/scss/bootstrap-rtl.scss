@@ -5,42 +5,42 @@
 // --------------------------------------------------
 
 // Core variables and mixins imported from the latest original bootstrap
-@import "../../bootstrap/scss/variables";
-@import "../../bootstrap/scss/mixins";
-@import "variables-rtl";
-@import "mixins-rtl";
+@import "../../bootstrap/scss/_variables.scss";
+@import "../../bootstrap/scss/_mixins.scss";
+@import "variables-rtl.scss";
+@import "mixins-rtl.scss";
 
 
 // Reset and dependencies
-@import "normalize-rtl";
+@import "normalize-rtl.scss";
 
 // Core CSS
-@import "type-rtl";
-@import "grid-rtl";
-@import "tables-rtl";
-@import "forms-rtl";
+@import "type-rtl.scss";
+@import "grid-rtl.scss";
+@import "tables-rtl.scss";
+@import "forms-rtl.scss";
 
 // Components
-@import "dropdowns-rtl";
-@import "button-groups-rtl";
-@import "input-groups-rtl";
-@import "navs-rtl";
-@import "navbar-rtl";
-@import "breadcrumbs-rtl";
-@import "pagination-rtl";
-@import "pager-rtl";
-@import "badges-rtl";
-@import "alerts-rtl";
-@import "progress-rtl";
-@import "media-rtl";
-@import "list-group-rtl";
-@import "responsive-embed-rtl";
-@import "close-rtl";
+@import "dropdowns-rtl.scss";
+@import "button-groups-rtl.scss";
+@import "input-groups-rtl.scss";
+@import "navs-rtl.scss";
+@import "navbar-rtl.scss";
+@import "breadcrumbs-rtl.scss";
+@import "pagination-rtl.scss";
+@import "pager-rtl.scss";
+@import "badges-rtl.scss";
+@import "alerts-rtl.scss";
+@import "progress-rtl.scss";
+@import "media-rtl.scss";
+@import "list-group-rtl.scss";
+@import "responsive-embed-rtl.scss";
+@import "close-rtl.scss";
 
 // Components w/ JavaScript
-@import "modals-rtl";
-@import "popovers-rtl";
-@import "carousel-rtl";
+@import "modals-rtl.scss";
+@import "popovers-rtl.scss";
+@import "carousel-rtl.scss";
 
 // Utility classes
-@import "utilities-rtl";
+@import "utilities-rtl.scss";

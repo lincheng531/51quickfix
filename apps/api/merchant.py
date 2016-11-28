@@ -1783,4 +1783,5 @@ def collect(request, id):
     resp['status'] = 1
     resp['info'] = collection.get_result()
 
-    return json_response(resp)
+    response = json_response(resp)
+    return response

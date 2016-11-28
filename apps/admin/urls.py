@@ -10,7 +10,7 @@ urlpatterns = patterns('apps.admin',
     ('^$','overview.index'),
     ('overview$','overview.overview'),
     ('detail$','overview.detail'),
-    ('login$','index.login'),
+    (r'^login$','index.login'),
     ('logout$','index.logout'),
     
     ('upload$','uploader.upload'),
@@ -75,7 +75,7 @@ urlpatterns = patterns('apps.admin',
     #('account/profile$','account.profile'),
     
     
-    ('maintenance/list$','maintenance.list'),
+    # ('maintenance/list$','maintenance.list'),
     ('maintenance/detail/(?P<oid>\S{24})$','maintenance.detail'),
     #('maintenance/edit/(?P<oid>\S{24})$','maintenance.edit'),
     #('maintenance/append$','maintenance.append'),
@@ -87,5 +87,8 @@ urlpatterns = patterns('apps.admin',
     #('bconfig/append$','bconfig.append'),
     #('bconfig/delete/(?P<oid>\S{24})$','bconfig.delete'),
 
+    url(r'api/v1/test', 'api.test'),
+    url(r'api/v1/login$', 'api.login'),
+    url(r'api/v1/maintenance/list$', 'api.maintenanceList'),
 )
 

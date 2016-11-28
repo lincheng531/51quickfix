@@ -121,6 +121,10 @@ def json_response(data,callback=None):
     else:
         response = HttpResponse(json.dumps(data), mimetype='application/json;charset=utf-8',status=200)
 
+    response['Access-Control-Allow-Origin'] = '*'
+    response["Access-Control-Allow-Credentials"] = True
+    response['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
+    response['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Key, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Headers"
     return response
 
 def base_login_required(category,is_active=1): 

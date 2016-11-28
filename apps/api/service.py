@@ -228,7 +228,7 @@ def grabs(request):
     return json_response(resp)
 
 
-@login_required('0', '2')
+@login_required(['0', '2'])
 def grab(request, oid):
     """  接单或者抢单(适用标准版和连锁版)
 

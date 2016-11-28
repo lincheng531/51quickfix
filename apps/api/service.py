@@ -117,7 +117,7 @@ def scan(request):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def delayed(request, oid):
     """  填写延时原因 /api/v1/service/delayed/<oid> 判断手机当前时间大于商户要求必须到店时间
 
@@ -361,7 +361,7 @@ def grab(request, oid):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def repairs(request):
     """  修单列表（适用标准版和连锁版）
 

@@ -50,6 +50,9 @@ module.exports = {
         path: path.resolve(__dirname + config.publicPath), //编译到app目录
         filename: '[name].js' //编译后的文件名
     },
+    externals: {
+        "window.BMap": "BMap",
+    },
     module: {
         loaders: [
             {

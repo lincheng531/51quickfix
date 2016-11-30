@@ -561,6 +561,7 @@ def verify_profile(request):
                 resp['alert'] = u'电工证，制冷证，煤气证必选其一'
     setattr(user, 'is_update', True)
     user.save()
+    resp['status'] = 1
     resp['info'] = user.get_user_profile_dict()
     return json_response(resp)
 

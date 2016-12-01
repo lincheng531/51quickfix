@@ -559,6 +559,7 @@ def verify_profile(request):
                 resp['status'], resp['alert'] = 1, u'修改成功'
             else:
                 resp['alert'] = u'电工证，制冷证，煤气证必选其一'
+                return json_response(resp)
     setattr(user, 'is_update', True)
     user.save()
     resp['status'] = 1

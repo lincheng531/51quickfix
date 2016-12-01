@@ -539,7 +539,7 @@ def verify_profile(request):
                 if key not in ['store', 'card', 'logo']:
                     setattr(user, key, v)
             resp['status'], resp['alert'] = 1, u'修改成功'
-    elif user.category == '0':
+    elif user.category in ('0', '2'):
         if not data.get('card'):
             resp['alert'] = u'身份证图片不得为空'
         else:

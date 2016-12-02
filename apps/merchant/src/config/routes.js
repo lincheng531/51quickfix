@@ -23,6 +23,10 @@ export default [
                         component: resolve => require(['../pages/home/maintenance-list.vue'], resolve),
                     },
                     {
+                        path: '/maintenance/:id(\\d+)',
+                        component: resolve => require(['../pages/home/maintenance-detail.vue'], resolve),
+                    },
+                    {
                         path: '/maintenance/call',
                         component: resolve => require(['../pages/home/maintenance-call.vue'], resolve),
                     },

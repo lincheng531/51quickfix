@@ -236,6 +236,8 @@ def update_profile(request):
     user = get_user(request)
     data =  get_json_data(request) or request.POST.dict()
     for k, v in data.iteritems():
+        if k == 'card' and v:
+            v = v.split(',')
         if hasattr(user, k):
             setattr(user, k, v)
     user.is_update = True

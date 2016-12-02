@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 import overview from '../src/pages/home/overview.vue'
 import MaintenanceList from '../src/pages/home/maintenance-list.vue'
-import MaintenanceDetail from './components/maintenance-detail.vue'
+import MaintenanceDetail from '../src/pages/home/maintenance-detail.vue'
 import MaintenanceCall from '../src/pages/home/maintenance-call.vue'
 import MaintenanceCallUsers from '../src/pages/home/maintenance-call-users.vue'
 import Login from './components/login.vue'

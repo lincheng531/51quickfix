@@ -542,10 +542,10 @@ def verify_profile(request):
                     setattr(user, key, v)
             resp['status'], resp['alert'] = 1, u'修改成功'
     elif user.category in ('0', '2'):
-        if not data.get('card'):
+        if user.category == '0' and not data.get('card'):
             resp['alert'] = u'身份证图片不得为空'
         else:
-            if len(data.get('card').split(',')) <> 2:
+            if user.category == '0' and len(data.get('card').split(',')) <> 2:
                 resp['alert'] = u'身份证必须正反两面'
                 return json_response(resp)
             __p = lambda t:True if t else False

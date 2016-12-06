@@ -93,6 +93,19 @@ class Maintenance(Document):
     dispatched = IntField(default=0) #是否改派
 
     verify_status = IntField(default=-1)  # 为未导入审核状态 0为新的 1为审核失败 2为审核中
+    settlement = IntField(default=0) #审核结算状态
+    audit_merchant_user = ReferenceField(User)
+    audit_merchant_date = DateTimeField()
+    audit_merchant_note = StringField()
+    audit_repair_user = ReferenceField(User)
+    audit_repair_date = DateTimeField()
+    audit_repair_note = StringField()
+    settle_merchant_user = ReferenceField(User)
+    settle_merchant_date = DateTimeField()
+    settle_merchant_note = StringField()
+    settle_repair_user = ReferenceField(User)
+    settle_repair_date = DateTimeField()
+    settle_repair_note = StringField()
 
     create_time = DateTimeField(default=dt.now)  # 叫修时间
     update_time = DateTimeField(default=dt.now)

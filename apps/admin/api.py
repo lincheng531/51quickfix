@@ -48,22 +48,12 @@ def login(request):
 
     user.backend = 'mongoengine.django.auth.MongoEngineBackend'
     result = _login(request, user)
-    print '==============>'
-    print result
-    print '==============>'
     resp['info'] = user.get_user_profile_dict()
     response = json_response(resp)
     return response
 
 # @login_required(2)
 def maintenanceList(request):
-    # if request.method == 'OPTIONS':
-    #     response = HttpResponse('', status=200)
-    #     response['Access-Control-Allow-Origin'] = '*'
-    #     response['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
-    #     response['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, XMLHttpRequest"
-    #     return response
-
     resp = {'status': 1, 'info': {}, 'alert': ''}
     data = get_json_data(request) or request.POST.dict()
     user = get_user(request)
@@ -90,6 +80,32 @@ def maintenanceList(request):
     result = [item.get_result() for item in mc]
     resp['info']['results'] = result
     return json_response(resp)
+
+
+def _process_result(_r):
+    _r['id'] = _r['_id']
+    _r['user'] = DB.user.find_one({'_id':_r['user']})
+    _r['user_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'opt_user':_r['user']['_id']}).count()
+    _r['apply_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'status':1, 'opt_user':_r['user']['_id']}).count()
+    _r['confirm_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'status':2, 'opt_user':_r['user']['_id']}).count()
+    _r['head_type_'] = HEAD_BRAND.get(_r.get('head_type', ''), '')
+    _r['state_'] = MaintenanceState.get(_r.get('state'), '')
+    _r['status_'] = MaintenanceStatus.get(_r.get('status'), '')
+    _r['device'] = DB.device.find_one({'_id': ObjectId(_r['device'])})
+    return _r
+
+
+def maintenanceDetail(request, id):
+    id = ObjectId(id)
+    item = DB.maintenance.find_one({'_id': id})
+    item = _process_result(item)
+    item['store'] = DB.store.find_one({'_id': ObjectId(item.get('store'))})
+    grab_user = DB.user.find_one({'_id': ObjectId(item.get('grab_user'))})
+    if grab_user:
+        item['grab_user'] = grab_user
+        item['grab_user']['title'] = USER_CATEGORY.get(grab_user['category'])
+    # return render('admin/{}_detail.html'.format(current),locals(),context_instance=RequestContext(request))
+    return json_response(item)
 
 
 def test(request):

@@ -37,14 +37,14 @@ $(document).ajaxSend(function (event, xhr, settings) {
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
-    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-
-    var USER_PROFILE = JSON.parse(sessionStorage.getItem('user'));
-    if (USER_PROFILE) {
-        xhr.setRequestHeader("Authorization", 'Token ' + USER_PROFILE.token);
-    }
+    // if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+    //     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    // }
+    //
+    // var USER_PROFILE = JSON.parse(sessionStorage.getItem('user'));
+    // if (USER_PROFILE) {
+    //     xhr.setRequestHeader("Authorization", 'Token ' + USER_PROFILE.token);
+    // }
 });
 
 $(document).ajaxComplete(function (event, request, settings) {

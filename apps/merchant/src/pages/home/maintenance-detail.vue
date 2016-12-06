@@ -9,15 +9,15 @@
                 <div class="box-body text-center">
                     <div class="m-t-md m-b">
                         <span class="avatar w-96">
-                            <img v-bind:src="store.store_logo">
+                            <img src="http://">
                             <i class="busy b-white right"></i>
                         </span>
                     </div>
-                    <h6>{{store.title}}</h6>
+                    <h6 v-text="store.name"></h6>
                     <p class="text-muted text-sm m-a">
-                        编号&nbsp; <span v-text="store.code"></span>
+                        编号&nbsp; <span v-text="store.no"></span>
                         <br>
-                        <span v-text="store.number"></span>
+                        <span v-text="store.mobile || store.phone || store.tel"></span>
                         <br>
                         <span v-text="store.address"></span>
                     </p>
@@ -71,7 +71,7 @@
 
                     <div class="col-md-8 col-md-push-4 m-t-sm m-b">
                         <div>
-                            <span v-for="img in images">
+                            <span v-for="img in this.maintenance.logo">
                                 <img class="img-rounded" alt="" src="" width="64" height="64"
                                      data-toggle="modal" data-target="#img-$index" ui-toggle-class="zoom"
                                      ui-target="#animate">
@@ -229,7 +229,7 @@
                 </div>
             </div>
 
-            <div class="box" v-if="maintenance.status > 1">
+            <div class="box" v-if="maintenance.status == 2">
                 <div class="box-header dker">
                     <h3>审核结算</h3>
                 </div>
@@ -237,13 +237,13 @@
                     <div class="row padding">
                         <div class="col-md-4"></div>
                         <div class="col-md-8">
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.verified=='1'">服务商审核</button>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 1">服务商审核</button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>服务商审核</button>
                             <span class="inline b-t b-t-dark" style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.verified=='2'">我方审核</button>
-                            <button class="btn btn-xs rounded text-white opacity" v-else>我方审核</button>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 2">商户审核</button>
+                            <button class="btn btn-xs rounded text-white opacity" v-else>商户审核</button>
                             <span class="inline b-t b-t-dark" style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.verified > '2'">工单结算</button>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.verified >= 4">工单结算</button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>工单结算</button>
                         </div>
                     </div>
@@ -251,8 +251,35 @@
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">服务商审核工单</div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" v-if="user.category=='1' && maintenance.settlement<1">
                             正在审核当前工单
+                        </div>
+                        <div class="col-md-8" v-if="maintenance.settlement >= 1">
+                            <div class="col-md-4">
+                                <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>服务商已审核</span>
+                            </div>
+                            <div class="col-md-5">
+                                <span v-text="maintenance.audit_repair_user.name"></span> /
+                                <span class="text-muted" v-text="maintenance.audit_repair_user.mobile"></span>
+                            </div>
+                            <div class="col-md-3" v-text="maintenance.audit_repair_date"></div>
+                        </div>
+                        <div class="col-md-8" v-if="user.category=='0' && maintenance.settlement<1">
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"
+                                       class="has-value"> 审核通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 审核不通过
+                            </label>
+                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"></textarea>
+                            <div class="m-t-md p-t-xs">
+                                <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
+                            </div>
+                            <div class="m-t-sm">
+                                <button class="btn btn-xs btn-fw dark">仅保存结果</button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm">提交审核</button>
+                            </div>
                         </div>
                     </div>
 
@@ -263,6 +290,9 @@
                     <div class="row padding">
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">商户审核工单</div>
+                        </div>
+                        <div class="col-md-8">
+                            正在审核当前工单
                         </div>
                         <div class="col-md-8">
                             <label class="radio-inline">
@@ -336,28 +366,30 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import appBreadcrumb from '../../component/app-breadcrumb.vue'
 
     export default {
         computed: {
             infoTable: function () {
                 return [
-                    {'label': '资产', 'text': this.maintenance.device},
-                    {'label': '固定资产编号', 'text': this.maintenance.no},
-                    {'label': '维修时效', 'text': ''},
-                    {'label': '故障现象', 'text': this.maintenance.content},
+                    {'label': '资产', 'text': this.maintenance.device && this.maintenance.device.name},
+                    {'label': '固定资产编号', 'text': this.maintenance.device && this.maintenance.device.uid},
+                    {'label': '维修时效', 'text': this.maintenance && this.maintenance.must_time},
+                    {'label': '故障现象', 'text': this.maintenance && this.maintenance.content},
                 ]
             },
             fixer: function () {
                 return {
-                    'screen_name': this.maintenance.grab_user,
-                    'mobile': this.maintenance.grab_user != '未接单' ? '13222222222' : ''
+                    'company': this.maintenance.grab_user && this.maintenance.grab_user.company,
+                    'screen_name': this.maintenance.grab_user && this.maintenance.grab_user.name,
+                    'mobile': this.maintenance.grab_user && this.maintenance.grab_user.mobile,
                 }
             },
             reporter: function () {
                 return {
-                    'screen_name': this.maintenance.user.name,
-                    'mobile': this.maintenance.user.mobile
+                    'screen_name': this.maintenance.user && this.maintenance.user.name,
+                    'mobile': this.maintenance.user && this.maintenance.user.mobile,
                 }
             },
             totalFee: function () {
@@ -371,7 +403,6 @@
                     {'title': '维修'},
                     {'title': '维修工单'},
                 ],
-                images: [],
                 store: {},
                 maintenance: {},
                 spare_fee: 0,
@@ -383,9 +414,12 @@
         },
         created: function () {
             var id = this.$route.params.id;
-            if (sessionStorage.getItem('maintenance' + id)) {
-                this.maintenance = JSON.parse(sessionStorage.getItem('maintenance' + id));
-            }
+            var url = global.API_HOST + '/maintenance/' + id;
+            var scope = this;
+            $.getJSON(url, {}, function (data) {
+                scope.maintenance = data;
+                scope.store = scope.maintenance.store;
+            });
         },
         components: {
             appBreadcrumb,

@@ -23,7 +23,7 @@ export default [
                         component: resolve => require(['../pages/home/maintenance-list.vue'], resolve),
                     },
                     {
-                        path: '/maintenance/:id(\\d+)',
+                        path: '/maintenance/:id',
                         component: resolve => require(['../pages/home/maintenance-detail.vue'], resolve),
                     },
                     {

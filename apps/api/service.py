@@ -33,7 +33,7 @@ logger = getlogger(__name__)
 '''
 
 
-@login_required('0')
+@login_required(['0', '2'])
 def scan(request):
     """  签到->扫描店铺并传入商铺no(连锁版)
 

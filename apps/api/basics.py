@@ -5,6 +5,7 @@
 import os
 import time
 import traceback
+import pymongo
 import random
 import json
 from datetime import datetime as dt
@@ -283,3 +284,9 @@ def device_detail(request, id):
 
     resp['info'] = device.get_result()
     return  json_response(resp)
+
+
+def brand(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    resp['info']['result'] = [item for item in DB.brand.find().sort('initial', pymongo.ASCENDING)]
+    return json_response(resp)

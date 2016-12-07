@@ -51,7 +51,7 @@ urlpatterns = patterns('',
     ('^basics/equipment$','apps.api.basics.equipment'),
     ('^basics/history/(?P<oid>\S{24})$','apps.api.basics.history'),
     ('^basics/device/(?P<id>\S{24})$','apps.api.basics.device_detail'),
-    ('^basics/brand$','apps.api.basics.brand'),
+    ('^basics/brands$','apps.api.basics.brandList'),
 
     ('^service/scan$','apps.api.service.scan'),
     ('^service/later/(?P<oid>\S{24})$','apps.api.service.later'),

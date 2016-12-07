@@ -286,7 +286,7 @@ def device_detail(request, id):
     return  json_response(resp)
 
 
-def brand(request):
+def brandList(request):
     resp = {'status': 1, 'info': {}, 'alert': ''}
-    resp['info']['result'] = [item for item in DB.brand.find().sort('initial', pymongo.ASCENDING)]
+    resp['info']['results'] = [item for item in DB.brand.find().sort('initial', pymongo.ASCENDING)]
     return json_response(resp)

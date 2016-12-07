@@ -912,7 +912,7 @@ def update_device(request, oid):
     return json_response(resp)
 
 
-@login_required('1'):
+@login_required('1')
 def add_device(request):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     user = get_user(request)

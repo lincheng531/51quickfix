@@ -920,8 +920,8 @@ def add_device(request):
     device = Device(**{
         'head_type': user.head_type,
         'no': data.get('no'),
-        'name':data.get('name')
-        'store': Store.objects.get(id=ObjectId(user.store_id))
+        'name':data.get('name'),
+        'store': Store.objects.get(id=ObjectId(user.store_id)),
         'area': user.area,
         'city': user.city,
         'description': data.get('description'),

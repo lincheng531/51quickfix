@@ -914,7 +914,46 @@ def update_device(request, oid):
 
 @login_required('1')
 def add_device(request):
-    pass
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    user = get_user(request)
+    data = get_json_data(request) or request.POST.dict()
+    # product = Product(**{
+    #    'head_type': user.head_type,
+    #    'category': data.get('category'),
+    #    'efcategory': data.get('efcategory'),
+    #    'ecategory': data.get('ecategory'),
+    #    'name': data.get('name'),
+    #    'model': data.get('model'),
+    #    'specification': data.get('specification'),
+    #    'logo': data.get('logo'),
+    #    'brand_name': data.get('brand_name'),
+    #
+    # }).save()
+    store = Store.objects.get(id=ObjectId(user.store_id))
+    device = Device(**{
+        'head_type': user.head_type,
+        'no': data.get('no'),
+        'name':data.get('name'),
+        'restaurant_name': store.name,
+        'restaurant_no': store.no,
+        'store': store,
+        'area': user.area,
+        'city': user.city,
+        'description': data.get('description'),
+        'model': data.get('model'),
+        'category': data.get('category'),
+        'efcategory': data.get('efcategory'),
+        'ecategory': data.get('ecategory'),
+        'expiration_date': data.get('expiration_date'),
+        'specifications': data.get('specifications'),
+        'brand': data.get('brand'),
+        'psnumber': data.get('psnumber'),
+        'manufacturer': data.get('manufacturer'),
+        'provider': data.get('provider'),
+        'logo': data.get('logo'),
+    }).save()
+    resp['info'] = DB.device.find_one({'_id':device.id})
+    return json_response(resp)
 
 
 @login_required('1')

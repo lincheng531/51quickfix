@@ -912,6 +912,32 @@ def update_device(request, oid):
     return json_response(resp)
 
 
+@login_required('1'):
+def add_device(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    user = get_user(request)
+    data = get_json_data(request) or request.POST.dict()
+    device = Device(**{
+        'head_type': user.head_type,
+        'no': data.get('no'),
+        'name':data.get('name')
+        'store': Store.objects.get(id=ObjectId(user.store_id))
+        'area': user.area,
+        'city': user.city,
+        'description': data.get('description'),
+        'model': data.get('model'),
+        'category': data.get('category'),
+        'efcategory', data.get('efcategory'),
+        'expiration_date': data.get('expiration_date'),
+        'specifications': date.get('specifications'),
+        'brand': data.get('brand'),
+        'psnumber': data.get('psnumber'),
+        'manufacturer': data.get('manufacturer'),
+    }).save()
+    resp['info'] = device
+    return json_response(resp)
+
+
 @login_required('1')
 def delete_device(request, rid):
     resp = {'status': 1, 'info': {}, 'alert': ''}

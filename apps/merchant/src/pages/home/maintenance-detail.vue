@@ -237,13 +237,21 @@
                     <div class="row padding">
                         <div class="col-md-4"></div>
                         <div class="col-md-8">
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 1">服务商审核</button>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 1">
+                                服务商审核
+                            </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>服务商审核</button>
-                            <span class="inline b-t b-t-dark" style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 2">商户审核</button>
+                            <span class="inline b-t b-t-dark"
+                                  style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 2">
+                                商户审核
+                            </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>商户审核</button>
-                            <span class="inline b-t b-t-dark" style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.verified >= 4">工单结算</button>
+                            <span class="inline b-t b-t-dark"
+                                  style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
+                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 3">
+                                工单结算
+                            </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>工单结算</button>
                         </div>
                     </div>
@@ -251,35 +259,47 @@
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">服务商审核工单</div>
                         </div>
-                        <div class="col-md-8" v-if="user.category=='1' && maintenance.settlement<1">
+                        <div class="col-md-8" v-show="is_store && maintenance.settlement<1">
                             正在审核当前工单
                         </div>
-                        <div class="col-md-8" v-if="maintenance.settlement >= 1">
-                            <div class="col-md-4">
-                                <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>服务商已审核</span>
+                        <div class="col-md-8" v-show="is_repair && maintenance.settlement<1">
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" value="1"
+                                       class="has-value" v-model="audit_repair_result"> 审核通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" value="0"
+                                       v-model="audit_repair_result"> 审核不通过
+                            </label>
+                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
+                                      v-model="audit_repair_note"></textarea>
+                            <div class="m-t-md p-t-xs">
+                                <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
                             </div>
-                            <div class="col-md-5">
+                            <div class="m-t-sm">
+                                <button class="btn btn-xs btn-fw dark" v-if="audit_repair_result">仅保存结果</button>
+                                <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" @click="submit_repair_audit"
+                                        v-if="audit_repair_result">提交审核
+                                </button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>提交审核</button>
+                            </div>
+                        </div>
+                        <div class="col-md-8" v-show="maintenance.settlement >= 1">
+                            <div class="col-md-4">
+                                <div>
+                                    <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>服务商已审核
+                                        <small class="text-success" v-if="maintenance.audit_repair_result">通过</small>
+                                        <small class="text-danger" v-else>不通过</small>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <span v-text="maintenance.audit_repair_user.name"></span> /
                                 <span class="text-muted" v-text="maintenance.audit_repair_user.mobile"></span>
                             </div>
-                            <div class="col-md-3" v-text="maintenance.audit_repair_date"></div>
-                        </div>
-                        <div class="col-md-8" v-if="user.category=='0' && maintenance.settlement<1">
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"
-                                       class="has-value"> 审核通过
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 审核不通过
-                            </label>
-                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"></textarea>
-                            <div class="m-t-md p-t-xs">
-                                <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
-                            </div>
-                            <div class="m-t-sm">
-                                <button class="btn btn-xs btn-fw dark">仅保存结果</button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm">提交审核</button>
-                            </div>
+                            <div class="col-md-4" v-text="maintenance.audit_repair_date"></div>
+                            <div class="col-md-12" v-text="maintenance.audit_repair_note"></div>
                         </div>
                     </div>
 
@@ -287,75 +307,106 @@
                         <hr>
                     </div>
 
-                    <div class="row padding">
+                    <div class="row padding" v-if="maintenance.settlement >= 1">
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">商户审核工单</div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" v-show="is_repair && maintenance.settlement < 2">
                             正在审核当前工单
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" v-show="is_store && maintenance.settlement < 2">
                             <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"
-                                       class="has-value"> 审核通过
+                                <input type="radio" name="inlineRadioOptions" value="1"
+                                       class="has-value" v-model="audit_merchant_result"> 审核通过
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 审核不通过
+                                <input type="radio" name="inlineRadioOptions" value="0"
+                                       v-model="audit_merchant_result"> 审核不通过
                             </label>
-                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"></textarea>
+                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
+                                      v-model="merchant_merchant_note"></textarea>
                             <div class="m-t-md p-t-xs">
                                 <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
                             </div>
                             <div class="m-t-sm">
-                                <button class="btn btn-xs btn-fw dark">仅保存结果</button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm">提交审核</button>
+                                <button class="btn btn-xs btn-fw dark" v-if="audit_merchant_result">仅保存结果</button>
+                                <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm"
+                                        @click="submit_merchant_audit" v-if="audit_merchant_result">提交审核
+                                </button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>提交审核</button>
                             </div>
+                        </div>
+                        <div class="col-md-8" v-show="maintenance.settlement >= 2">
+                            <div class="col-md-4">
+                                <div>
+                                    <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>商户已审核
+                                        <small class="text-success" v-if="maintenance.audit_merchant_result">通过</small>
+                                        <small class="text-danger" v-else>不通过</small>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <span v-text="maintenance.audit_merchant_user.name"></span> /
+                                <span class="text-muted" v-text="maintenance.audit_merchant_user.mobile"></span>
+                            </div>
+                            <div class="col-md-4" v-text="maintenance.audit_merchant_date"></div>
+                            <div class="col-md-12" v-text="maintenance.audit_merchant_note"></div>
                         </div>
                     </div>
 
-                    <div class="row p-l p-r">
+                    <div class="row p-l p-r" v-if="maintenance.settlement >= 1">
                         <hr>
                     </div>
 
-                    <div class="row padding">
+                    <div class="row padding" v-if='maintenance.settlement>=2'>
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">结算</div>
                         </div>
                         <div class="col-md-8">
-                            <div class="row">
+                            <div class="row m-b" v-if="maintenance.settle_repair_result">
                                 <div class="col-md-4">
                                     <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>服务商已结算</span>
                                 </div>
-                                <div class="col-md-5">
-                                    <span>张永生</span> /
-                                    <span class="text-muted">13816903031</span>
+                                <div class="col-md-4">
+                                    <span v-text="maintenance.settle_repair_user.name"></span> /
+                                    <span class="text-muted" v-text="maintenance.settle_repair_user.mobile"></span>
                                 </div>
-                                <div class="col-md-3">2015年11月3日 15:16</div>
+                                <div class="col-md-4" v-text="maintenance.settle_repair_date"></div>
+                                <div class="col-md-12" v-text="maintenance.settle_repair_note"></div>
                             </div>
-                            <div class="row">
+                            <div class="row m-b" v-if="maintenance.settle_merchant_result">
                                 <div class="col-md-4">
                                     <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>商户已结算</span>
                                 </div>
-                                <div class="col-md-5">
-                                    <span>张永生</span> /
-                                    <span class="text-muted">13816903031</span>
+                                <div class="col-md-4">
+                                    <span v-text="maintenance.settle_merchant_user.name"></span> /
+                                    <span class="text-muted" v-text="maintenance.settle_merchant_user.mobile"></span>
                                 </div>
-                                <div class="col-md-3">2015年11月3日 15:16</div>
+                                <div class="col-md-4" v-text="maintenance.settle_merchant_date"></div>
+                                <div class="col-md-12" v-text="maintenance.settle_merchant_note"></div>
                             </div>
-                            <div class="m-t-md">
-                                <label class="md-check">
-                                    <input type="checkbox" checked class="has-value">
-                                    <i class="indigo"></i>
-                                    <span class="text-muted">本工单已结算</span>
-                                </label>
-                            </div>
-                            <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"></textarea>
-                            <div class="m-t-md p-t-xs">
-                                <small class="text-muted">提示: 您可在当前页面保存结算结果, 再返回列表页选择多张工单批量结算</small>
-                            </div>
-                            <div class="m-t-sm">
-                                <button class="btn btn-xs btn-fw dark">仅保存结果</button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm">结算工单</button>
+                            <div v-if="(is_store && !maintenance.settle_merchant_result) || (is_repair && !maintenance.settle_repair_result)">
+                                <div>
+                                    <label class="md-check">
+                                        <input type="checkbox" class="has-value" v-model="settle_result">
+                                        <i class="indigo"></i>
+                                        <span class="text-muted">本工单已结算</span>
+                                    </label>
+                                </div>
+                                <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
+                                          v-model="settle_note"></textarea>
+                                <div class="m-t-md p-t-xs">
+                                    <small class="text-muted">提示: 您可在当前页面保存结算结果, 再返回列表页选择多张工单批量结算</small>
+                                </div>
+                                <div class="m-t-sm">
+                                    <button class="btn btn-xs btn-fw dark" v-if="settle_result">仅保存结果</button>
+                                    <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
+                                    <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" @click="settle"
+                                            v-if="settle_result">结算工单
+                                    </button>
+                                    <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>结算工单</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -410,9 +461,21 @@
                 transport_fee: 0,
                 house_fee: 0,
                 delivery_fee: 0,
+                user: JSON.parse(sessionStorage.getItem('user')) || {},
+                audit_repair_result: null,
+                audit_repair_note: '',
+                audit_merchant_result: null,
+                audit_merchant_note: '',
+                settle_result: false,
+                settle_note: '',
+                is_store: false,
+                is_repair: false,
             }
         },
         created: function () {
+            this.is_store = ['1', '3', '4', '5', '7'].indexOf(this.user.category) > -1;
+            this.is_repair = ['0', '2', '6', '7'].indexOf(this.user.category) > -1;
+
             var id = this.$route.params.id;
             var url = global.API_HOST + '/maintenance/' + id;
             var scope = this;
@@ -421,9 +484,64 @@
                 scope.store = scope.maintenance.store;
             });
         },
+        methods: {
+            submit_repair_audit() {
+                var scope = this;
+                var data = {
+                    audit_repair_result: this.audit_repair_result,
+                    audit_repair_note: this.audit_repair_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/audit/repair',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                    }
+                });
+            },
+            submit_merchant_audit() {
+                var scope = this;
+                var data = {
+                    audit_merchant_result: this.audit_merchant_result,
+                    audit_merchant_note: this.audit_merchant_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/audit/merchant',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                    }
+                });
+            },
+            settle(){
+                var scope = this;
+                var data = {
+                    settle_note: this.settle_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/settlement',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                    }
+                });
+            }
+        },
         components: {
             appBreadcrumb,
-        }
+        },
     }
 </script>
 

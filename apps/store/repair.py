@@ -156,6 +156,8 @@ def dump(request):
                 sheet.row(index+2).height_mismatch = True
                 sheet.row(index+2).height  = 600
                 device = Device.objects.filter(id=ObjectId(q.device)).first()
+                if not device:
+                    continue
                 sheet.write(index+2, 0, q.code, style)
                 sheet.write(index+2, 1, q.statuss, style)
                 sheet.write(index+2, 2, q.city, style)

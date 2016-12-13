@@ -23,16 +23,16 @@ export default [
                         component: resolve => require(['../pages/home/maintenance-list.vue'], resolve),
                     },
                     {
-                        path: '/maintenance/:id',
-                        component: resolve => require(['../pages/home/maintenance-detail.vue'], resolve),
-                    },
-                    {
                         path: '/maintenance/call',
                         component: resolve => require(['../pages/home/maintenance-call.vue'], resolve),
                     },
                     {
                         path: '/maintenance/call/users',
                         component: resolve => require(['../pages/home/maintenance-call-users.vue'], resolve),
+                    },
+                    {
+                        path: '/maintenance/:id',
+                        component: resolve => require(['../pages/home/maintenance-detail.vue'], resolve),
                     },
                 ],
             },

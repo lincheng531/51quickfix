@@ -1,7 +1,7 @@
 <template>
     <div class="padding">
         <div class="row">
-            <div class="pull-right" v-if="user.category=='7'">
+            <div class="pull-right" v-if="user.category=='1'">
                 <router-link to="/maintenance/call">
                     <a class="p-l-lg p-r-lg btn btn-sm theme-blue text-white">+ 报修</a>
                 </router-link>

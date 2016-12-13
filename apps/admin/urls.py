@@ -75,7 +75,7 @@ urlpatterns = patterns('apps.admin',
     #('account/profile$','account.profile'),
     
 
-    # ('maintenance/list$','maintenance.list'),
+    ('maintenance/list$','maintenance.list'),
     ('maintenance/detail/(?P<oid>\S{24})$','maintenance.detail'),
     #('maintenance/edit/(?P<oid>\S{24})$','maintenance.edit'),
     #('maintenance/append$','maintenance.append'),
@@ -94,5 +94,9 @@ urlpatterns = patterns('apps.admin',
     url(r'api/v1/maintenance/(?P<id>\S{24})/audit/repair$','api.audit_repair'),
     url(r'api/v1/maintenance/(?P<id>\S{24})/audit/merchant$','api.audit_merchant'),
     url(r'api/v1/maintenance/(?P<id>\S{24})/settlement$','api.settlement_clear'),
-)
+    url(r'api/v1/store$','api.store'),
+    url(r'api/v1/user$','api.user'),
+    url(r'api/v1/repairs$','api.repairs'),
+    url(r'api/v1/categories','api.categoryList'),
 
+)

@@ -163,6 +163,55 @@ def settlement_clear(request, id):
     return maintenanceDetail(request, id)
 
 
+def store(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.POST.dict()
+    user = get_user(request)
+    head_type, no = [data.get(i) for i in ['head_type', 'no']]
+    resp['info']['results'] = DB.store.find_one({'no': no, 'head_type': int(head_type)})
+    return json_response(resp)
+
+
+def user(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.POST.dict()
+    user = get_user(request)
+    mobile = data.get('mobile')
+    resp['info']['results'] = DB.user.find_one({'mobile': mobile})
+    return json_response(resp)
+
+
+def repairs(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.POST.dict()
+    user = get_user(request)
+    resp['info']['results'] = [item for item in DB.user.find({'category': '0'}).sort([('city',1)])]
+    return json_response(resp)
+
+
+def categoryList(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.POST.dict()
+    level = request.GET.get('level', '1')
+    parent = request.GET.get('parent')
+    key_dict = {'1': 'category', '2': 'efcategory', '3': 'ecategory', '4': 'brand'}
+    key = key_dict[level]
+    filter_dict = {}
+    if parent:
+        parent_key = key_dict.get(str((int(level) - 1)))
+        if parent_key:
+            filter_dict[parent_key] = parent
+
+    resp['info']['results'] = DB.device.find(filter_dict).distinct(key)
+    return json_response(resp)
+
+
+# def deviceList(request):
+#     resp = {'status': 1, 'info': {}, 'alert': ''}
+#     data = get_json_data(request) or request.POST.dict()
+#     filter_dict = {}
+#     resp['info']['results'] =  DB.device.find(filter_dict)
+#     return json_response(resp)
 
 def test(request):
     import pdb;pdb.set_trace()

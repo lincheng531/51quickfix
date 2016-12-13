@@ -23,7 +23,7 @@
             <tbody class="theme-text-blue">
             <tr :class="{'theme-table-selected':item.checked}" v-for="item in maintenances"
                 @click="clickMaintenance(item)">
-                <td><input type="checkbox" v-model="item.checked"></td>
+                <td><input type="checkbox" v-model="item.checked" @click.stop.prevent="1"></td>
                 <td>
                     <div v-text="item.code"></div>
                     <small class="text-muted">报修于: <span v-text="item.create_time.slice(0, 10)"></span></small>

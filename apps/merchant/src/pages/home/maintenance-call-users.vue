@@ -64,48 +64,6 @@
 </template>
 
 <script>
-    var test_grab_users = [
-        {
-            'city': '上海市',
-            'area': '黄浦区',
-            'name': '张永胜',
-            'mobile': '13809872345',
-            'certificates': '制冷证',
-            checked: false,
-        },
-        {
-            'city': '上海市',
-            'area': '长宁区',
-            'name': 'Paulin',
-            'mobile': '15012341234',
-            'certificates': '制冷证',
-            checked: false,
-        },
-        {
-            'city': '上海市',
-            'area': '黄浦区',
-            'name': '刘强',
-            'mobile': '13893745052',
-            'certificates': '制冷证',
-            checked: false,
-        },
-        {
-            'city': '上海市',
-            'area': '静安区',
-            'name': '周文辉',
-            'mobile': '15913457132',
-            'certificates': '制冷证',
-            checked: false,
-        },
-        {
-            'city': '上海市',
-            'area': '闵行区',
-            'name': '李毅',
-            'mobile': '13901758573',
-            'certificates': '制冷证',
-            checked: false,
-        },
-    ]
     export default {
         data () {
             return {
@@ -133,7 +91,7 @@
             }
         },
         created(){
-            this.grab_users = test_grab_users;
+            this.getRepairUsers();
         },
         methods: {
             selectAll(){
@@ -141,6 +99,24 @@
                 this.selectAllStatus = !this.selectAllStatus;
                 this.grab_users.map(function (e) {
                     e.checked = scope.selectAllStatus;
+                });
+            },
+            getRepairUsers(){
+                var scope = this;
+                $.ajax({
+                    type: 'GET',
+                    url: global.API_HOST + '/repairs',
+                }).done(function (res) {
+                    if (res.status == 1) {
+                        var results = res.info.results;
+                        results.map(function(e){
+                           e.checked = false;
+                        });
+                        scope.grab_users = results;
+                    }
+                    else {
+                        toastr.warning(res.alert);
+                    }
                 });
             },
             call(){
@@ -164,10 +140,10 @@
                 var news = JSON.parse(sessionStorage.getItem('new')) || [];
                 news.unshift(testMaintenance);
                 sessionStorage.setItem('new', JSON.stringify(news));
-
-                toastr.success('报修成功！', function () {
-                    scope.$router.go(-2);
-                });
+                toastr.error('推送失败');
+//                toastr.success('报修成功！', function () {
+//                    scope.$router.go(-2);
+//                });
             },
             stepBack() {
                 this.$router.go(-1);

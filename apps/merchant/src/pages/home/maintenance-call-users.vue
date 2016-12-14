@@ -103,9 +103,14 @@
             },
             getRepairUsers(){
                 var scope = this;
+                var url = global.API_HOST + '/repairs';
+                var loc = this.$route.query.store_loc;
+                if (loc) {
+                    url += '?loc=' + loc[0]+','+loc[1]
+                }
                 $.ajax({
                     type: 'GET',
-                    url: global.API_HOST + '/repairs',
+                    url: url,
                 }).done(function (res) {
                     if (res.status == 1) {
                         var results = res.info.results;

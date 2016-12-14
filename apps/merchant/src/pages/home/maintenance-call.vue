@@ -287,6 +287,7 @@
                     brand: null,
                     device: null,
                 },
+                store_loc: null,
                 categories: [],
                 efcategories: [],
                 ecategories: [],
@@ -316,11 +317,13 @@
                 mp.centerAndZoom(new BMap.Point(121.491, 31.233), 11);
             },
             codeAddress(address) {
+                var scope = this;
                 console.log('encoding address...');
                 var map = new BMap.Map("map");
                 var geo = new BMap.Geocoder();
                 geo.getPoint(address, function (point) {
                     console.log(point);
+                    scope.store_loc = [point.lat, point.lng]
                     if (point) {
                         map.centerAndZoom(point, 16);
                         map.addOverlay(new BMap.Marker(point));
@@ -338,6 +341,7 @@
                 else {
                     scope.form['brand'] = $('#brand').val();
                 }
+                scope.form['store_loc'] = scope.store_loc;
                 this.$router.push({
                     path: '/maintenance/call/users',
                     query: scope.form,
@@ -357,6 +361,7 @@
                     if (res.status == 1) {
                         var store = res.info.results;
                         if (store) {
+                            scope.store_loc = store.loc;
                             scope.form.store_name = store.name;
                             scope.form.address = store.address;
                             scope.codeAddress(scope.form.address);

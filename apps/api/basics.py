@@ -300,15 +300,27 @@ def brandList(request):
 def categoryList(request):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     data = get_json_data(request) or request.POST.dict()
-    level = request.GET.get('level', '1')
-    parent = request.GET.get('parent')
-    key_dict = {'1': 'category', '2': 'efcategory', '3': 'ecategory'}
-    key = key_dict[level]
-    filter_dict = {}
-    if parent:
-        parent_key = key_dict.get(str((int(level) - 1)))
-        if parent_key:
-            filter_dict[parent_key] = parent
+    level = int(request.GET.get('level', '1'))
 
-    resp['info']['results'] = DB.device.find(filter_dict).distinct(key)
+    if level > 1:
+        parent = request.GET.get('parent')
+        key_dict = {1: 'category', 2: 'efcategory', 3: 'ecategory'}
+        key = key_dict[level]
+        filter_dict = {}
+        if parent:
+            parent_key = key_dict.get((int(level) - 1))
+            if parent_key:
+                filter_dict[parent_key] = parent
+
+        results = DB.device.find(filter_dict).distinct(key)
+    else:
+        results = []
+        categories = DB.device.find().distinct('category')
+        for item in categories:
+            result = DB.device.find({'category': item}).distinct('efcategory')
+            results.append({
+                item: result
+            })
+
+    resp['info']['results'] = results
     return json_response(resp)

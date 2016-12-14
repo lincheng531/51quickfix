@@ -11,6 +11,7 @@ from apps.base.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from apps.base.logger import getlogger
+from bson.son import SON
 
 logger = getlogger(__name__)
 
@@ -185,7 +186,26 @@ def repairs(request):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     data = get_json_data(request) or request.POST.dict()
     user = get_user(request)
-    resp['info']['results'] = [item for item in DB.user.find({'category': '0'}).sort([('city',1)])]
+    loc = request.GET.get('loc')
+    results = [item for item in DB.user.find({'category': '0'}).sort([('city', 1)])]
+    if loc:
+        loc = loc.split(',')
+        for item in results:
+            userloc = item.get('loc') or (999999999, 999999999)
+            item['max_distance'] = (userloc[0]-float(loc[0]))**2 + (userloc[1]-float(loc[1]))**2
+
+        # users = list(User.objects(
+        #     __raw__={"loc": SON([("$near", loc), ("$maxDistance", 10 * 10000000000000000 / 111.12)]),
+        #              'category': '0', 'is_active': 1, 'device_token': {'$ne': None}}))
+
+        # results = [{
+        #     'city': item.city,
+        #     'area': item.area,
+        #     'name': item.name,
+        #     'mobile': item.mobile,
+        # } for item in users]
+        results.sort(key=lambda x: x['max_distance'])
+    resp['info']['results'] = results
     return json_response(resp)
 
 

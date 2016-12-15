@@ -111,7 +111,7 @@
                 <div class="box-header theme-grey-dark">
                     <h3>报修信息</h3>
                 </div>
-                <div class="box-body clearfix" v-if="!toCreateDevice">
+                <div class="box-body clearfix" v-show="!toCreateDevice">
                     <div class="row text-muted m-t">
                         <div class="col-md-6">
                             <div class="col-md-2 text-right">请选资产</div>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-body clearfix" v-else>
+                <div class="box-body clearfix" v-show="toCreateDevice">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="col-md-2 text-right">
@@ -220,7 +220,7 @@
                         <div class="col-md-6">
                             <div class="col-md-2 text-right">过保日期</div>
                             <div class="col-md-10">
-                                <input type="datetime">
+                                <input type="datetime" id="expiration_date" v-model="expiration_date">
                             </div>
                         </div>
                     </div>
@@ -306,6 +306,11 @@
                 autoclose: true,
                 todayHighlight: true,
             });
+            $('#expiration_date').datetimepicker({
+                language: 'zh-CN',
+                autoclose: true,
+                todayHighlight: true,
+            });
             this.getCategories();
         },
         methods: {
@@ -339,6 +344,8 @@
                     scope.form['brand'] = $('#brand').val();
                 }
                 scope.form['store_loc'] = scope.store_loc;
+                scope.form['must_time'] = $('#must_time').val();
+                scope.form['expiration_date'] = $('#expiration_date').val();
                 this.$router.push({
                     path: '/maintenance/call/users',
                     query: scope.form,

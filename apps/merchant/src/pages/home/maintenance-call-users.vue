@@ -25,7 +25,8 @@
                         </thead>
                         <tbody class="theme-text-blue">
                         <tr v-for="item in grab_users">
-                            <td :class="{'theme-table-selected': item.checked}"><input type="checkbox" v-model="item.checked"></td>
+                            <td :class="{'theme-table-selected': item.checked}"><input type="checkbox"
+                                                                                       v-model="item.checked"></td>
                             <td :class="{'theme-table-selected': item.checked}" v-text="item.city"></td>
                             <td :class="{'theme-table-selected': item.checked}" v-text="item.area"></td>
                             <td :class="{'theme-table-selected': item.checked}" v-text="item.name">姓名</td>
@@ -42,7 +43,9 @@
                         <span class="text-muted">维修员</span>
                     </h3>
                     <div class="row m-t-md m-b" style="width: 35%; margin: 0 auto;">
-                        <button class="btn btn-sm theme-blue text-white form-control" @click="call" v-if="canBePosted">发布</button>
+                        <button class="btn btn-sm theme-blue text-white form-control" @click="call" v-if="canBePosted">
+                            发布
+                        </button>
                         <button class="btn btn-sm theme-blue text-white form-control" disabled v-else>发布</button>
                     </div>
                     <div class="row m-b" style="width: 35%; margin: 0 auto;">
@@ -82,7 +85,7 @@
             selectedCount() {
                 var count = 0;
                 this.grab_users.map(function (e) {
-                    if(e.checked){
+                    if (e.checked) {
                         count++;
                     }
                 });
@@ -106,7 +109,7 @@
                 var url = global.API_HOST + '/repairs';
                 var loc = this.$route.query.store_loc;
                 if (loc) {
-                    url += '?loc=' + loc[0]+','+loc[1]
+                    url += '?loc=' + loc[0] + ',' + loc[1]
                 }
                 $.ajax({
                     type: 'GET',
@@ -114,8 +117,8 @@
                 }).done(function (res) {
                     if (res.status == 1) {
                         var results = res.info.results;
-                        results.map(function(e){
-                           e.checked = false;
+                        results.map(function (e) {
+                            e.checked = false;
                         });
                         scope.grab_users = results;
                     }
@@ -125,19 +128,29 @@
                 });
             },
             call(){
+                var user_ids = this.grab_users.filter(function (e) {
+                    return e.checked;
+                }).map(function (e) {
+                    return e.id;
+                });
+
                 var scope = this;
-                var device = this.$route.query.selectedDevice || '空调';
+                var device = this.$route.query.selectedDevice || this.$route.query.device;
                 var testMaintenance = {
                     'create_time': moment().format('YYYY-MM-DD hh:mm:ss'),
                     'city': '上海市',
+                    'store': this.$route.query.store_name,
+                    'store_no': this.$route.query.store_no,
                     'store_name': this.$route.query.store_name,
-                    'category': '设备',
+                    'category': this.$route.query.category,
+                    'product': device,
                     'device': device,
+                    'brand': this.$route.query.brand,
                     'brand_name': this.$route.query.brand,
                     'state': 1,
                     'content': this.$route.query.content,
                     'grab_user': '未接单',
-                    'status': '新订单',
+                    'status': '0',
                     'no': moment().format('YYYYMMDDhhm'),
                     'user': this.$route.query.name,
                 };
@@ -145,10 +158,9 @@
                 var news = JSON.parse(sessionStorage.getItem('new')) || [];
                 news.unshift(testMaintenance);
                 sessionStorage.setItem('new', JSON.stringify(news));
-                toastr.error('推送失败');
-//                toastr.success('报修成功！', function () {
-//                    scope.$router.go(-2);
-//                });
+                toastr.success('报修成功！', function () {
+                    scope.$router.go(-2);
+                });
             },
             stepBack() {
                 this.$router.go(-1);

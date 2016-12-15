@@ -186,7 +186,14 @@
                     data: qs,
                 }).done(function (res) {
                     if (res.status == 1) {
-                        scope.maintenances = res.info.results;
+                        var results = res.info.results;
+                        if(qs.status == '0'){
+                            var news = JSON.parse(sessionStorage.getItem('new')) || [];
+                            for(var i=news.length - 1; i>-1; i--){
+                                results.unshift(news[i]);
+                            }
+                        }
+                        scope.maintenances = results;
                         scope.maintenances.map(function (e) {
                             e.status = statusText[e.status];
                         });

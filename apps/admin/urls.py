@@ -98,5 +98,6 @@ urlpatterns = patterns('apps.admin',
     url(r'api/v1/user$','api.user'),
     url(r'api/v1/repairs$','api.repairs'),
     url(r'api/v1/categories','api.categoryList'),
+    url(r'api/v1/maintenance/call','api.call'),
 
 )

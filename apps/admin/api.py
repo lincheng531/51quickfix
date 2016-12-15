@@ -233,6 +233,136 @@ def categoryList(request):
 #     resp['info']['results'] =  DB.device.find(filter_dict)
 #     return json_response(resp)
 
+
+def call(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    # now = dt.now()
+    # data = get_json_data(request) or request.POST.dict()
+    # loggend_user = User.objects.get(id=ObjectId(data.get('logged_user')))
+    # head_type = int(data.get('type', 1))
+    # store = None
+    # store_no = data.get('store_no')
+    # if store_no:
+    #     store = Store.objects.filter(head_type, no = store_no).first()
+    #
+    # if not store:
+    #     import pdb;pdb.set_trace()
+    #     pass
+    #
+    #
+    # mobile = data.get('mobile')
+    # user = User.objects.filter(username=mobile).first()
+    # if not user:
+    #     import pdb;pdb.set_trace()
+    #
+    # selectedDevice = data.get('selectedDevice')
+    # if selectedDevice:
+    #     device = Device.objects.get(id=ObjectId(selectedDevice))
+    # else:
+    #     import pdb;pdb.set_trace()
+    #     pass
+    #
+    #
+    # if not device:
+    #     resp['status'], resp['alert'] = 0, u'没有找到该设备'
+    #     return json_response(resp)
+    #
+    # users = data.get('users')
+    #
+    # maintenance = Maintenance(**{}).save()
+    #
+    # if len(users) > 0:
+    #     # 推送短信规则
+    #     send_time = now.strftime('%H:%M')
+    #
+    #     members = [str(i.id) for i in users]
+    #
+    #     maintenance = {
+    #         'user': loggend_user.id,
+    #         'store_name': store.name,
+    #         'store': str(store.id),
+    #         'address': store.address,
+    #         'company': user.company,
+    #         'product': device.name,
+    #         'product_id': product.id,
+    #         'supplier': supplier.name,
+    #         'supplier_id': supplier.id,
+    #         'area': store.area,
+    #         'city': store.city,
+    #         'loc': store.loc,
+    #         'status': 0,
+    #         'brand': product.brand.name,
+    #         'head_type': loggend_user.head_type,
+    #         'device': str(device.id),
+    #         'no': device.no,
+    #         'store_no': store.no,
+    #         'logo': logo.split(',') if logo else [],
+    #         'content': error,
+    #         'error_code': eid,
+    #         'create_time': dt.now(),
+    #         'update_time': dt.now(),
+    #         'members': members
+    #     }
+    #
+    #     maintenance['code'] = _send_count(loggend_user.head_type)
+    #     maintenance['guarantee'] = device.guarantee
+    #     maintenance['start_time'] = pf8(start_time)
+    #     maintenance['end_time'] = pf8(end_time)
+    #     # mtceid = DB.maintenance.save(maintenance)
+    #     mtceid = Maintenance(**maintenance).save()
+    #
+    #     # 新增报价单
+    #     Bill(**{
+    #         'opt_user': loggend_user, 'maintenance': mtceid.id,
+    #         'supplier': device.supplier, 'product': device.product,
+    #         'total': 0, 'analysis': '', 'measures': '', 'status': -2,
+    #         'state': 1, 'device': device
+    #     }).save()
+    #
+    #     if MaintenanceHistory.objects(maintenances=mtceid).count():
+    #         resp['status'], resp['alert'] = 0, u'订单已经存在维修历史, 请联系管理员'
+    #         return json_response(resp)
+    #
+    #     mhid = MaintenanceHistory(**{
+    #         'user': loggend_user,
+    #         'maintenances': [mtceid],
+    #         'members': members,
+    #     }).save()
+    #
+    #     mc_data = {
+    #         'user': loggend_user,
+    #         'histories': [mhid],
+    #         'store_name': store.name,
+    #         'store': str(store.id),
+    #         'store_no': store.no,
+    #         'address': store.address,
+    #         'members': members,
+    #     }
+    #
+    #     if loggend_user.head_type > 1:
+    #         mc_data['state'] = maintenance.get('state')
+    #         mc_data['must_time'] = maintenance.get('must_time')
+    #
+    #     mcid = MaintenanceCollection(**mc_data).save()
+    #
+    #     title = PUSH0.format(store.name, product.name)
+    #     sdata = {'type': 0, 'oid': str(mtceid.id), 'cid': str(mcid.id)}
+    #
+    #     resp['info']['id'] = str(mtceid.id)
+    #
+    #     for user in users:
+    #         PushHistory(**{'maintenance': str(mtceid.id), 'opt_user': loggend_user.id, 'user': user.id, 'data': sdata,
+    #                        'title': title, 'head_type': 0, 'active': 0}).save()
+    #
+    #     for member in mtceid.users():
+    #         push_message(member.id, title, sdata)
+    #     resp['alert'] = u'派单成功！请耐心等候维修工回复吧！'
+    # else:
+    #     resp['status'], resp['alert'] = 0, u'该区域未找到相应的维修人员'
+    # resp['info']['count'] = len(users)
+    # return json_response(resp)
+
+
 def test(request):
     import pdb;pdb.set_trace()
     return HttpResponse('test')

@@ -953,7 +953,9 @@ def add_device(request):
         'supplier': Supplier.objects.get(id=ObjectId(data.get('supplier'))),
         'logo': [data.get('logo')],
     }).save()
-    resp['info'] = DB.device.find_one({'_id':device.id})
+    result = DB.device.find_one({'_id':device.id})
+    del result['store']
+    resp['info'] = result
     return json_response(resp)
 
 

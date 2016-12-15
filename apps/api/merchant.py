@@ -950,7 +950,7 @@ def add_device(request):
         'psnumber': data.get('psnumber'),
         'manufacturer': data.get('manufacturer'),
         'provider': data.get('provider'),
-        'supplier': Supplier.objects.get(id=ObjectId(data.get('supplier'))),
+        'supplier': Supplier.objects.filter(id=ObjectId(data.get('supplier'))).first(),
         'logo': [data.get('logo')],
     }).save()
     result = DB.device.find_one({'_id':device.id})

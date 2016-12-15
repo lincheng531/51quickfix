@@ -295,21 +295,18 @@
                 toCreateDevice: false,
             }
         },
-        created(){
-            $('#must_time').datetimepicker({
-                language: 'zh-CN',
-                format: 'yyyy-mm-dd',
-                minView: 'month',
-                autoclose: true,
-                todayHighlight: true,
-            });
-            this.getCategories();
-        },
         mounted(){
             window.initialize = this.initMap();
             var script = document.createElement('script');
             script.src = 'http://api.map.baidu.com/api?v=1.4&callback=initialize';
             document.body.appendChild(script);
+
+            $('#must_time').datetimepicker({
+                language: 'zh-CN',
+                autoclose: true,
+                todayHighlight: true,
+            });
+            this.getCategories();
         },
         methods: {
             initMap() {

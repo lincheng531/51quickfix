@@ -420,9 +420,10 @@ def call(request):
             return json_response(resp)
         company = ''
         for step in range(1, 20):
-            users = list(User.objects(
-                    __raw__={"loc": SON([("$near", loggend_user.loc), ("$maxDistance", 10 * step / 111.12)]),
-                             'category': '0', 'is_active': 1, 'device_token': {'$ne': None}}))
+            users = list(User.objects.filter(category='0', is_active=1))
+            # users = list(User.objects(
+            #         __raw__={"loc": SON([("$near", loggend_user.loc), ("$maxDistance", 10 * step / 111.12)]),
+            #                  'category': '0', 'is_active': 1, 'device_token': {'$ne': None}}))
             if len(users) > 0:
                 break
     if len(users) > 0:

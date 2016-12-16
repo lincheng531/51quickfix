@@ -1410,23 +1410,28 @@ def maintenances(request):
     data = get_json_data(request) or request.POST.dict()
     user = get_user(request)
     p = int(data.get('p', 1))
-    # res = Maintenance.objects((Q(be_reset_fixed__ne=1) | Q(is_collect=1)) & Q(collected__ne=1) & Q(user=user)).order_by(
-    #         '-create_time').skip((p - 1) * 20).limit(20)
-    # result = []
-    # for r in res:
-    #     if r.head_type == 1:
-    #         detail = r.get_result1()
-    #     else:
-    #         detail = r.get_result(0)
-    #     detail['push_count'] = PushHistory.objects.filter(maintenance=str(r['id'])).count()
-    #     result.append(detail)
-    # resp['info']['results'] = result
-    # return json_response(resp)
 
-    mc = MaintenanceCollection.objects(user=user).order_by('-create_time').skip((p - 1) * 20).limit(20)
-    collections = [collection.get_result() for collection in mc]
-    resp['info']['results'] = collections
-    return json_response(resp)
+    if user.head_type == 1:
+        # res = Maintenance.objects((Q(be_reset_fixed__ne=1) | Q(is_collect=1)) & Q(collected__ne=1) & Q(user=user)).order_by(
+        #         '-create_time').skip((p - 1) * 20).limit(20)
+        res = Maintenance.objects(user=user).order_by('-create_time').skip((p - 1) * 20).limit(20)
+        result = []
+        for r in res:
+            # if r.head_type == 1:
+            #     detail = r.get_result1()
+            # else:
+            #     detail = r.get_result(0)
+            detail = r.get_result1()
+            detail['push_count'] = PushHistory.objects.filter(maintenance=str(r['id'])).count()
+            result.append(detail)
+        resp['info']['results'] = result
+        return json_response(resp)
+
+    else:
+        mc = MaintenanceCollection.objects(user=user).order_by('-create_time').skip((p - 1) * 20).limit(20)
+        collections = [collection.get_result() for collection in mc]
+        resp['info']['results'] = collections
+        return json_response(resp)
 
 
 @login_required('1')

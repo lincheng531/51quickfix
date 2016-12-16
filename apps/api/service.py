@@ -376,21 +376,24 @@ def repairs(request):
     user = get_user(request)
     data = get_json_data(request) or request.POST.dict()
     p = int(data.get('p', 1))
-    # mtce = Maintenance.objects((Q(be_reset_fixed__ne=1) | Q(is_collect=1)) & Q(collected__ne=1) & Q(grab_user=user) & Q(status__gt=0)).order_by('-create_time').skip((p-1)*20).limit(20)
-    # results = []
-    # for m in mtce:
-    #     if m.head_type ==1:
-    #         results.append(m.get_result1())
-    #     else:
-    #         results.append(m.get_result())
-    # resp['info']['results'] = results
-    # return json_response(resp)
 
-    mc = MaintenanceCollection.objects(grab_users=user).order_by('-create_time').skip((p - 1) * 20).limit(20)
-    collections = [collection.get_result(grab_user=user) for collection in mc]
+    if user.head_type == 1:
+        mtce = Maintenance.objects(Q(grab_user=user) & Q(status__gt=0)).order_by('-create_time').skip((p-1)*20).limit(20)
+        results = []
+        for m in mtce:
+            if m.head_type ==1:
+                results.append(m.get_result1())
+            else:
+                results.append(m.get_result())
+        resp['info']['results'] = results
+        return json_response(resp)
 
-    resp['info']['results'] = collections
-    return json_response(resp)
+    else:
+        mc = MaintenanceCollection.objects(grab_users=user).order_by('-create_time').skip((p - 1) * 20).limit(20)
+        collections = [collection.get_result(grab_user=user) for collection in mc]
+
+        resp['info']['results'] = collections
+        return json_response(resp)
 
 
 @login_required(['0', '2'])

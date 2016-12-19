@@ -466,6 +466,7 @@ def signout(request):
         assert(key not in request.session.keys())
     return  json_response(resp)
 
+
 @login_required
 def profile(request, uid):
     """ 根据用户ID获取用户信息,该接口必须是自己查询自己的资料，不得查询他人的
@@ -474,8 +475,13 @@ def profile(request, uid):
 
     """
     resp  = {'status':0, 'info':{}}
-    user  = get_user(request)
+    current_user  = get_user(request)
     resp['status']  = 1
+    user = User.objects.get(id=ObjectId(uid))
+    if current_user.head_type == user.head_type:
+        pass
+    else:
+        user = current_user
     resp['info']    = user.get_user_profile_dict()
     return json_response(resp)
 

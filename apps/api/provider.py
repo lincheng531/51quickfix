@@ -145,6 +145,7 @@ def repair(request, oid):
     resp = {'status': 0, 'info': {}, 'alert': ''}
     user = get_user(request)
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
+    members.append(str(user.id))
     mtce = Maintenance.objects.filter(id=ObjectId(oid), members__in=members).first()
     resp['info'], resp['status'] = mtce.get_result(), 1
     resp['info']['reset_fix_maintenances'] = mtce.get_reset_fixes(user)

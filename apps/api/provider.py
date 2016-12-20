@@ -184,6 +184,7 @@ def dispatch(request, oid):
     data = get_json_data(request) or request.POST.dict()
     uids = data.get('uid')
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
+    members.append(str(user.id))
     mtce = Maintenance.objects.filter(id=ObjectId(oid), status__gte=0, members__in=members).first()
     member_users = User.objects.filter(id__in=[ObjectId(uid) for uid in uids.split(',')])
 

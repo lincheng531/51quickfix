@@ -90,10 +90,10 @@ class Maintenance(Document):
     collected = IntField(default=0)  # 是否合辑分单
     collect_maintenance = StringField()  # 合辑标的
 
-    dispatched = IntField(default=0) #是否改派
+    dispatched = IntField(default=0)  # 是否改派
 
     verify_status = IntField(default=-1)  # 为未导入审核状态 0为新的 1为审核失败 2为审核中
-    settlement = IntField(default=0) #审核结算状态
+    settlement = IntField(default=0)  # 审核结算状态
     audit_merchant_user = ReferenceField(User)
     audit_merchant_date = DateTimeField()
     audit_merchant_result = BooleanField()
@@ -110,6 +110,16 @@ class Maintenance(Document):
     settle_repair_user = ReferenceField(User)
     settle_repair_date = DateTimeField()
     settle_repair_note = StringField()
+
+    audit_repair_result_save = BooleanField()
+    audit_repair_note_save = StringField()
+    audit_merchant_result_save = BooleanField()
+    audit_merchant_note_save = StringField()
+
+    settle_merchant_result_save = BooleanField()
+    settle_merchant_note_save = StringField()
+    settle_repair_result_save = BooleanField()
+    settle_repair_note_save = StringField()
 
     create_time = DateTimeField(default=dt.now)  # 叫修时间
     update_time = DateTimeField(default=dt.now)
@@ -149,7 +159,7 @@ class Maintenance(Document):
     @property
     def apply_count(self):
         return DB.maintenance_users.find(
-                {'maintenance': self.id, 'status': {'$in': [1, 2, 3]}, 'opt_user': self.user.id}).count()
+            {'maintenance': self.id, 'status': {'$in': [1, 2, 3]}, 'opt_user': self.user.id}).count()
 
     @property
     def confirm_count(self):
@@ -162,12 +172,12 @@ class Maintenance(Document):
     @property
     def target(self):
         return MaintenanceUsers.objects.filter(
-                **{'maintenance': self.id, 'status__in': [1, 2, 3, 4, 5], 'opt_user': self.user.id}).first()
+            **{'maintenance': self.id, 'status__in': [1, 2, 3, 4, 5], 'opt_user': self.user.id}).first()
 
     @property
     def target_user(self):
         mu = DB.maintenance_users.find_one(
-                {'maintenance': self.id, 'status': {'$in': [1, 2, 3, 4, 5, 6]}, 'opt_user': self.user.id})
+            {'maintenance': self.id, 'status': {'$in': [1, 2, 3, 4, 5, 6]}, 'opt_user': self.user.id})
         return DB.user.find_one({'_id': mu['user']}) if mu else {}
 
     @property
@@ -226,15 +236,15 @@ class Maintenance(Document):
 
         if collect:
             collections.append(
-                    collect.get_result(collect=False) if collect.head_type > 1 else collect.get_result1(collect=False))
+                collect.get_result(collect=False) if collect.head_type > 1 else collect.get_result1(collect=False))
             collections.extend(
-                    [item.get_result(collect=False) if item.head_type > 1 else item.get_result1(collect=False) \
-                     for item in Maintenance.objects.filter(collect_maintenance=str(collect.id), be_reset_fixed__ne=1,
-                                                            grab_user=self.grab_user)])
+                [item.get_result(collect=False) if item.head_type > 1 else item.get_result1(collect=False) \
+                 for item in Maintenance.objects.filter(collect_maintenance=str(collect.id), be_reset_fixed__ne=1,
+                                                        grab_user=self.grab_user)])
 
         else:
             collections.append(
-                    self.get_result(collect=False) if self.head_type > 1 else self.get_result1(collect=False))
+                self.get_result(collect=False) if self.head_type > 1 else self.get_result1(collect=False))
 
         return collections
 
@@ -374,7 +384,17 @@ class Maintenance(Document):
             'audit_merchant_result': self.audit_merchant_result,
             'audit_repair_result': self.audit_repair_result,
             'settle_merchant_result': self.settle_merchant_result,
-            'settle_repair_result': self.settle_repair_result
+            'settle_repair_result': self.settle_repair_result,
+
+            'audit_repair_result_save': self.audit_repair_result_save,
+            'audit_repair_note_save': self.audit_repair_note_save,
+            'audit_merchant_result_save': self.audit_merchant_result_save,
+            'audit_merchant_note_save': self.audit_merchant_note_save,
+
+            'settle_merchant_result_save': self.settle_merchant_result_save,
+            'settle_merchant_note_save': self.settle_merchant_note_save,
+            'settle_repair_result_save': self.settle_repair_result_save,
+            'settle_repair_note_save': self.settle_repair_note_save,
         }
 
         item['count'] = len(self.members)
@@ -449,7 +469,6 @@ class MaintenanceCollection(Document):
     state = IntField()  # 状态 1:紧急 2:非紧急
     must_time = DateTimeField()  # 合约到店时间
 
-
     @property
     def states(self):
         status = {1: u'紧急', 2: u'非紧急'}
@@ -466,7 +485,8 @@ class MaintenanceCollection(Document):
             collections = [ \
                 item.maintenances[-1].get_result1() \
                     if item.maintenances[-1].head_type == 1 else item.maintenances[-1].get_result() \
-                for item in (filter(lambda x: grab_user in x.grab_users, self.histories) if grab_user else self.histories)]
+                for item in
+                (filter(lambda x: grab_user in x.grab_users, self.histories) if grab_user else self.histories)]
 
         return {
             'id': self.id,

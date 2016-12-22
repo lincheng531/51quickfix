@@ -299,6 +299,7 @@
                 }).done(function (res) {
                     if (res.status == 1) {
                         scope.getMaintenanceList();
+                        toastr.info('操作成功');
                     }
                     else {
                         toastr.warning(res.alert);

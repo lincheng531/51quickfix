@@ -145,6 +145,43 @@ def maintenance_history(request, id):
     return render('store/{}_detail.html'.format(current), locals(), context_instance=RequestContext(request))
 
 
+def save_audit_repair(request, id):
+    data = get_json_data(request) or request.POST.dict()
+    maintenance = Maintenance.objects.get(id=ObjectId(id))
+    user = User.objects.get(id=ObjectId(data['user_id']))
+    maintenance.audit_repair_result_save = bool(int(data['audit_repair_result']))
+    maintenance.audit_repair_note_save = data.get('audit_repair_note')
+    maintenance.save()
+    return maintenanceDetail(request, id)
+
+
+def save_audit_merchant(request, id):
+    data = get_json_data(request) or request.POST.dict()
+    maintenance = Maintenance.objects.get(id=ObjectId(id))
+    user = User.objects.get(id=ObjectId(data['user_id']))
+    maintenance.audit_merchant_result_save = bool(int(data['audit_merchant_result']))
+    maintenance.audit_merchant_note_save = data.get('audit_merchant_note')
+    maintenance.save()
+    return maintenanceDetail(request, id)
+
+
+def save_settlement(request, id):
+    data = get_json_data(request) or request.POST.dict()
+    maintenance = Maintenance.objects.get(id=ObjectId(id))
+    user = User.objects.get(id=ObjectId(data['user_id']))
+
+    if user.category in ('1', '3', '4', '5', '7'):
+        maintenance.settle_merchant_result_save = True
+        maintenance.settle_merchant_note_save = data.get('settle_note')
+
+    if user.category in ('0', '2', '6', '7'):
+        maintenance.settle_repair_result_save = True
+        maintenance.settle_repair_note_save = data.get('settle_note')
+
+    maintenance.save()
+    return maintenanceDetail(request, id)
+
+
 def audit_repair(request, id):
     data = get_json_data(request) or request.POST.dict()
     maintenance = Maintenance.objects.get(id=ObjectId(id))
@@ -408,8 +445,10 @@ def batchOp(request):
                 maintenance.settlement = 1
                 maintenance.audit_repair_user = user
                 maintenance.audit_repair_date = datetime.datetime.now()
-                maintenance.audit_repair_result = True
-                maintenance.audit_repair_note = ''
+                maintenance.audit_repair_result = maintenance.audit_repair_result_save
+                if maintenance.audit_repair_result is None:
+                    maintenance.audit_repair_result = True
+                maintenance.audit_repair_note = maintenance.audit_repair_note_save or ''
                 maintenance.save()
 
             if user.category in ('1', '3', '4', '5', '7'):
@@ -420,24 +459,30 @@ def batchOp(request):
                 maintenance.settlement = 2
                 maintenance.audit_merchant_user = user
                 maintenance.audit_merchant_date = datetime.datetime.now()
-                maintenance.audit_merchant_result = True
-                maintenance.audit_merchant_note = ''
+                maintenance.audit_merchant_result = maintenance.audit_merchant_result_save
+                if maintenance.audit_merchant_result is None:
+                    maintenance.audit_merchant_result = True
+                maintenance.audit_merchant_note = maintenance.audit_merchant_note_save or ''
                 maintenance.save()
 
     if type == 'settle':
         result = Maintenance.objects(id__in=ids)
         for maintenance in result:
             if user.category in ('1', '3', '4', '5', '7'):
-                maintenance.settle_merchant_result = True
+                maintenance.settle_merchant_result = maintenance.settle_merchant_result_save
+                if maintenance.settle_merchant_result is None:
+                    maintenance.settle_merchant_result = True
                 maintenance.settle_merchant_user = user
                 maintenance.settle_merchant_date = datetime.datetime.now()
-                maintenance.settle_merchant_note = ''
+                maintenance.settle_merchant_note = maintenance.settle_merchant_note_save or ''
 
             if user.category in ('0', '2', '6', '7'):
-                maintenance.settle_repair_result = True
+                maintenance.settle_repair_result = maintenance.settle_repair_result_save
+                if maintenance.settle_repair_result is None:
+                    maintenance.settle_repair_result = True
                 maintenance.settle_repair_user = user
                 maintenance.settle_repair_date = datetime.datetime.now()
-                maintenance.settle_repair_note = ''
+                maintenance.settle_repair_note = maintenance.settle_repair_note_save or ''
 
             if maintenance.settle_repair_result and maintenance.settle_merchant_result:
                 maintenance.settlement = 3

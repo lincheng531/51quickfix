@@ -91,9 +91,15 @@ urlpatterns = patterns('apps.admin',
     url(r'api/v1/login$', 'api.login'),
     url(r'api/v1/maintenance/list$', 'api.maintenanceList'),
     url(r'api/v1/maintenance/(?P<id>\S{24})$','api.maintenanceDetail'),
+
+    url(r'api/v1/maintenance/(?P<id>\S{24})/audit/repair/save$', 'api.save_audit_repair'),
+    url(r'api/v1/maintenance/(?P<id>\S{24})/audit/merchant/save$', 'api.save_audit_merchant'),
+    url(r'api/v1/maintenance/(?P<id>\S{24})/settlement/save$', 'api.save_settlement'),
+
     url(r'api/v1/maintenance/(?P<id>\S{24})/audit/repair$','api.audit_repair'),
     url(r'api/v1/maintenance/(?P<id>\S{24})/audit/merchant$','api.audit_merchant'),
     url(r'api/v1/maintenance/(?P<id>\S{24})/settlement$','api.settlement_clear'),
+
     url(r'api/v1/store$','api.store'),
     url(r'api/v1/user$','api.user'),
     url(r'api/v1/repairs$','api.repairs'),

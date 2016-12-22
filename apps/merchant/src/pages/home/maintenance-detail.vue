@@ -277,7 +277,9 @@
                                 <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
                             </div>
                             <div class="m-t-sm">
-                                <button class="btn btn-xs btn-fw dark" v-if="audit_repair_result">仅保存结果</button>
+                                <button class="btn btn-xs btn-fw dark" v-if="audit_repair_result"
+                                        @click="save_repair_audit">仅保存结果
+                                </button>
                                 <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
                                 <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" @click="submit_repair_audit"
                                         v-if="audit_repair_result">提交审核
@@ -324,12 +326,14 @@
                                        v-model="audit_merchant_result"> 审核不通过
                             </label>
                             <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
-                                      v-model="merchant_merchant_note"></textarea>
+                                      v-model="audit_merchant_note"></textarea>
                             <div class="m-t-md p-t-xs">
                                 <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
                             </div>
                             <div class="m-t-sm">
-                                <button class="btn btn-xs btn-fw dark" v-if="audit_merchant_result">仅保存结果</button>
+                                <button class="btn btn-xs btn-fw dark" v-if="audit_merchant_result"
+                                        @click="save_merchant_audit">仅保存结果
+                                </button>
                                 <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
                                 <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm"
                                         @click="submit_merchant_audit" v-if="audit_merchant_result">提交审核
@@ -400,12 +404,15 @@
                                     <small class="text-muted">提示: 您可在当前页面保存结算结果, 再返回列表页选择多张工单批量结算</small>
                                 </div>
                                 <div class="m-t-sm">
-                                    <button class="btn btn-xs btn-fw dark" v-if="settle_result">仅保存结果</button>
+                                    <button class="btn btn-xs btn-fw dark" v-if="settle_result"
+                                            @click="save_settlement">仅保存结果
+                                    </button>
                                     <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
                                     <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" @click="settle"
                                             v-if="settle_result">结算工单
                                     </button>
-                                    <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>结算工单</button>
+                                    <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>结算工单
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -482,6 +489,22 @@
             $.getJSON(url, {}, function (data) {
                 scope.maintenance = data;
                 scope.store = scope.maintenance.store;
+
+                scope.audit_repair_result = scope.maintenance['audit_repair_result_save'];
+                scope.audit_repair_note = scope.maintenance['audit_repair_note_save'];
+                scope.audit_merchant_result = scope.maintenance['audit_merchant_result_save'];
+                scope.audit_merchant_note = scope.maintenance['audit_merchant_note_save'];
+
+                if(scope.is_store) {
+                    scope.settle_result = scope.maintenance['settle_merchant_result_save'];
+                    scope.settle_note = scope.maintenance['settle_merchant_note_save'];
+                }
+
+                if(scope.is_repair) {
+                    scope.settle_result = scope.maintenance['settle_repair_result_save'];
+                    scope.settle_note = scope.maintenance['settle_repair_note_save'];
+                }
+
             });
         },
         methods: {
@@ -537,7 +560,64 @@
                         scope.maintenance = data;
                     }
                 });
-            }
+            },
+            save_repair_audit(){
+                var scope = this;
+                var data = {
+                    audit_repair_result: this.audit_repair_result,
+                    audit_repair_note: this.audit_repair_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/audit/repair/save',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                        toastr.info('保存成功');
+                    }
+                });
+            },
+            save_merchant_audit(){
+                var scope = this;
+                var data = {
+                    audit_merchant_result: this.audit_merchant_result,
+                    audit_merchant_note: this.audit_merchant_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/audit/merchant/save',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                        toastr.info('保存成功');
+                    }
+                });
+
+            },
+            save_settlement(){
+                var scope = this;
+                var data = {
+                    settle_note: this.settle_note,
+                    user_id: this.user.id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/' + this.maintenance.id + '/settlement/save',
+                    data: data,
+                    crossDomain: true,
+                }).done(function (data) {
+                    if (data) {
+                        scope.maintenance = data;
+                        toastr.info('保存成功');
+                    }
+                });
+            },
         },
         components: {
             appBreadcrumb,

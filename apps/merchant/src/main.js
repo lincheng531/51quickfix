@@ -33,7 +33,7 @@ import './libs/jquery/jquery.raty.min.js'
 
 import './libs/js/datetimepicker/bootstrap-datetimepicker.js'
 import './libs/js/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js'
-// import './libs/jquery/jquery.twbsPagination.js'
+import './libs/jquery/jquery.twbsPagination.js'
 
 import routes from './config/routes'
 import store from './store/'

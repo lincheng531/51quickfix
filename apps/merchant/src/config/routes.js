@@ -19,7 +19,7 @@ export default [
                         component: resolve => require(['../pages/home/overview.vue'], resolve),
                     },
                     {
-                        path: '/maintenances',
+                        path: '/maintenances/:type',
                         component: resolve => require(['../pages/home/maintenance-list.vue'], resolve),
                     },
                     {

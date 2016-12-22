@@ -288,6 +288,12 @@ class Maintenance(Document):
             'is_collect': self.is_collect,
             'collected': self.collected,
             'manager_content': self.manager_content,
+
+            'settlement': self.settlement,
+            'audit_merchant_result': self.audit_merchant_result,
+            'audit_repair_result': self.audit_repair_result,
+            'settle_merchant_result': self.settle_merchant_result,
+            'settle_repair_result': self.settle_repair_result
         }
 
         if self.grab_user:
@@ -363,6 +369,12 @@ class Maintenance(Document):
             'is_collect': self.is_collect,
             'collected': self.collected,
             'manager_content': self.manager_content,
+
+            'settlement': self.settlement,
+            'audit_merchant_result': self.audit_merchant_result,
+            'audit_repair_result': self.audit_repair_result,
+            'settle_merchant_result': self.settle_merchant_result,
+            'settle_repair_result': self.settle_repair_result
         }
 
         item['count'] = len(self.members)

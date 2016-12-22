@@ -1,7 +1,7 @@
 <template>
     <div class="padding">
         <div class="row">
-            <div class="pull-right" v-if="user.category=='1'">
+            <div class="pull-right">
                 <router-link to="/maintenance/call">
                     <a class="p-l-lg p-r-lg btn btn-sm theme-blue text-white">+ 报修</a>
                 </router-link>
@@ -84,18 +84,15 @@
                                     <option value="">全部</option>
                                 </select>
                             </div>
-                            <div class="form-group col-xs-4">
-                                <div class="col-xs-4 text-right">
-                                    <label class="m-r text-muted">维修状态</label>
+
+                            <div class="form-group col-xs-8">
+                                <div class="col-xs-2 text-right">
+                                    <label class="m-r text-muted">报修时间</label>
                                 </div>
-                                <select class="form-control">
-                                    <option value="">全部</option>
-                                </select>
-                            </div>
-                            <div class="col-xs-4" id="date-filter">
-                                <label class="p-r-xs text-muted m-r-md">报修时间</label><input type="datetime"
-                                                                                           style="width: 35%">
-                                <label> 至 </label><input type="datetime" style="width: 35%">
+                                <div class="col-xs-10" style="padding-left:0">
+                                    <input type="datetime" class="fixTime" style="width:20%">
+                                    <label> 至 </label><input type="datetime" class="fixTime" style="width:20%">
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -103,7 +100,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="list_type=='status'">
             <div class="b-b nav-active-orange">
                 <ul class="nav nav-tabs">
                     <li class="nav-item b-a box-radius-3x">
@@ -120,7 +117,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-content m-b-md">
+            <div class="tab-content">
                 <div class="tab-pane animated fadeIn text-muted active" id="tab1" aria-expanded="true">
                     <com-maintenance-table :maintenances="maintenances"></com-maintenance-table>
                 </div>
@@ -132,35 +129,110 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" v-if="list_type=='audit'">
+            <div class="b-b nav-active-orange">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item b-a box-radius-3x">
+                        <a class="nav-link active" data-toggle="tab" data-target="#tabAudit1" aria-expanded="true"
+                           @click="getMaintenanceList('auditing')">待审核</a>
+                    </li>
+                    <li class="nav-item b-a box-radius-3x">
+                        <a class="nav-link" data-toggle="tab" data-target="#tabAudit2" aria-expanded="false"
+                           @click="getMaintenanceList('audited')">审核未通过</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane animated fadeIn text-muted active" id="tabAudit1" aria-expanded="true">
+                    <com-maintenance-table :maintenances="maintenances"></com-maintenance-table>
+                    <button class="btn primary pull-left" v-if="list_type=='audit'" @click="batchOp('audit')">审核
+                    </button>
+                </div>
+                <div class="tab-pane animated fadeIn text-muted" id="tabAudit2" aria-expanded="false">
+                    <com-maintenance-table :maintenances="maintenances"></com-maintenance-table>
+                </div>
+            </div>
+        </div>
+        <div class="row" v-if="list_type=='settlement'">
+            <div class="b-b nav-active-orange">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item b-a box-radius-3x">
+                        <a class="nav-link active" data-toggle="tab" data-target="#tabSettlement1" aria-expanded="true"
+                           @click="getMaintenanceList('settling')">待结算</a>
+                    </li>
+                    <li class="nav-item b-a box-radius-3x">
+                        <a class="nav-link" data-toggle="tab" data-target="#tabSettlement2" aria-expanded="false"
+                           @click="getMaintenanceList('settled')">结案</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane animated fadeIn text-muted active" id="#tabSettlement1" aria-expanded="true">
+                    <com-maintenance-table :maintenances="maintenances"></com-maintenance-table>
+                    <button class="btn primary pull-left" v-if="list_type=='settlement'" @click="batchOp('settle')">结算
+                    </button>
+                </div>
+                <div class="tab-pane animated fadeIn text-muted" id="#tabSettlement2" aria-expanded="false">
+                    <com-maintenance-table :maintenances="maintenances"></com-maintenance-table>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul id="maintenance-pagination" class="pull-right"></ul>
+        </div>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import {mapActions} from 'vuex'
     export default {
         data(){
             return {
+                list_type: null,
+                queryFilter: {},
                 maintenances: [],
+                user: JSON.parse(sessionStorage.getItem('user')) || {},
             }
         },
-        computed: mapState({user: state => state.user}),
-        created(){
-            this.getMaintenanceList('new');
+        computed: {
+            list_type(){
+                return this.$route.params.type;
+            }
+        },
+        mounted(){
+            $('.fixTime').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                autoclose: true,
+                clearBtn: true,
+                minView: 0,
+                todayHighlight: true,
+            });
+            this.maintenances = [];
         },
         methods: {
-            ...mapActions(['SIGNOUT']),
+            setPagination(currentPage, totalPage) {
+                var scope = this;
+                var $pagination = $('#maintenance-pagination');
+                $pagination.twbsPagination('destroy');
+                $pagination.twbsPagination({
+                    first: "第一页",
+                    prev: "上一页",
+                    next: "下一页",
+                    last: "最后一页",
+                    totalPages: totalPage,
+                    visiblePages: 10,
+                    startPage: currentPage,
+                    initiateStartPageClick: false,
+                    onPageClick: function (event, page) {
+                        scope.queryFilter.page = page;
+                        scope.getMaintenanceList();
+                    }
+                });
+            },
             getMaintenanceList(status){
-                var parmas = {};
-//                if (status == 'new') {
-//                    this.maintenances = JSON.parse(sessionStorage.getItem('new'));
-//                }
-//                if (status == 'fixing') {
-//                    this.maintenances = JSON.parse(sessionStorage.getItem('fixing'));
-//                }
-//                if (status == 'done') {
-//                    this.maintenances = JSON.parse(sessionStorage.getItem('done'));
-//                }
+                var scope = this;
                 //维修单状态 -1：取消 0：新维修单 1：接单或者出发中 2：已经完成  3:到店  4:维修失败 5:填写修单未确认 6:为暂停 7.被返修
                 var statusChoiceDict = {
                     'new': '0',
@@ -168,30 +240,35 @@
                     'done': '-1,2,4,7'
                 };
                 var statusText = {
-                    '-1':'取消',
-                    '0':'新维修单' ,
-                    '1':'接单或者出发中',
-                    '2':'已经完成',
-                    '3':'到店',
-                    '4':'维修失败',
-                    '5':'填写修单未确认',
-                    '6':'为暂停',
-                    '7':'被返修',
+                    '-1': '取消',
+                    '0': '新维修单',
+                    '1': '接单或者出发中',
+                    '2': '已经完成',
+                    '3': '到店',
+                    '4': '维修失败',
+                    '5': '填写修单未确认',
+                    '6': '为暂停',
+                    '7': '被返修',
                 }
-                var qs = {status: statusChoiceDict[status]};
-                var scope = this;
+                if (status) {
+                    this.maintenances = [];
+                    this.queryFilter.page = 1;
+                    this.queryFilter.status = statusChoiceDict[status] || status;
+                }
                 $.ajax({
                     type: 'GET',
                     url: global.API_HOST + '/maintenance/list',
-                    data: qs,
+                    data: this.queryFilter,
                 }).done(function (res) {
                     if (res.status == 1) {
                         var results = res.info.results;
-                        if(qs.status == '0'){
-                            var news = JSON.parse(sessionStorage.getItem('new')) || [];
-                            for(var i=news.length - 1; i>-1; i--){
-                                results.unshift(news[i]);
-                            }
+                        var meta = res.info.meta;
+                        results = results.map(function (e) {
+                            e.checked = false;
+                            return e;
+                        });
+                        if (results.length) {
+                            scope.setPagination(meta.currentPage, meta.totalPage);
                         }
                         scope.maintenances = results;
                         scope.maintenances.map(function (e) {
@@ -202,6 +279,32 @@
                         toastr.warning(res.alert);
                     }
                 });
+            },
+            batchOp(item) {
+                var scope = this;
+                var ids = this.maintenances.filter(function (e) {
+                    return e.checked;
+                }).map(function (e) {
+                    return e.id;
+                });
+
+                if (!ids.length) {
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/batchOp',
+                    data: {ids: ids.join(','), type: item, user_id: this.user.id},
+                }).done(function (res) {
+                    if (res.status == 1) {
+                        scope.getMaintenanceList();
+                    }
+                    else {
+                        toastr.warning(res.alert);
+                    }
+                });
+
             }
         }
     }

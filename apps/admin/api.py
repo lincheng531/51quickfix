@@ -15,13 +15,14 @@ from bson.son import SON
 
 logger = getlogger(__name__)
 
+
 def logout(request):
     _logout(request)
     return HttpResponseRedirect('/admin/')
 
 
 def login(request):
-    resp = {'status':1, 'info':''}
+    resp = {'status': 1, 'info': ''}
 
     form = LoginForm(request.POST)
     if not form.is_valid():
@@ -53,12 +54,13 @@ def login(request):
     response = json_response(resp)
     return response
 
+
 # @login_required(2)
 def maintenanceList(request):
     resp = {'status': 1, 'info': {}, 'alert': ''}
     data = get_json_data(request) or request.POST.dict()
     user = get_user(request)
-    p = int(data.get('p', 1))
+    p = int(data.get('page') or request.GET.get('page') or 1)
     # res = Maintenance.objects((Q(be_reset_fixed__ne=1) | Q(is_collect=1)) & Q(collected__ne=1) & Q(user=user)).order_by(
     #         '-create_time').skip((p - 1) * 20).limit(20)
     # result = []
@@ -77,18 +79,35 @@ def maintenanceList(request):
     if status:
         query['status__in'] = status.split(',')
 
-    mc = Maintenance.objects(**query).order_by('-create_time').skip((p - 1) * 20).limit(20)
+    q = Maintenance.objects(**query)
+    if status == 'auditing':
+        q = Maintenance.objects(
+            Q(status=2) & (Q(settlement__exists=False) | Q(settlement__lt=2)))
+    if status == 'audited':
+        q = Maintenance.objects(Q(status=2) & (Q(audit_merchant_result=False) | Q(audit_repair_result=False)))
+    if status == 'settling':
+        q = Maintenance.objects(
+            Q(status=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & (Q(settle_merchant_result__exists=False) | Q(settle_repair_result__exists=False)))
+    if status == 'settled':
+        q = Maintenance.objects(status=2, settle_merchant_result=True, settle_repair_result=True)
+
+    mc = q.order_by('-create_time').skip((p - 1) * 20).limit(20)
+    total = q.count()
+    totalPage = total / 20 + int(bool((total % 20)))
     result = [item.get_result() for item in mc]
+    resp['info']['meta'] = {'totalPage': totalPage, 'currentPage': p, 'totalCount': total}
     resp['info']['results'] = result
     return json_response(resp)
 
 
 def _process_result(_r):
     _r['id'] = _r['_id']
-    _r['user'] = DB.user.find_one({'_id':_r['user']})
-    _r['user_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'opt_user':_r['user']['_id']}).count()
-    _r['apply_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'status':1, 'opt_user':_r['user']['_id']}).count()
-    _r['confirm_count'] = DB.maintenance_users.find({'maintenance':_r['_id'], 'status':2, 'opt_user':_r['user']['_id']}).count()
+    _r['user'] = DB.user.find_one({'_id': _r['user']})
+    _r['user_count'] = DB.maintenance_users.find({'maintenance': _r['_id'], 'opt_user': _r['user']['_id']}).count()
+    _r['apply_count'] = DB.maintenance_users.find(
+        {'maintenance': _r['_id'], 'status': 1, 'opt_user': _r['user']['_id']}).count()
+    _r['confirm_count'] = DB.maintenance_users.find(
+        {'maintenance': _r['_id'], 'status': 2, 'opt_user': _r['user']['_id']}).count()
     _r['head_type_'] = HEAD_BRAND.get(_r.get('head_type', ''), '')
     _r['state_'] = MaintenanceState.get(_r.get('state'), '')
     _r['status_'] = MaintenanceStatus.get(_r.get('status'), '')
@@ -112,6 +131,18 @@ def maintenanceDetail(request, id):
     item['settle_repair_user'] = DB.user.find_one({'_id': ObjectId(item.get('settle_repair_user'))}) or {}
     item['settle_merchant_user'] = DB.user.find_one({'_id': ObjectId(item.get('settle_merchant_user'))}) or {}
     return json_response(item)
+
+
+def maintenance_history(request, id):
+    current = 'repair'
+    user = get_user(request)
+    res = Maintenance.objects.get(id=ObjectId(oid), head_type=user.head_type)
+    store = Store.objects.get(id=ObjectId(res['store']))
+    device = Device.objects.get(id=ObjectId(res['device']))
+    setattr(res, 'store', store)
+    detail = res.get_result()
+    bill = res.bill.detail() if res.bill else {}
+    return render('store/{}_detail.html'.format(current), locals(), context_instance=RequestContext(request))
 
 
 def audit_repair(request, id):
@@ -192,7 +223,7 @@ def repairs(request):
         loc = loc.split(',')
         for item in results:
             userloc = item.get('loc') or (999999999, 999999999)
-            item['max_distance'] = (userloc[0]-float(loc[0]))**2 + (userloc[1]-float(loc[1]))**2
+            item['max_distance'] = (userloc[0] - float(loc[0])) ** 2 + (userloc[1] - float(loc[1])) ** 2
 
         # users = list(User.objects(
         #     __raw__={"loc": SON([("$near", loc), ("$maxDistance", 10 * 10000000000000000 / 111.12)]),
@@ -361,6 +392,59 @@ def call(request):
     #     resp['status'], resp['alert'] = 0, u'该区域未找到相应的维修人员'
     # resp['info']['count'] = len(users)
     # return json_response(resp)
+
+
+def batchOp(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.POST.dict()
+    user = User.objects.get(id=ObjectId(data['user_id']))
+    type = data.get('type')
+    ids = [ObjectId(id) for id in data.get('ids').split(',')]
+
+    if type == 'audit':
+        result = Maintenance.objects(id__in=ids)
+        for maintenance in result:
+            if user.category in ('0', '2', '6', '7'):
+                maintenance.settlement = 1
+                maintenance.audit_repair_user = user
+                maintenance.audit_repair_date = datetime.datetime.now()
+                maintenance.audit_repair_result = True
+                maintenance.audit_repair_note = ''
+                maintenance.save()
+
+            if user.category in ('1', '3', '4', '5', '7'):
+                if maintenance.settlement != 1:
+                    resp['status'] = 0
+                    resp['alert'] = u'存在服务商未审核的订单'
+                    continue
+                maintenance.settlement = 2
+                maintenance.audit_merchant_user = user
+                maintenance.audit_merchant_date = datetime.datetime.now()
+                maintenance.audit_merchant_result = True
+                maintenance.audit_merchant_note = ''
+                maintenance.save()
+
+    if type == 'settle':
+        result = Maintenance.objects(id__in=ids)
+        for maintenance in result:
+            if user.category in ('1', '3', '4', '5', '7'):
+                maintenance.settle_merchant_result = True
+                maintenance.settle_merchant_user = user
+                maintenance.settle_merchant_date = datetime.datetime.now()
+                maintenance.settle_merchant_note = ''
+
+            if user.category in ('0', '2', '6', '7'):
+                maintenance.settle_repair_result = True
+                maintenance.settle_repair_user = user
+                maintenance.settle_repair_date = datetime.datetime.now()
+                maintenance.settle_repair_note = ''
+
+            if maintenance.settle_repair_result and maintenance.settle_merchant_result:
+                maintenance.settlement = 3
+
+            maintenance.save()
+
+    return json_response(resp)
 
 
 def test(request):

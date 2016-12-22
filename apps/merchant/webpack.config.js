@@ -30,6 +30,7 @@ plugins.push(
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
+        'window.jQuery': "jquery",
         tether: "tether",
         'window.Tether': "tether",
         _: "underscore",

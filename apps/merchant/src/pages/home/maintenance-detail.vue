@@ -44,9 +44,9 @@
                     </div>
                 </div>
                 <hr>
-                <!--<div class="box-body">-->
-                <!--<div ui-include="'/static/views/htmls/detail-timeline.html'"></div>-->
-                <!--</div>-->
+                <div class="box-body">
+                    <com-maintenance-history :id="maintenance.id"></com-maintenance-history>
+                </div>
             </div>
         </div>
 

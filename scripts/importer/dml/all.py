@@ -49,7 +49,7 @@ def create_store_user(data, store):
         store_manager['address'] = store.address
         store_manager['store_id'] = str(store.id)
         store_manager['store'] = store.name
-        print 'store manager:', User(**store_manager).save().id
+        pass #print 'store manager:', User(**store_manager).save().id
         #
         # if data.get('area_manager'):
         #     area_manager = copy.deepcopy(item_template)
@@ -59,7 +59,7 @@ def create_store_user(data, store):
         #     area_manager['mobile'] = data['area_manager_mobile']
         #     area_manager['category'] = '3'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
         #     try:
-        #         print 'area_manager:', User(**area_manager).save().id
+        #         pass #print 'area_manager:', User(**area_manager).save().id
         #     except:
         #         pass
         #
@@ -71,7 +71,7 @@ def create_store_user(data, store):
         #     oc['mobile'] = data['oc_mobile']
         #     oc['category'] = '4'  # 1为商户，0为维修员 2为维修服务商主管 3商户区域经理 4商户OC 5商户管理员，6：维修工区域经理
         #     try:
-        #         print 'oc:', User(**oc).save().id
+        #         pass #print 'oc:', User(**oc).save().id
         #     except:
         #         pass
 
@@ -84,7 +84,7 @@ def create_sh_stores():
     error_users = []
 
     for i in xrange(nrows):
-        print 'row: ', i + 1
+        pass #print 'row: ', i + 1
         if i % 2 or i == 0:
             continue
 
@@ -103,7 +103,7 @@ def create_sh_stores():
             data = cell.value
 
             if data:
-                print j, data
+                pass #print j, data
             else:
                 continue
 
@@ -150,28 +150,28 @@ def create_sh_stores():
         if store.name in (u'汇融店', u'蓝村路店'):
             continue
 
-        print store.name,
-        print store.no,
-        print store.opening_time,
-        print store.tel,
-        print store.email,
-        print store.address
+        pass #print store.name,
+        pass #print store.no,
+        pass #print store.opening_time,
+        pass #print store.tel,
+        pass #print store.email,
+        pass #print store.address
 
         store.save()
         user_data['store_id'] = str(store.id)
         user_data['store'] = store.name
-        print json.dumps(user_data, ensure_ascii=False)
+        pass #print json.dumps(user_data, ensure_ascii=False)
         try:
             create_store_user(user_data, store)
         except Exception as e:
             user_data['error_msg'] = e
             error_users.append(user_data)
-        print
-        print
+        pass #print
+        pass #print
 
-    print 'error users:', len(error_users)
+    pass #print 'error users:', len(error_users)
     for u in error_users:
-        print u
+        pass #print u
 
 
 def create_bj_stores():
@@ -181,7 +181,7 @@ def create_bj_stores():
     error_users = []
 
     for i in xrange(nrows):
-        print 'row: ', i + 1
+        pass #print 'row: ', i + 1
         if i % 3 != 2:
             continue
 
@@ -197,7 +197,7 @@ def create_bj_stores():
             data = cell.value
 
             if data:
-                print j, data
+                pass #print j, data
             else:
                 continue
 
@@ -246,28 +246,28 @@ def create_bj_stores():
         if store.name in (u'汇融店', u'蓝村路店'):
             continue
 
-        print store.name,
-        print store.no,
-        print store.opening_time,
-        print store.tel,
-        print store.email,
-        print store.address
+        pass #print store.name,
+        pass #print store.no,
+        pass #print store.opening_time,
+        pass #print store.tel,
+        pass #print store.email,
+        pass #print store.address
 
         store.save()
         user_data['store_id'] = str(store.id)
         user_data['store'] = store.name
-        print json.dumps(user_data, ensure_ascii=False)
+        pass #print json.dumps(user_data, ensure_ascii=False)
         try:
             create_store_user(user_data, store)
         except Exception as e:
             user_data['error_msg'] = e
             error_users.append(user_data)
-        print
-        print
+        pass #print
+        pass #print
 
-    print 'error users:', len(error_users)
+    pass #print 'error users:', len(error_users)
     for u in error_users:
-        print u
+        pass #print u
 
 
 from collections import OrderedDict, defaultdict
@@ -286,7 +286,7 @@ def create_product():
         store_dict[meta_table.cell(i, 0).value] = meta_table.cell(i, 1).value
 
     for k, v in store_dict.iteritems():
-        print k, v
+        pass #print k, v
 
     for one_sheet in sheet.sheets():
         if one_sheet.name not in store_dict:
@@ -322,11 +322,11 @@ def create_product():
                         if not store:
                             raise Exception('store error:' + store_name)
 
-        print '================>'
-        print table.name
+        pass #print '================>'
+        pass #print table.name
 
         for i in xrange(nrows):
-            print '\nrow: ', i + 1
+            pass #print '\nrow: ', i + 1
 
             if i < 5:
                 continue
@@ -336,7 +336,7 @@ def create_product():
             #     data = cell.value
             #
             #     if data:
-            #         print j, data
+            #         pass #print j, data
             #     else:
             #         continue
 
@@ -385,7 +385,7 @@ def create_product():
                 'supplier': supplier,
             }
             for k, v in item.iteritems():
-                print k, v
+                pass #print k, v
 
             filter_dict = {'name': item['name']}
             if item.get('category'):
@@ -443,11 +443,11 @@ def create_product():
 
             Device(**device_item).save()
 
-    print 'error_brands:', len(error_brands)
-    print json.dumps(error_brands, ensure_ascii=False)
+    pass #print 'error_brands:', len(error_brands)
+    pass #print json.dumps(error_brands, ensure_ascii=False)
 
-    print 'error_suppliers:', len(error_suppliers)
-    print json.dumps(error_suppliers, ensure_ascii=False)
+    pass #print 'error_suppliers:', len(error_suppliers)
+    pass #print json.dumps(error_suppliers, ensure_ascii=False)
 
 def make_no(val):
     try:
@@ -467,22 +467,22 @@ def create_spare():
         nrows = table.nrows
         ncols = table.ncols
 
-        print '================>'
-        print table.name, nrows, ncols
+        pass #print '================>'
+        pass #print table.name, nrows, ncols
 
         for i in xrange(nrows):
             if table.name == '果汁机':
                 if i < 6: continue
             else:
                 if i < 2: continue
-            print '\nrow: ', i + 1
+            pass #print '\nrow: ', i + 1
 
             # for j in xrange(ncols):
             #     cell = table.cell(i, j)
             #     data = cell.value
             #
             #     if data:
-            #         print j, data
+            #         pass #print j, data
             #     else:
             #         continue
 
@@ -535,18 +535,18 @@ def create_spare():
             }
 
             for k, v in item.iteritems():
-                print k, v
+                pass #print k, v
 
             Spare(**item).save()
 
-    print 'error_brands:', len(error_brands)
-    print json.dumps(error_brands, ensure_ascii=False)
+    pass #print 'error_brands:', len(error_brands)
+    pass #print json.dumps(error_brands, ensure_ascii=False)
 
-    print 'error_products1:', len(error_products)
-    print json.dumps(error_products, ensure_ascii=False)
+    pass #print 'error_products1:', len(error_products)
+    pass #print json.dumps(error_products, ensure_ascii=False)
 
-    print 'error_products2:', len(error_products2)
-    print json.dumps(error_products2, ensure_ascii=False)
+    pass #print 'error_products2:', len(error_products2)
+    pass #print json.dumps(error_products2, ensure_ascii=False)
 
 
 def init_brand():
@@ -648,16 +648,16 @@ def init_brand():
 def show_products():
     query = Product.objects.filter(head_type=HEAD_TYPE).order_by("name")
     for item in query:
-        print '\n=======>'
-        print item.name
-        print item.efcategory
-        print item.ecategory
-        print item.brand_name
-        print item.model
-        print item.specification
-        print item.create_time
+        pass #print '\n=======>'
+        pass #print item.name
+        pass #print item.efcategory
+        pass #print item.ecategory
+        pass #print item.brand_name
+        pass #print item.model
+        pass #print item.specification
+        pass #print item.create_time
 
-    print 'total:', query.count()
+    pass #print 'total:', query.count()
 
 
 if __name__ == '__main__':

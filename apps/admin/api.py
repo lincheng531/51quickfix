@@ -136,7 +136,7 @@ def maintenanceDetail(request, id):
 def maintenance_history(request, id):
     current = 'repair'
     user = get_user(request)
-    res = Maintenance.objects.get(id=ObjectId(oid), head_type=user.head_type)
+    res = Maintenance.objects.get(id=ObjectId(id    ), head_type=user.head_type)
     store = Store.objects.get(id=ObjectId(res['store']))
     device = Device.objects.get(id=ObjectId(res['device']))
     setattr(res, 'store', store)

@@ -126,7 +126,16 @@ def repairs(request):
     #     result.append(m.get_result())
     # resp['info']['results'] = result
     # return json_response(resp)
-    mc = MaintenanceCollection.objects(members__in=members).order_by('-create_time').skip((p - 1) * 20).limit(20)
+    filter_dict = {
+        'members': {'$in': members}
+    }
+    if data.get('is_grab') == '0':
+        filter_dict.update({'$or': [{'grab_users': {'$exists': False}}, {'grab_users': []}, {'grab_users': None}]})
+    elif data.get('is_grab') == '1':
+        filter_dict.update({'grab_users': {'$exists': True, '$ne': []}})
+
+    query = MaintenanceCollection.objects(__raw__=filter_dict)
+    mc = query.order_by('-create_time').skip((p - 1) * 20).limit(20)
     collections = [collection.get_result(members=members) for collection in mc]
 
     resp['info']['results'] = collections
@@ -176,7 +185,7 @@ def dispatch(request, oid):
     :POST params:
         * uid 多个请用,号隔开
     :return:
-        * 
+        *
 
     """
     resp = {'status': 0, 'info': {}, 'alert': ''}

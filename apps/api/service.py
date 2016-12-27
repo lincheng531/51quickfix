@@ -804,7 +804,7 @@ def bill(request, oid):
     return json_response(resp)
 
 
-@login_required('0')
+@login_required('0', '2')
 def bill2(request, oid):
     """  填写(修改)维修单--失败 填写失败原因 (适用连锁版)
 

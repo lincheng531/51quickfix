@@ -930,29 +930,87 @@ def add_device(request):
     #    'brand_name': data.get('brand_name'),
     #
     # }).save()
+    product = None
+    category = data.get('category')
+    efcategory = data.get('efcategory')
+    ecategory = data.get('ecategory')
+    name = data.get('name')
+    model = data.get('model')
+    description = data.get('description')
+    specifications = data.get('specifications')
+    brand_name = data.get('brand')
+    brand = Brand.objects.get(Q(name=brand_name) or Q(name2=brand_name))
+    supplier = Supplier.objects.filter(id=ObjectId(data.get('supplier'))).first()
+
+    product = Product.objects(
+        category = category,
+        efcategory = efcategory,
+        ecategory = ecategory,
+        brand = brand,
+        name = name,
+        model = model,
+        specification = specifications
+    ).first()
+
+    if not product:
+        product = Product.objects(
+            category=category,
+            efcategory=efcategory,
+            ecategory=ecategory,
+            brand=brand,
+            name=name,
+            model=model,
+        ).first()
+
+    if not product:
+        product = Product.objects(
+            category=category,
+            efcategory=efcategory,
+            ecategory=ecategory,
+            brand=brand,
+            name=name,
+        ).first()
+
+    if not product:
+        item = {
+            'head_type': user.head_type,
+            'category': category,
+            'efcategory': efcategory,
+            'ecategory': ecategory,
+            'name': name,
+            'description': description,
+            'brand_name': brand_name,
+            'brand': brand,
+            'model': model,
+            'specification': specifications,
+            'supplier': supplier,
+        }
+        product = Product(**item).save()
+
     store = Store.objects.get(id=ObjectId(user.store_id))
     device = Device(**{
         'head_type': user.head_type,
         'no': data.get('no'),
-        'name':data.get('name'),
+        'name': name,
         'restaurant_name': store.name,
         'restaurant_no': store.no,
         'store': store,
         'area': user.area,
         'city': user.city,
-        'description': data.get('description'),
-        'model': data.get('model'),
-        'category': data.get('category'),
-        'efcategory': data.get('efcategory'),
-        'ecategory': data.get('ecategory'),
+        'description': description,
+        'model': model,
+        'category': category,
+        'efcategory': efcategory,
+        'ecategory': ecategory,
         'expiration_date': data.get('expiration_date'),
         'specifications': data.get('specifications'),
-        'brand': data.get('brand'),
+        'brand': brand_name,
         'psnumber': data.get('psnumber'),
         'manufacturer': data.get('manufacturer'),
         'provider': data.get('provider'),
-        'supplier': Supplier.objects.filter(id=ObjectId(data.get('supplier'))).first(),
+        'supplier': supplier,
         'logo': [data.get('logo')],
+        'product': product,
     }).save()
     result = DB.device.find_one({'_id':device.id})
     del result['store']

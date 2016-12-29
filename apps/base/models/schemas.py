@@ -740,6 +740,14 @@ class Bill(Document):
 
     def detail1(self):
         device = self.device
+        supplier = device.supplier
+        supplier_name = None
+        supplier_id = None
+
+        if supplier:
+            supplier_name = device.supplier.name
+            supplier_id = device.supplier.id
+
         item = {
             'id': str(self.id),
             'quality': self.quality,
@@ -749,8 +757,8 @@ class Bill(Document):
             'product_code': self.product_code,
             'error_code': self.error_code.no if hasattr(self.error_code, 'no') else '',
             'error_code_id': str(self.error_code.id) if hasattr(self.error_code, 'id') else '',
-            'supplier': device.supplier.name,
-            'supplier_id': device.supplier.id,
+            'supplier': supplier_name,
+            'supplier_id': supplier_id,
             'labor': self.labor,
             'total': self.total,
             'state': self.state,

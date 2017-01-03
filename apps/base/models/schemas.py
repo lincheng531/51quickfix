@@ -401,15 +401,19 @@ class Maintenance(Document):
 
         if self.arrival_time:
             item['come_time'] = self.arrival_time
-            item['work_time'] = self.arrival_time + timedelta(hours=self.work_range)
+            if self.work_range:
+                item['work_time'] = self.arrival_time + timedelta(hours=self.work_range)
         elif self.come_time:
             item['come_time'] = self.come_time
-            item['work_time'] = self.come_time + timedelta(hours=self.work_range)
+            if self.work_range:
+                item['work_time'] = self.come_time + timedelta(hours=self.work_range)
         elif self.must_time:
             item['come_time'] = self.must_time
-            item['work_time'] = self.must_time + timedelta(hours=self.work_range)
+            if self.work_range:
+                item['work_time'] = self.must_time + timedelta(hours=self.work_range)
         else:
-            item['work_time'] = dt.now() + timedelta(hours=self.work_range)
+            if self.work_range:
+                item['work_time'] = dt.now() + timedelta(hours=self.work_range)
         if self.work_time:
             item['work_time'] = self.work_time
 

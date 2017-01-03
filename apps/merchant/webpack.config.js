@@ -4,8 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const config = require('./config/')
 const IS_ENV = process.env.NODE_ENV == 'production'
 
+var global_js_path = IS_ENV ? './src/config/global.js' : './src/config/global_dev.js'
 
-var plugins = []
+var plugins = [];
 if (IS_ENV) { //生产环境
     plugins.push(new webpack.DefinePlugin({
         'process.env': { //设置成生产环境
@@ -24,7 +25,7 @@ plugins.push(
         filename: './index.html', //生成的html存放路径，相对于 path
         template: './src/template/index.html', //html模板路径
     })
-)
+);
 
 plugins.push(
     new webpack.ProvidePlugin({
@@ -42,7 +43,7 @@ plugins.push(
         MyUtils: "MyUtils",
         app: "app",
     })
-)
+);
 
 module.exports = {
     entry: ['./src/main.js'], //编译入口文件
@@ -98,7 +99,7 @@ module.exports = {
             uiLoad: path.resolve(__dirname, './src/js/ui-load.js'),
             toastr: path.resolve(__dirname, './src/libs/jquery/toastr/toastr.min.js'),
             moment: path.resolve(__dirname, './src/libs/js/moment/moment.js'),
-            global: path.resolve(__dirname, './src/config/global.js'),
+            global: path.resolve(__dirname, global_js_path),
             MyUtils: path.resolve(__dirname, './src/js/base.js'),
             app: path.resolve(__dirname, './src/js/app.js'),
         }
@@ -123,4 +124,4 @@ module.exports = {
         progress: true,
         port: config.devPort,
     },
-}
+};

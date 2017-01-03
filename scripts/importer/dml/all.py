@@ -49,7 +49,8 @@ def create_store_user(data, store):
         store_manager['address'] = store.address
         store_manager['store_id'] = str(store.id)
         store_manager['store'] = store.name
-        pass #print 'store manager:', User(**store_manager).save().id
+        uid = User(**store_manager).save().id
+        pass #print 'store manager:', uid
         #
         # if data.get('area_manager'):
         #     area_manager = copy.deepcopy(item_template)

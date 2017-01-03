@@ -988,6 +988,9 @@ def add_device(request):
         product = Product(**item).save()
 
     store = Store.objects.get(id=ObjectId(user.store_id))
+    logos = []
+    if data.get('logo'):
+        logos.append(data.get('logo'))
     device = Device(**{
         'head_type': user.head_type,
         'no': data.get('no'),
@@ -1009,7 +1012,7 @@ def add_device(request):
         'manufacturer': data.get('manufacturer'),
         'provider': data.get('provider'),
         'supplier': supplier,
-        'logo': [data.get('logo')],
+        'logo': logos,
         'product': product,
     }).save()
     result = DB.device.find_one({'_id':device.id})

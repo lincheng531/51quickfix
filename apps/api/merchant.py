@@ -460,7 +460,7 @@ def call(request):
             'city': store.city,
             'loc': store.loc,
             'status': 0,
-            'brand': product.brand.name,
+            'brand': device.brand,
             'head_type': loggend_user.head_type,
             'device': str(device.id),
             'no': device.no,

@@ -370,15 +370,16 @@ def call(request):
     if not product:
         resp['status'], resp['alert'] = 0, u'该设备未找到设备大类，请联系管理员'
         return json_response(resp)
-    if not supplier:
-        resp['status'], resp['alert'] = 0, u'该设备未找到供应商，请联系管理员'
-        return json_response(resp)
 
     # 是否采购
     is_buy = int(data.get('is_buy', 0))
     if is_buy == 1: state = 2
 
     if loggend_user.head_type > 1:
+        if not supplier:
+            resp['status'], resp['alert'] = 0, u'该设备未找到供应商，请联系管理员'
+            return json_response(resp)
+
         if not logo:
             resp['status'], resp['alert'] = 0, u'故障图片不得为空'
             return json_response(resp)
@@ -438,6 +439,13 @@ def call(request):
 
         members = [str(i.id) for i in users]
 
+        supplier_name = None
+        supplier_id = None
+
+        if supplier:
+            supplier_name = supplier.name
+            supplier_id = supplier.id
+
         maintenance = {
             'user': loggend_user.id,
             'store_name': store.name,
@@ -446,8 +454,8 @@ def call(request):
             'company': company,
             'product': device.name,
             'product_id': product.id,
-            'supplier': supplier.name,
-            'supplier_id': supplier.id,
+            'supplier': supplier_name,
+            'supplier_id': supplier_id,
             'area': store.area,
             'city': store.city,
             'loc': store.loc,

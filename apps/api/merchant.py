@@ -945,14 +945,18 @@ def add_device(request):
     description = data.get('description')
     specifications = data.get('specifications')
     brand_name = data.get('brand')
-    brand = Brand.objects.get(Q(name=brand_name) or Q(name2=brand_name))
+    brand = None
+    try:
+        brand = Brand.objects.get(Q(name=brand_name) or Q(name2=brand_name))
+    except:
+        pass
     supplier = Supplier.objects.filter(id=ObjectId(data.get('supplier'))).first()
 
     product = Product.objects(
         category = category,
         efcategory = efcategory,
         ecategory = ecategory,
-        brand = brand,
+        brand_name = brand_name,
         name = name,
         model = model,
         specification = specifications
@@ -963,7 +967,7 @@ def add_device(request):
             category=category,
             efcategory=efcategory,
             ecategory=ecategory,
-            brand=brand,
+            brand_name=brand_name,
             name=name,
             model=model,
         ).first()
@@ -973,7 +977,7 @@ def add_device(request):
             category=category,
             efcategory=efcategory,
             ecategory=ecategory,
-            brand=brand,
+            brand_name=brand_name,
             name=name,
         ).first()
 

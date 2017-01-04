@@ -76,6 +76,8 @@ def maintenanceList(request):
 
     query = {}
     status = request.GET.get('status')
+    search_q = request.GET.get('q')
+
     if status:
         query['status__in'] = status.split(',')
 
@@ -90,6 +92,9 @@ def maintenanceList(request):
             Q(status=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & (Q(settle_merchant_result__exists=False) | Q(settle_repair_result__exists=False)))
     if status == 'settled':
         q = Maintenance.objects(status=2, settle_merchant_result=True, settle_repair_result=True)
+
+    if search_q:
+        q = Maintenance.objects(Q(code=search_q) | Q(store_name=search_q))
 
     mc = q.order_by('-create_time').skip((p - 1) * 20).limit(20)
     total = q.count()

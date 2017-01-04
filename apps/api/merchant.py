@@ -418,6 +418,12 @@ def call(request):
         if not loggend_user.loc:
             resp['alert'] = u'无法定位当前位置，请联系管理员'
             return json_response(resp)
+
+        # 当前一个设备未完成的时候后面一个无法叫修
+        if Maintenance.objects.filter(device=cid, user=loggend_user, status__in=[0, 1, 3]).count() > 0:
+            resp['status'], resp['alert'] = 0, u'该设备有未接的维修单，无法重新叫修，请去我的修单里处理'
+            return json_response(resp)
+
         company = ''
         for step in range(1, 20):
             users = list(User.objects.filter(category='0', is_active=1))

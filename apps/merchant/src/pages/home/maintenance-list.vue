@@ -12,7 +12,7 @@
                         <input type="text" class="form-control" placeholder="请输入编号、商户等" v-model="search_q">
                         <span class="input-group-btn">
                                 <a class="btn no-radius deep-orange-400 text-white b-a b-orange" type="button"
-                                   ui-sref="app.store.search({search_q: search_q})"><i class="fa fa-search"></i></a>
+                                   @click="search(search_q)"><i class="fa fa-search"></i></a>
                             </span>
                     </div>
                 </form>
@@ -230,6 +230,12 @@
                         scope.getMaintenanceList();
                     }
                 });
+            },
+            search(q){
+                this.maintenances = [];
+                this.queryFilter.page = 1;
+                this.queryFilter.q = q;
+                this.getMaintenanceList()
             },
             getMaintenanceList(status){
                 var scope = this;

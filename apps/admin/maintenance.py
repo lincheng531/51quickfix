@@ -88,6 +88,10 @@ def detail(request, oid):
         item['grab_user'] = grab_user
         item['grab_user']['title'] = USER_CATEGORY.get(grab_user['category'])
     #return render('admin/{}_detail.html'.format(current),locals(),context_instance=RequestContext(request))
+
+    mt = Maintenance.objects.get(id=ObjectId(oid))
+    bill = mt.bill.detail() if mt.bill else {}
+    item['bill'] = bill
     return json_response(item)
 
 

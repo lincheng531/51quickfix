@@ -30,10 +30,11 @@
                     </div>
                 </div>
 
-                <div class="col-md-8 col-md-push-4 m-t-sm m-b">
-                    <div>
+                <div class="row">
+                    <div class="col-md-8 col-md-push-4 m-t-sm m-b">
+                        <div>
                     <span ng-repeat="img in images">
-                        <img class="img-rounded" alt="" ng-src="{{img}}" width="64" height="64"
+                        <img class="img-rounded" alt="" ng-src="{{ img }}" width="64" height="64"
                              data-toggle="modal" data-target="#img-{{$index}}" ui-toggle-class="zoom"
                              ui-target="#animate">
                         &nbsp;&nbsp;
@@ -44,7 +45,7 @@
                             <div class="modal-content">
 
                               <div class="modal-body text-center p-lg">
-                                <img class="img-rounded" alt="" ng-src="{{img}}">
+                                <img class="img-rounded" alt="" ng-src="{{ img }}">
                               </div>
                             </div><!-- /.modal-content -->
                           </div>
@@ -53,6 +54,71 @@
 
                     </span>
 
+                        </div>
+                    </div>
+                </div>
+
+                <hr ng-if="bill">
+                <br ng-if="bill">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted">零件费</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="bill.spare_total"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted">交通费</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="bill.travel"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted">人工费</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="bill.labor"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted">住宿费</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="bill.stay_total"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <p class="text-muted">合计</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="pull-left">
+                            <p ng-bind="bill.total"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,7 +133,7 @@
                     <div class="col-md-4">
                         <div class="pull-right">
                             <span class="avatar w-64">
-                                <img ng-src="{{fixer.avatar_img}}" alt="...">
+                                <img ng-src="{{ fixer.avatar_img }}" alt="...">
                                 <i class="busy b-white right"></i>
                             </span>
                         </div>
@@ -97,7 +163,7 @@
                     <div class="col-md-4">
                         <div class="pull-right">
                             <span class="avatar w-64">
-                                <img ng-src="{{reporter.avatar_img}}" alt="...">
+                                <img ng-src="{{ reporter.avatar_img }}" alt="...">
                                 <i class="busy b-white right"></i>
                             </span>
                         </div>

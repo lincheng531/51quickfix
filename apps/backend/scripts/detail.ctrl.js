@@ -26,7 +26,8 @@ angular.module('app').controller('DetailCtrl', ['$scope', '$location', '$rootSco
                 }
             ];
 
-            $scope.images = ['/static/images/c1.jpg', '/static/images/c2.jpg', '/static/images/c3.jpg', '/static/images/c4.jpg'];
+            $scope.bill = data.bill;
+            $scope.images = data.logo;
             $scope.reporter = {
                 screen_name: data.user.name,
                 avatar_img: data.user.avatar_img,

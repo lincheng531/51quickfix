@@ -12,7 +12,7 @@
         .run(runBlock)
         .config(config)
         .constant('sys', {
-            'API': 'http://localhost:7999/admin'
+            'API': 'http://www.51quickfix.com/admin'
         });
 
     runBlock.$inject = ['$rootScope', '$state', '$stateParams'];

@@ -58,13 +58,16 @@
                             <div class="col-md-12 text-muted m-t">
                                 <div class="col-md-2 text-right">地址</div>
                                 <div class="col-md-9">
-                                <textarea cols="45" class="form-control" placeholder="请输入" v-model="form.address"
-                                          @change="codeAddress(form.address)"></textarea>
+                                    <div class="col-md-11" style="padding:0;">
+                                        <textarea cols="45" class="form-control" placeholder="请输入"
+                                                  v-model="form.address" @change="codeAddress(form.address)"></textarea>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div id="map" style="width:100%px;height:160px"></div>
+                            <div id="map" style="width:100%;height:220px"></div>
                         </div>
                     </div>
                 </div>

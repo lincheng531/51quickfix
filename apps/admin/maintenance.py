@@ -92,6 +92,7 @@ def detail(request, oid):
     mt = Maintenance.objects.get(id=ObjectId(oid))
     bill = mt.bill.detail() if mt.bill else {}
     item['bill'] = bill
+    item['status_list'] = mt.status_list
     return json_response(item)
 
 

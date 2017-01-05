@@ -26,6 +26,7 @@ angular.module('app').controller('DetailCtrl', ['$scope', '$location', '$rootSco
                 }
             ];
 
+            $scope.status_list = data.status_list;
             $scope.bill = data.bill;
             $scope.images = data.logo;
             $scope.reporter = {

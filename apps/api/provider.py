@@ -118,6 +118,7 @@ def repairs(request):
     user = get_user(request)
     data = get_json_data(request) or request.POST.dict()
     p = int(data.get('p', 1))
+    head_type = int(data.get('head_type', user.head_type))
     result = []
 
     members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
@@ -136,7 +137,8 @@ def repairs(request):
 
     query = MaintenanceCollection.objects(__raw__=filter_dict)
     mc = query.order_by('-create_time').skip((p - 1) * 20).limit(20)
-    collections = [collection.get_result(members=members) for collection in mc]
+    collections = [collection.get_result(members=members, head_type=head_type) for collection in mc]
+    collections = filter(lambda x: x, collections)
 
     resp['info']['results'] = collections
     return json_response(resp)

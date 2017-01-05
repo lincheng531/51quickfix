@@ -478,7 +478,7 @@ class MaintenanceCollection(Document):
         status = {1: u'紧急', 2: u'非紧急'}
         return status.get(int(self.state))
 
-    def get_result(self, grab_user=None, members=[]):
+    def get_result(self, grab_user=None, members=[], head_type=None):
         if members:
             member_set = set(members)
             collections = [ \
@@ -492,23 +492,29 @@ class MaintenanceCollection(Document):
                 for item in
                 (filter(lambda x: grab_user in x.grab_users, self.histories) if grab_user else self.histories)]
 
-        return {
-            'id': self.id,
-            'user_id': self.user.id,
-            'grab_users': [item.id for item in self.grab_users],
-            'create_time': self.create_time,
-            'update_time': self.update_time,
-            'collections': collections,
-            'store_name': self.store_name,
-            'store_id': self.store,
-            'store_no': self.store_no,
-            'address': self.address,
-            'state': self.state,
-            'name': self.user.name,
-            'logo': self.user.avatar_img,
-            'mobile': self.user.mobile,
-            'must_time': self.must_time,
-        }
+        if head_type:
+            collections = filter(lambda x: x.get('head_type') == head_type, collections)
+
+        if collections:
+            return {
+                'id': self.id,
+                'user_id': self.user.id,
+                'grab_users': [item.id for item in self.grab_users],
+                'create_time': self.create_time,
+                'update_time': self.update_time,
+                'collections': collections,
+                'store_name': self.store_name,
+                'store_id': self.store,
+                'store_no': self.store_no,
+                'address': self.address,
+                'state': self.state,
+                'name': self.user.name,
+                'logo': self.user.avatar_img,
+                'mobile': self.user.mobile,
+                'must_time': self.must_time,
+            }
+
+        return {}
 
 
 # 无用

@@ -104,6 +104,31 @@ def online(request):
 
 
 @login_required('2')
+def grabs(request):
+    """  接单列表(head_type)
+    :POST:
+        * head_type(user profile中取) 1为标准 大于1为连锁(默认) 0为混合(暂无)
+
+    :uri: /api/v1/provider/grabs
+
+    """
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    data = get_json_data(request) or request.GET.dict()
+    user = get_user(request)
+    p = int(data.get('p', 1))
+    members = [str(i.id) for i in Member.objects.filter(opt_user=user).distinct('user')]
+    members.append(str(user.id))
+    maintenances = Maintenance.objects(
+        __raw__={'status': 0, 'head_type': {'$gt': 1}, 'members': {'$in': members}}).order_by(
+        '-create_time').skip((p-1)*20).limit(20)
+    
+    results = [i.get_result() for i in maintenances]
+
+    resp['info']['results'] = results
+    return json_response(resp)
+
+
+@login_required('2')
 def repairs(request):
     """  修单列表
 

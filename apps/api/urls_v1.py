@@ -110,6 +110,7 @@ urlpatterns = patterns('',
     ('^provider/repair/(?P<oid>\S{24})$','apps.api.provider.repair'),
     ('^provider/collection/(?P<id>\S{24})$','apps.api.provider.collection'),
     ('^provider/dispatch/(?P<oid>\S{24})$','apps.api.provider.dispatch'),
+    ('^provider/grabs$','apps.api.provider.grabs'),
 
     ('^task/list$','apps.api.task.list'),
     ('^task/check/(?P<oid>\S{24})$','apps.api.task.check'),

@@ -39,6 +39,12 @@ import routes from './config/routes'
 import store from './store/'
 import com from './component/' //加载公共组件
 
+//select2
+import './libs/jquery/select2/dist/css/select2.min.css'
+import './libs/jquery/select2-bootstrap-theme/dist/select2-bootstrap.min.css'
+import './libs/jquery/select2-bootstrap-theme/dist/select2-bootstrap.4.css'
+import './libs/jquery/select2/dist/js/select2.min.js'
+
 Object.keys(com).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
     Vue.component(`com${name}`, com[key])

@@ -45,7 +45,7 @@
                 </div>
                 <hr>
                 <div class="box-body">
-                    <com-maintenance-history :id="maintenance.id"></com-maintenance-history>
+                    <com-maintenance-history :status_list="status_list"></com-maintenance-history>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
 
                     <div class="col-md-8 col-md-push-4 m-t-sm m-b">
                         <div>
-                            <span v-for="img in this.maintenance.logo">
+                            <span v-for="img in maintenance.logo">
                                 <img class="img-rounded" alt="" src="" width="64" height="64"
                                      data-toggle="modal" data-target="#img-$index" ui-toggle-class="zoom"
                                      ui-target="#animate">
@@ -109,7 +109,8 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<input type="number" v-model="spare_fee"></p>
+                                    <p>￥<span type="number"
+                                              v-text="maintenance.bill && maintenance.bill.spare_total"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +122,8 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<input type="number" v-model="labor_fee"></p>
+                                    <p>￥<span type="number" v-text="maintenance.bill && maintenance.bill.labor"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +135,8 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<input type="number" v-model="transport_fee"></p>
+                                    <p>￥<span type="number" v-text="maintenance.bill && maintenance.bill.travel"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +148,8 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<input type="number" v-model="house_fee"></p>
+                                    <p>￥<span type="number"
+                                              v-text="maintenance.bill && maintenance.bill.stay_total"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +161,20 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<input type="number" v-model="delivery_fee"></p>
+                                    <p>￥<span v-text="delivery_fee"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-xs" v-for="item in ((maintenance.bill || {}).others || [])">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted" v-text="item.msg"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="pull-left">
+                                    <p>￥<span v-text="item.total"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -170,8 +187,32 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <h5 class="text-orange" v-text="totalFee"></h5>
+                                    <h5 class="text-orange" v-text="maintenance.bill && maintenance.bill.total"></h5>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row m-t-md">
+                            <div id="spare-specifications">
+                                <table class="table table-striped table-hover">
+                                    <thead class="text-white" style="background-color: #374256;">
+                                    <tr>
+                                        <th>零配件</th>
+                                        <th>编号</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>变量</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="item in ((maintenance.bill || {}).spare || [])">
+                                        <td v-text="item.name"></td>
+                                        <td v-text="item.no"></td>
+                                        <td v-text="item.price"></td>
+                                        <td v-text="item.count"></td>
+                                        <td v-text="item.total"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -259,32 +300,32 @@
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">服务商审核工单</div>
                         </div>
-                        <div class="col-md-8" v-show="is_store && maintenance.settlement<1">
+                        <div class="col-md-8"
+                             v-show="is_store && (!maintenance.settlement || maintenance.settlement<1)">
                             正在审核当前工单
                         </div>
-                        <div class="col-md-8" v-show="is_repair && maintenance.settlement<1">
+                        <div class="col-md-8"
+                             v-show="is_repair && (!maintenance.settlement || maintenance.settlement<1)">
                             <label class="radio-inline">
                                 <input type="radio" name="inlineRadioOptions" value="1"
-                                       class="has-value" v-model="audit_repair_result"> 审核通过
+                                       class="has-value" v-model="audit_repair_result"> 核对无误，审核通过
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" name="inlineRadioOptions" value="0"
-                                       v-model="audit_repair_result"> 审核不通过
+                                       v-model="audit_repair_result"> 工单有争议，审核失败
                             </label>
                             <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
                                       v-model="audit_repair_note"></textarea>
                             <div class="m-t-md p-t-xs">
-                                <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
+                                <small class="text-muted">提示: 确定审核结果后，工单将进入"<strong
+                                        class="text-orange">维修/费用审核/待提交列表</strong>"，可批量提交至商户。
+                                </small>
                             </div>
                             <div class="m-t-sm">
                                 <button class="btn btn-xs btn-fw dark" v-if="audit_repair_result"
-                                        @click="save_repair_audit">仅保存结果
+                                        @click="save_repair_audit">确定
                                 </button>
-                                <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" @click="submit_repair_audit"
-                                        v-if="audit_repair_result">提交审核
-                                </button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>提交审核</button>
+                                <button class="btn btn-xs btn-fw dark" disabled v-else>确定</button>
                             </div>
                         </div>
                         <div class="col-md-8" v-show="maintenance.settlement >= 1">
@@ -327,18 +368,24 @@
                             </label>
                             <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
                                       v-model="audit_merchant_note"></textarea>
+                            <!--
                             <div class="m-t-md p-t-xs">
                                 <small class="text-muted">提示: 您可在当前页面保存审核结果, 再返回列表页选择多张工单批量审核</small>
-                            </div>
+                            </div>-->
                             <div class="m-t-sm">
+                                <!--
                                 <button class="btn btn-xs btn-fw dark" v-if="audit_merchant_result"
                                         @click="save_merchant_audit">仅保存结果
                                 </button>
                                 <button class="btn btn-xs btn-fw dark" disabled v-else>仅保存结果</button>
                                 <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm"
-                                        @click="submit_merchant_audit" v-if="audit_merchant_result">提交审核
+                                        @click="submit_merchant_audit" v-if="audit_merchant_result">提交
                                 </button>
-                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>提交审核</button>
+                                <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>提交</button>-->
+                                <button class="btn btn-xs btn-fw dark" v-if="audit_merchant_result"
+                                        @click="submit_merchant_audit">提交
+                                </button>
+                                <button class="btn btn-xs btn-fw dark" disabled v-else>提交</button>
                             </div>
                         </div>
                         <div class="col-md-8" v-show="maintenance.settlement >= 2">
@@ -363,7 +410,8 @@
                         <hr>
                     </div>
 
-                    <div class="row padding" v-if='maintenance.settlement>=2'>
+                    <div class="row padding"
+                         v-if='maintenance.settlement>=2 && maintenance.audit_repair_result && maintenance.audit_merchant_result'>
                         <div class="col-md-4">
                             <div class="p-r text-right text-muted">结算</div>
                         </div>
@@ -400,10 +448,12 @@
                                 </div>
                                 <textarea class="form-control m-t" rows="2" placeholder="请填写备注信息"
                                           v-model="settle_note"></textarea>
+                                <!--
                                 <div class="m-t-md p-t-xs">
                                     <small class="text-muted">提示: 您可在当前页面保存结算结果, 再返回列表页选择多张工单批量结算</small>
-                                </div>
+                                </div>-->
                                 <div class="m-t-sm">
+                                    <!--
                                     <button class="btn btn-xs btn-fw dark" v-if="settle_result"
                                             @click="save_settlement">仅保存结果
                                     </button>
@@ -412,7 +462,11 @@
                                             v-if="settle_result">结算工单
                                     </button>
                                     <button class="btn btn-xs btn-fw text-white p-x-md m-l-sm" disabled v-else>结算工单
+                                    </button>-->
+                                    <button class="btn btn-xs btn-fw dark" v-if="settle_result"
+                                            @click="settle">提交
                                     </button>
+                                    <button class="btn btn-xs btn-fw dark" disabled v-else>提交</button>
                                 </div>
                             </div>
                         </div>
@@ -463,6 +517,7 @@
                 ],
                 store: {},
                 maintenance: {},
+                status_list: [],
                 spare_fee: 0,
                 labor_fee: 0,
                 transport_fee: 0,
@@ -487,6 +542,7 @@
             var url = global.API_HOST + '/maintenance/' + id;
             var scope = this;
             $.getJSON(url, {}, function (data) {
+                scope.status_list = data.status_list;
                 scope.maintenance = data;
                 scope.store = scope.maintenance.store;
 
@@ -495,12 +551,12 @@
                 scope.audit_merchant_result = scope.maintenance['audit_merchant_result_save'];
                 scope.audit_merchant_note = scope.maintenance['audit_merchant_note_save'];
 
-                if(scope.is_store) {
+                if (scope.is_store) {
                     scope.settle_result = scope.maintenance['settle_merchant_result_save'];
                     scope.settle_note = scope.maintenance['settle_merchant_note_save'];
                 }
 
-                if(scope.is_repair) {
+                if (scope.is_repair) {
                     scope.settle_result = scope.maintenance['settle_repair_result_save'];
                     scope.settle_note = scope.maintenance['settle_repair_note_save'];
                 }

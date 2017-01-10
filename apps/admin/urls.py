@@ -75,7 +75,7 @@ urlpatterns = patterns('apps.admin',
     #('account/profile$','account.profile'),
     
 
-    ('maintenance/list$','maintenance.list'),
+    # ('maintenance/list$','maintenance.list'),
     ('maintenance/detail/(?P<oid>\S{24})$','maintenance.detail'),
     #('maintenance/edit/(?P<oid>\S{24})$','maintenance.edit'),
     #('maintenance/append$','maintenance.append'),

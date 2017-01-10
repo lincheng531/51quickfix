@@ -1,123 +1,145 @@
 <template>
-    <div>
-        <table id="timeline" v-for="stat in res.status_list">
-            <tr v-if="stat.head_type==-1">
-                <td class="center"><img src="/static/images/time_dot_2.png"/></td>
-                <td colspan="2" class="f1">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==1">
-                <td style="width: 60px"><span class="icon">报修</span></td>
-                <td><p class="f3">{{stat.must_time}}到修(合约)</p>
-                    <p>{{stat.name}}</p>
-                    <p class="f3">{{stat.mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==2">
-                <td><span class="icon">通知</span></td>
-                <td>
-                    <p class="f3">{{stat.company}} {{stat.city}}{{stat.count}}人</p>
-                    <p>{{stat.name}}(主管)</p>
-                    <p class="f3">{{stat.mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==3">
-                <td class="center"><img src="/static/images/time_dot.png"/></td>
-                <td>
-                    <p class="f3">{{stat.company}} {{stat.city}}</p>
-                    <p>{{stat.to_name}}</p>
-                    <p class="f3">{{stat.to_mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==4">
-                <td class="center"><img src="/static/images/time_dot.png"/></td>
-                <td>
-                    <p class="f3">{{stat.company}} {{stat.city}}</p>
-                    <p>{{stat.to_name}}</p>
-                    <p class="f3">{{stat.to_mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==5">
-                <td class="center"><img src="/static/images/time_dot.png"/></td>
-                <td>
-                    <p class="f3">{{stat.company}} 总部</p>
-                    <p>{{stat.to_name}}</p>
-                    <p class="f3">{{stat.to_mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==6">
-                <td><span class="icon">接单</span></td>
-                <td>
-                    <p class="f3">预计{{stat.must_time}}时候到店</p>
-                    <p>{{stat.to_name}}({{stat.company}}{{stat.city}})</p>
-                    <p class="f3">{{stat.to_mobile}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==7">
-                <td><span class="icon">到店</span></td>
-                <td>
-                    <p>实际到店</p>
-                    {% if stat.later %}
-                    <p class="f3">迟到原因:{{stat.later}}</p>
-                    {% endif %}
-                </td>
-                <td class="f3" valign="top">{{stat.arrival_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==8">
-                <td><span class="icon">维修</span></td>
-                <td>
-                    预计{{stat.create_time}}修复
-                </td>
-                <td></td>
-            </tr>
-            <tr v-if="stat.head_type==12">
-                <td><span class="icon">暂停</span></td>
-                <td>
-                    {{stat.title}}
-                    <p>{{stat.content}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.stop_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==9">
-                <td></td>
-                <td>
-                    <p>{{stat.msg}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==10">
-                <td><span class="icon">确认修单</span></td>
-                <td>
-                    <p>{{stat.msg}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-            <tr v-if="stat.head_type==11">
-                <td><span class="icon">24H</span></td>
-                <td>
-                    <p>{{stat.msg|safe}}</p>
-                </td>
-                <td valign="top" class="f3">{{stat.create_time}}</td>
-            </tr>
-        </table>
+    <div class="w3">
+        <ul class="timeline" v-for="stat in status_list">
+            <li class="tl-header" v-if="stat.head_type==-1">
+                <div class="btn white" ui-toggle-class="timeline-center"
+                     ui-target=".timeline">{{ stat.create_time }}</div>
+            </li>
+            <li class="tl-item" v-if="stat.head_type!=-1">
+                <div class="tl-wrap b-success">
+                    <span class="tl-date text-muted" v-if="stat.head_type==7">{{ stat.arrival_time }}</span>
+                    <span class="tl-date text-muted" v-if="stat.head_type==12">{{ stat.stop_time }}</span>
+                    <span class="tl-date text-muted"
+                          v-if="stat.head_type!=7 && stat.head_type!=12">{{ stat.create_time }}</span>
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==1">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm">报修</div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">{{ stat.must_time }}到修(合约)</div>
+                            <div>{{ stat.name }}</div>
+                            <div class="f3">{{ stat.mobile }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==2">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm">通知</div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">{{ stat.company }} {{ stat.city }}{{ stat.count }}人</div>
+                            <div>{{ stat.name }}(主管)</div>
+                            <div class="f3">{{ stat.mobile }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==3">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><img src="/static/images/time_dot.png"/></div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">{{ stat.company }} {{ stat.city }}</div>
+                            <div>{{ stat.to_name }}</div>
+                            <div class="f3">{{ stat.to_mobile }}</div>
+                        </div>
+                    </div>
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==4">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><img src="/static/images/time_dot.png"/></div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">{{ stat.company }} {{ stat.city }}</div>
+                            <div>{{ stat.to_name }}</div>
+                            <div class="f3">{{ stat.to_mobile }}</div>
+                        </div>
+                    </div>
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==5">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><img src="/static/images/time_dot.png"/></div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">{{ stat.company }} 总部</div>
+                            <div>{{ stat.to_name }}</div>
+                            <div class="f3">{{ stat.to_mobile }}</div>
+                        </div>
+                    </div>
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==6">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm">接单</div>
+                        <div class="p-a b-t b-light">
+                            <div class="f3">预计{{ stat.must_time }}时候到店</div>
+                            <div>{{ stat.to_name }}({{ stat.company }}{{ stat.city }})</div>
+                            <div class="f3">{{ stat.to_mobile }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==7">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm">到店</div>
+                        <div class="p-a b-t b-light">
+                            <td>
+                                <div>实际到店</div>
+                                <div class="f3" v-if="stat.later">迟到原因:{{ stat.later }}</div>
+                            </td>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==8">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><span class="icon">维修</span></div>
+                        <div class="p-a b-t b-light">
+                            预计{{ stat.create_time }}修复
+                        </div>
+                    </div>
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==12">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><span class="icon">暂停</span></div>
+                        <div class="p-a b-t b-light">
+                            {{ stat.title }}
+                            <div>{{ stat.content }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==9">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"></div>
+                        <div class="p-a b-t b-light">
+                            {{ stat.msg }}
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==10">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><span class="icon">确认修单</span></div>
+                        <div class="p-a b-t b-light">
+                            <div>{{ stat.msg }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="tl-content box-color text-color" v-if="stat.head_type==11">
+                        <span class="arrow b-white left pull-top"></span>
+                        <div class="text-lt p-x m-b-sm"><span class="icon">24H</span></div>
+                        <div class="p-a b-t b-light">
+                            <div>{{ stat.msg }}</div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
 <script>
     export default {
-        data(){
-            return {
-                res: {status_list:[]},
-            }
-        },
-        props: ['id'],
-        created(){
-
-        }
+        props: ['status_list'],
     }
 </script>

@@ -93,7 +93,7 @@ class Maintenance(Document):
     dispatched = IntField(default=0)  # 是否改派
 
     verify_status = IntField(default=-1)  # 为未导入审核状态 0为新的 1为审核失败 2为审核中
-    settlement = IntField(default=0)  # 审核结算状态
+    settlement = IntField(default=-1)  # 审核结算状态未0
     audit_merchant_user = ReferenceField(User)
     audit_merchant_date = DateTimeField()
     audit_merchant_result = BooleanField()

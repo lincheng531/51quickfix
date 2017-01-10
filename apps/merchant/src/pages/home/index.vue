@@ -43,10 +43,10 @@
                                         <span class="nav-text">维修跟踪</span>
                                     </router-link>
                                     <router-link to="/maintenances/audit" class="dropdown-item">
-                                        <span class="nav-text">维修审核</span>
+                                        <span class="nav-text">费用审核</span>
                                     </router-link>
                                     <router-link to="/maintenances/settlement" class="dropdown-item">
-                                        <span class="nav-text">维修结算</span>
+                                        <span class="nav-text">费用结算</span>
                                     </router-link>
                                     <router-link to="/maintenance/call" class="dropdown-item hide show"
                                                  :class="{'show': 1}">

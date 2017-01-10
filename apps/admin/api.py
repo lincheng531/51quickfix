@@ -78,18 +78,65 @@ def maintenanceList(request):
     status = request.GET.get('status')
     search_q = request.GET.get('q')
 
-    if status:
-        query['status__in'] = status.split(',')
-
     q = Maintenance.objects(**query)
-    if status == 'auditing':
+
+    if status:
+        q = Maintenance.objects(Q(status__in=status.split(',')) & (Q(settlement__lt=0) | Q(settlement__exists=False)))
+
+    if status == 'serviceAudit1':  # 服务商待提交
         q = Maintenance.objects(
-            Q(status=2) & (Q(settlement__exists=False) | Q(settlement__lt=2)))
-    if status == 'audited':
-        q = Maintenance.objects(Q(status=2) & (Q(audit_merchant_result=False) | Q(audit_repair_result=False)))
-    if status == 'settling':
+            Q(status=2) & (Q(audit_repair_result_save=True) & Q(settlement__lt=1)))
+
+    if status == 'serviceAudit2':  # 服务商待商户审核
         q = Maintenance.objects(
-            Q(status=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & (Q(settle_merchant_result__exists=False) | Q(settle_repair_result__exists=False)))
+            Q(status=2) & Q(settlement=1) & Q(audit_merchant_result__exists=False))
+
+    if status == 'serviceAudit3':  # 商户审核未通过
+        q = Maintenance.objects(
+            Q(status=2) & (Q(audit_merchant_result=False)))
+
+    if status == 'serviceAudit4':  # 服务商审核未通过
+        q = Maintenance.objects(
+            Q(status=2) & (Q(audit_repair_result_save=False) & Q(settlement__lt=1)))
+
+    if status == 'merchantAudit1':  # 商户待审核
+        q = Maintenance.objects(
+            Q(status=2) & Q(settlement=1) & Q(audit_merchant_result__exists=False) & (
+                Q(audit_merchant_result_save=True) | Q(audit_merchant_result_save__exists=False)))
+
+    if status == 'merchantAudit2':  # 商户审核未通过
+        q = Maintenance.objects(
+            Q(status=2) & (Q(audit_merchant_result=False)))
+
+    if status == 'merchantAudit3':  # 商户审核失败
+        q = Maintenance.objects(
+            Q(status=2) & (Q(audit_merchant_result_save=False) & Q(settlement=1)))
+
+    # if status == 'auditing':
+    #     q = Maintenance.objects(
+    #         Q(status=2) & (Q(settlement__exists=False) | Q(settlement__lt=2)))
+    # if status == 'audited':
+    #     q = Maintenance.objects(Q(status=2) & (Q(audit_merchant_result=False) | Q(audit_repair_result=False)))
+    if status == 'merchantSettling':
+        q = Maintenance.objects(
+            Q(status=2) & Q(settlement=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & Q(
+                settle_merchant_result__exists=False))
+
+    if status == 'merchantForSettling':
+        q = Maintenance.objects(
+            Q(status=2) & Q(settlement=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & Q(
+                settle_merchant_result=True) & Q(settle_repair_result__exists=False))
+
+    if status == 'repairSettling':
+        q = Maintenance.objects(
+            Q(status=2) & Q(settlement=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & Q(
+                settle_repair_result__exists=False))
+
+    if status == 'repairForSettling':
+        q = Maintenance.objects(
+            Q(status=2) & Q(settlement=2) & Q(audit_merchant_result=True) & Q(audit_repair_result=True) & Q(
+                settle_repair_result=True) & Q(settle_merchant_result__exists=False))
+
     if status == 'settled':
         q = Maintenance.objects(status=2, settle_merchant_result=True, settle_repair_result=True)
 
@@ -117,6 +164,14 @@ def _process_result(_r):
     _r['state_'] = MaintenanceState.get(_r.get('state'), '')
     _r['status_'] = MaintenanceStatus.get(_r.get('status'), '')
     _r['device'] = DB.device.find_one({'_id': ObjectId(_r['device'])})
+
+    mt = Maintenance.objects.get(id=ObjectId(_r['id']))
+    _r['status_list'] = mt.status_list
+    bill = Bill.objects.filter(maintenance=mt).first()
+    if bill:
+        _r['bill'] = bill.detail()
+        if _r['status'] == 3: _['status'] = 5
+
     return _r
 
 
@@ -141,7 +196,7 @@ def maintenanceDetail(request, id):
 def maintenance_history(request, id):
     current = 'repair'
     user = get_user(request)
-    res = Maintenance.objects.get(id=ObjectId(id    ), head_type=user.head_type)
+    res = Maintenance.objects.get(id=ObjectId(id), head_type=user.head_type)
     store = Store.objects.get(id=ObjectId(res['store']))
     device = Device.objects.get(id=ObjectId(res['device']))
     setattr(res, 'store', store)
@@ -156,6 +211,7 @@ def save_audit_repair(request, id):
     user = User.objects.get(id=ObjectId(data['user_id']))
     maintenance.audit_repair_result_save = bool(int(data['audit_repair_result']))
     maintenance.audit_repair_note_save = data.get('audit_repair_note')
+    maintenance.settlement = 0
     maintenance.save()
     return maintenanceDetail(request, id)
 
@@ -498,5 +554,6 @@ def batchOp(request):
 
 
 def test(request):
-    import pdb;pdb.set_trace()
+    import pdb;
+    pdb.set_trace()
     return HttpResponse('test')

@@ -742,6 +742,10 @@ def bill(request, oid):
         if other_msg:
             other_msgs = other_msg.split(',')
             other_totals = other_total.split(',')
+            if len(other_msgs) != len(other_totals):
+                resp['alert'] = u'{}和{}不一致'.format(other_msgs, other_totals)
+                return json_response(resp)
+
             for index, other_m in enumerate(other_msgs):
                 other_t = float(other_totals[index])
                 total += other_t

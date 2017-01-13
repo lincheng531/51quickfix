@@ -90,6 +90,13 @@
                     {id: "3", text: "达美乐"},
                     {id: "4", text: "永和大王"},
                 ];
+            } else if (this.type == 'category') {
+                this.data = [
+                    {id: "", text: "全部"},
+                    {id: "设备", text: "设备类"},
+                    {id: "工程", text: "工程类"},
+                    {id: "IT", text: "IT类"},
+                ];
             }
         },
         mounted(){
@@ -133,14 +140,15 @@
                         dataType: 'json',
                         processResults: function (res) {
                             var results = [];
-                            if (res.code == 0) {
-                                results = res.data.map(function (e) {
+                            if (res.status == 1) {
+                                results = res.info.results.map(function (e) {
                                     return {
                                         id: e[scope.keyName],
                                         text: e[scope.valueName],
                                     }
-                                })
+                                });
                             }
+
                             return {
                                 results: results
                             };

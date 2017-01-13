@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from apps.base.logger import getlogger
 from bson.son import SON
+import pymongo
+
 
 logger = getlogger(__name__)
 
@@ -142,6 +144,27 @@ def maintenanceList(request):
 
     if search_q:
         q = Maintenance.objects(Q(code=search_q) | Q(store_name=search_q))
+
+
+    filter_dict = {}
+    for item in ('city', 'category', 'state', 'head_type'):
+        if request.GET.get(item):
+            filter_dict[item] = request.GET.get(item)
+
+    brand_id = request.GET.get('brand')
+    if brand_id:
+        brand = Brand.objects(id=ObjectId(brand_id)).first()
+        if brand:
+            filter_dict['brand'] = brand.name
+
+    starttime = request.GET.get('starttime')
+    endtime = request.GET.get('endtime')
+    if starttime:
+        filter_dict['create_time__gte'] = starttime
+    if endtime:
+        filter_dict['create_time__lte'] = endtime
+
+    q = q.filter(**filter_dict)
 
     mc = q.order_by('-create_time').skip((p - 1) * 20).limit(20)
     total = q.count()
@@ -550,6 +573,12 @@ def batchOp(request):
 
             maintenance.save()
 
+    return json_response(resp)
+
+
+def brandList(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    resp['info']['results'] = [item for item in DB.brand.find().sort('initial', pymongo.ASCENDING)]
     return json_response(resp)
 
 

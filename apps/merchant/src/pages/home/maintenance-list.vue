@@ -38,21 +38,21 @@
                                     <label class="m-r text-muted">餐厅</label>
                                 </div>
                                 <com-ui-single-select :size="'sm'" :width="'118px'"
-                                                      v-model="queryFilter.city"></com-ui-single-select>
+                                                      v-model="queryFilter.store"></com-ui-single-select>
                             </div>
                             <div class="form-group col-xs-4" v-if="user_category=='merchant'">
                                 <div class="col-xs-4 text-right">
                                     <label class="m-r text-muted">服务商</label>
                                 </div>
                                 <com-ui-single-select :size="'sm'" :width="'118px'"
-                                                      v-model="queryFilter.city"></com-ui-single-select>
+                                                      v-model="queryFilter.provider"></com-ui-single-select>
                             </div>
                             <div class="form-group col-xs-4" v-if="user_category=='service'">
                                 <div class="col-xs-4 text-right">
                                     <label class="m-r text-muted">商家品牌</label>
                                 </div>
                                 <com-ui-single-select :size="'sm'" :type="'head_type'" :width="'118px'"
-                                                      v-model="queryFilter.city"></com-ui-single-select>
+                                                      v-model="queryFilter.head_type"></com-ui-single-select>
                             </div>
                         </div>
                         <div class="row m-b-sm">
@@ -60,15 +60,15 @@
                                 <div class="col-xs-4 text-right">
                                     <label class="m-r text-muted">维修类别</label>
                                 </div>
-                                <com-ui-single-select :size="'sm'" :width="'118px'"
-                                                      v-model="queryFilter.city"></com-ui-single-select>
+                                <com-ui-single-select :size="'sm'" :width="'118px'" :type="'category'"
+                                                      v-model="queryFilter.category"></com-ui-single-select>
                             </div>
                             <div class="form-group col-xs-4">
                                 <div class="col-xs-4 text-right">
                                     <label class="m-r text-muted">设备品牌</label>
                                 </div>
-                                <com-ui-single-select :size="'sm'" :width="'118px'"
-                                                      v-model="queryFilter.city"></com-ui-single-select>
+                                <com-ui-single-select :size="'sm'" :width="'118px'" :api="'/brands'" :valueName="'name'"
+                                                      v-model="queryFilter.brand"></com-ui-single-select>
                             </div>
                             <div class="form-group col-xs-4">
                                 <div class="col-xs-4 text-right">
@@ -91,9 +91,14 @@
                                 <div class="col-xs-2 text-right">
                                     <label class="m-r text-muted">报修时间</label>
                                 </div>
-                                <div class="col-xs-10" style="padding-left:0">
-                                    <input type="datetime" class="fixTime" style="width:20%">
-                                    <label> 至 </label><input type="datetime" class="fixTime" style="width:20%">
+                                <div class="col-xs-6" style="padding-left:0">
+                                    <input type="text" class="fixTime w-sm" id="starttime"
+                                           v-model="queryFilter.starttime">
+                                    <label> 至 </label><input type="text" class="fixTime w-sm" id="endtime"
+                                                             v-model="queryFilter.endtime">
+                                </div>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-fw btn-xs dark" @click="getMaintenanceList()">筛选</button>
                                 </div>
                             </div>
                         </div>
@@ -273,7 +278,7 @@
                     </div>
                     <div class="modal-body text-center text-muted p-lg">
                         <div v-if="user_category=='merchant'">
-                            <div class="p-a" >您已选择<span class="text-orange">{{ selectedCount }}</span>张工单，</div>
+                            <div class="p-a">您已选择<span class="text-orange">{{ selectedCount }}</span>张工单，</div>
                             <div>未保存审核结果的工单，将被视为审核通过</div>
                             <div>请谨慎提交。</div>
                         </div>
@@ -335,21 +340,21 @@
                 return this.$route.params.type;
             }
         },
-        mounted(){
+        created(){
             if (['1', '3', '4', '5'].indexOf(this.user.category) > -1) {
                 this.user_category = 'merchant';
             } else if (['0', '2', '6'].indexOf(this.user.category) > -1) {
                 this.user_category = 'service';
             }
+            this.maintenances = [];
+        },
+        mounted(){
             $('.fixTime').datetimepicker({
-                language: 'zh-CN',
                 format: 'yyyy-mm-dd hh:ii',
                 autoclose: true,
-                clearBtn: true,
                 minView: 0,
                 todayHighlight: true,
             });
-            this.maintenances = [];
         },
         methods: {
             setPagination(currentPage, totalPage) {
@@ -396,11 +401,20 @@
                     '6': '为暂停',
                     '7': '被返修',
                 }
+                this.maintenances = [];
                 if (status) {
-                    this.maintenances = [];
                     this.queryFilter.page = 1;
                     this.queryFilter.status = statusChoiceDict[status] || status;
                 }
+                var starttime = $('#starttime').val();
+                var endtime = $('#endtime').val();
+                if (starttime) {
+                    this.queryFilter.starttime = starttime;
+                }
+                if (endtime) {
+                    this.queryFilter.endtime = endtime;
+                }
+                console.log(this.queryFilter);
                 $.ajax({
                     type: 'GET',
                     url: global.API_HOST + '/maintenance/list',

@@ -172,9 +172,8 @@
             <div class="tab-content" v-if="user_category=='merchant'">
                 <div class="tab-pane animated fadeIn text-muted active" id="tabAudit1" aria-expanded="true">
                     <com-maintenance-table :maintenances="maintenances" :list_type="list_type"></com-maintenance-table>
-                    <!--
-                    <button class="btn primary pull-left" v-if="list_type=='audit'" @click="batchOp('audit')">审核
-                    </button>-->
+                    <button class="btn primary pull-left" v-if="list_type=='audit'" @click="batchOp('audit')">提交
+                    </button>
                 </div>
                 <div class="tab-pane animated fadeIn text-muted" id="tabAudit2" aria-expanded="false">
                     <com-maintenance-table :maintenances="maintenances" :list_type="list_type"></com-maintenance-table>
@@ -264,6 +263,57 @@
         <div>
             <ul id="maintenance-pagination" class="pull-right"></ul>
         </div>
+
+
+        <div id="audit-modal" class="modal in" data-backdrop="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: none" v-if="user_category=='service'">
+                        <h5 class="modal-title text-center">提交审核</h5>
+                    </div>
+                    <div class="modal-body text-center text-muted p-lg">
+                        <div v-if="user_category=='merchant'">
+                            <div class="p-a" >您已选择<span class="text-orange">{{ selectedCount }}</span>张工单，</div>
+                            <div>未保存审核结果的工单，将被视为审核通过</div>
+                            <div>请谨慎提交。</div>
+                        </div>
+                        <div v-if="user_category=='service'">
+                            <div>您已选择<span class="text-orange">{{ selectedCount }}</span>张工单，</div>
+                            <div>向商户提交审核前，请仔细检查每张工单！</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-center" style="border-top: none">
+                        <button type="button" class="btn btn-sm btn-fw grey p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-sm btn-fw dark p-x-md" data-dismiss="modal"
+                                @click="commitBatchOp('audit')">
+                            提交
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+
+        <div id="settle-modal" class="modal in" data-backdrop="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: none">
+                        <h5 class="modal-title text-center">提示</h5>
+                    </div>
+                    <div class="modal-body text-center text-muted p-lg">
+                        <div>您已选择<span class="text-orange">{{ selectedCount }}</span>张工单，</div>
+                        <div v-if="user_category=='merchant'">请仔细确认当前工单是否符合结算条件。</div>
+                        <div v-if="user_category=='service'">请务必确认维修款项到账后再结算</div>
+                    </div>
+                    <div class="modal-footer text-center" style="border-top: none">
+                        <button type="button" class="btn btn-sm btn-fw grey p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-sm btn-fw dark p-x-md" data-dismiss="modal"
+                                @click="commitBatchOp('settle')">
+                            结算
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -277,6 +327,7 @@
                 maintenances: [],
                 user: JSON.parse(sessionStorage.getItem('user')) || {},
                 user_category: null,
+                selectedCount: 0,
             }
         },
         computed: {
@@ -377,13 +428,31 @@
             },
             batchOp(item) {
                 var scope = this;
+                this.selectedCount = 0;
                 var ids = this.maintenances.filter(function (e) {
                     return e.checked;
                 }).map(function (e) {
                     return e.id;
                 });
 
-                if (!ids.length) {
+                this.selectedCount = ids.length;
+                if (!this.selectedCount) {
+                    return;
+                }
+                $('#' + item + '-modal').modal('show');
+                return
+            },
+            commitBatchOp(item){
+                var scope = this;
+                this.selectedCount = 0;
+                var ids = this.maintenances.filter(function (e) {
+                    return e.checked;
+                }).map(function (e) {
+                    return e.id;
+                });
+
+                this.selectedCount = ids.length;
+                if (!this.selectedCount) {
                     return;
                 }
 
@@ -400,7 +469,6 @@
                         toastr.warning(res.alert);
                     }
                 });
-
             }
         }
     }

@@ -48,7 +48,7 @@
                                     <router-link to="/maintenances/settlement" class="dropdown-item">
                                         <span class="nav-text">费用结算</span>
                                     </router-link>
-                                    <router-link to="/maintenance/call" class="dropdown-item hide show"
+                                    <router-link to="/analytics/stats" class="dropdown-item hide show"
                                                  :class="{'show': 1}">
                                         <span class="nav-text">数据分析</span>
                                     </router-link>

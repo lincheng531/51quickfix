@@ -34,6 +34,10 @@ export default [
                         path: '/maintenance/:id',
                         component: resolve => require(['../pages/home/maintenance-detail.vue'], resolve),
                     },
+                    {
+                        path: '/analytics/stats',
+                        component: resolve => require(['../pages/home/stats.vue'], resolve),
+                    },
                 ],
             },
             {

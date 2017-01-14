@@ -14,7 +14,6 @@ from apps.base.logger import getlogger
 from bson.son import SON
 import pymongo
 
-
 logger = getlogger(__name__)
 
 
@@ -144,7 +143,6 @@ def maintenanceList(request):
 
     if search_q:
         q = Maintenance.objects(Q(code=search_q) | Q(store_name=search_q))
-
 
     filter_dict = {}
     for item in ('city', 'category', 'state', 'head_type'):
@@ -573,6 +571,38 @@ def batchOp(request):
 
             maintenance.save()
 
+    return json_response(resp)
+
+
+def stats(request):
+    resp = {'status': 1, 'info': {}, 'alert': ''}
+    result = {}
+
+    q = Maintenance.objects()
+
+    result['total'] = q.count()
+    result['unfix'] = q.filter(status=0).count()
+    result['fixing'] = q.filter(status__in=[1, 3, 5]).count()
+    result['fixed'] = q.filter(status=2).count()
+    result['cancelled'] = q.filter(status=-1).count()
+
+    today = datetime.date.today()
+    result['total_today'] = q.filter(create_time__gte=today).count()
+    result['unfix_today'] = q.filter(status=0, create_time__gte=today).count()
+    result['fixing_today'] = q.filter(status__in=[1, 3, 5], create_time__gte=today).count()
+    result['fixed_today'] = q.filter(status=2, create_time__gte=today).count()
+    result['cancelled_today'] = q.filter(status=-1, create_time__gte=today).count()
+
+    result['head_type'] = len(HEAD_BRAND)
+    result['stores'] = Store.objects.count()
+    result['stores_sh'] = Store.objects(city='上海市').count()
+    result['merchant'] = User.objects(category__in=('1', '3', '4', '5'), is_active=1).count()
+
+    repair_qs = User.objects(category__in=('0', '2', '6'), is_active=1)
+    result['service'] = len({item.company for item in repair_qs if item.company})
+    result['repairer'] = repair_qs.count()
+
+    resp['info']['result'] = result
     return json_response(resp)
 
 

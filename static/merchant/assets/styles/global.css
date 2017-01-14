@@ -4,7 +4,7 @@ body {
     background: #ffffff;
 }
 
-.app-footer:not(.hide)~.app-body {
+.app-footer:not(.hide) ~ .app-body {
     padding-bottom: 5.125rem;
 }
 
@@ -18,4 +18,8 @@ body {
 
 .text-orange {
     color: #ff7043;
+}
+
+.opacity-7 {
+    opacity: 0.7;
 }

@@ -697,10 +697,12 @@ class Bill(Document):
     measures = StringField()  # 措施
     spare = ListField(DictField())
     spare_price = FloatField(default=0)
+    visit = FloatField(default=0)  # 上门费
     labor = FloatField(default=0)  # 维修费
     travel = FloatField(default=0)  # 交通费
     stay = FloatField(default=0)  # 住宿天数
     stay_total = FloatField(default=0)  # 住宿费
+    discount = FloatField(default=0) #折扣
     total = FloatField(default=0)
     status = IntField(default=0)  # 报价单状态：1:为确认（完成） 0:为未确认 -1:为拒绝 -2:餐厅提交报价单 维修工未报价
     state = IntField(default=0)  # 工单状态：2:餐厅确认完成 1:维修结束  0:新的  -1失败
@@ -769,8 +771,10 @@ class Bill(Document):
             'error_code_id': str(self.error_code.id) if hasattr(self.error_code, 'id') else '',
             'supplier': supplier_name,
             'supplier_id': supplier_id,
+            'visit': self.visit,
             'labor': self.labor,
             'total': self.total,
+            'discount': self.discount,
             'state': self.state,
             'analysis': self.analysis,
             'pay_status': self.pay_status,
@@ -829,11 +833,13 @@ class Bill(Document):
             'error_code_id': str(self.error_code.id) if hasattr(self.error_code, 'id') else '',
             'supplier': self.supplier.name if hasattr(self.supplier, 'name') else '',
             'supplier_id': str(self.supplier.id) if hasattr(self.supplier, 'id')  else '',
+            'visit': self.visit,
             'labor': self.labor,
             'travel': self.travel,
             'total': self.total,
             'stay': self.stay,
             'stay_total': self.stay_total,
+            'discount': self.discount,
             'status': self.status,
             'analysis': self.analysis,
             'measures': self.measures,

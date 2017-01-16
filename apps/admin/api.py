@@ -196,6 +196,29 @@ def _process_result(_r):
     return _r
 
 
+def update_bill(request, id):
+    data = get_json_data(request) or request.POST.dict()
+    bill = Bill.objects.get(id=ObjectId(id))
+    for item in ['visit', 'labor', 'travel', 'stay_total', 'discount', 'total']:
+        try:
+            value = int(data.get(item) or 0)
+        except:
+            continue
+
+        setattr(bill, item, value)
+
+    if data.get('others'):
+        try:
+            others = json.loads(data['others'])
+            bill.others = [{'msg': item.get('key'), 'total': int(item.get('value') or 0)} for item in others]
+        except:
+            import traceback
+            traceback.print_exc()
+
+    bill.save()
+    return json_response(True)
+
+
 def maintenanceDetail(request, id):
     id = ObjectId(id)
     item = DB.maintenance.find_one({'_id': id})

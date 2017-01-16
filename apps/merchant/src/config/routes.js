@@ -42,7 +42,7 @@ export default [
             },
             {
                 path: '/',
-                component: resolve => require(['../pages/index/'], resolve)
+                component: resolve => require(['../pages/home/'], resolve)
             },
             {
                 path: '*',

@@ -1,7 +1,30 @@
+<style>
+    #maintenance-info .box {
+        margin-bottom: 0;
+    }
+
+    #maintenance-info .detail {
+        padding-right: 0;
+    }
+
+    #maintenance-info .sidebar {
+        margin-top: 1px;
+        padding-left: 0;
+    }
+
+    #maintenance-info #fees .input-group-addon {
+        border-right: none;
+    }
+
+    #maintenance-info #fees .input-group input {
+        border-left: none;
+    }
+</style>
 <template>
     <div class="row" id="maintenance-info">
         <div class="col-md-12">
-            <app-breadcrumb :breadcrumb="breadcrumb"></app-breadcrumb>
+            <div class="pull-right m-t-md text-muted">编号：<span v-text="maintenance.code"></span></div>
+            <app-breadcrumb class="w-lg" :breadcrumb="breadcrumb"></app-breadcrumb>
             <!--<div ui-include="'/static/views/htmls/detail-breadcrumb.html'"></div>-->
         </div>
         <div class="col-md-3 pull-right sidebar">
@@ -100,7 +123,29 @@
                     <h3>维修情况</h3>
                 </div>
                 <div class="box-body">
-                    <div id="fees">
+                    <div id="fees" v-if="billEdit">
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">上门费</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b w-sm">
+                                        <span class="input-group-addon">￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               @keyup="changeBill(billForm.visit)" v-model="billForm.visit">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="pull-right text-muted m-r-sm" @click="addFeeItem">
+                                    <i class="fa fa-plus m-r-xs opacity"></i>添加其他费用
+                                </a>
+                            </div>
+                        </div>
+
                         <div class="row m-t-xs">
                             <div class="col-md-4">
                                 <div class="pull-right">
@@ -110,7 +155,174 @@
                             <div class="col-md-8">
                                 <div class="pull-left">
                                     <p>￥<span type="number"
-                                              v-text="maintenance.bill && maintenance.bill.spare_total"></span></p>
+                                              v-text="billForm.spare_total"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">人工费</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b">
+                                        <span class="input-group-addon">￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               @keyup="changeBill(billForm.labor)" v-model="billForm.labor">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">交通费</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b">
+                                        <span class="input-group-addon">￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               @keyup="changeBill(billForm.travel)" v-model="billForm.travel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">住宿费</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b">
+                                        <span class="input-group-addon">￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               @keyup="changeBill(billForm.stay_total)" v-model="billForm.stay_total">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-xs" v-for="(item, index) in otherFees">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <input type="text text-right" class="form-control w r text-muted"
+                                           placeholder="请输入花费原因" v-model="item.key" @keyup="changeBill(item.value)">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b">
+                                        <span class="input-group-addon">￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               v-model="item.value"
+                                               @keyup="changeBill(item.value)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <a class="pull-right text-muted m-r-lg m-t-sm" @click="removeFeeItem(index)"><i
+                                        class="fa fa-remove"></i></a>
+                            </div>
+                        </div>
+
+
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">优惠金额</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-left">
+                                    <div class="input-group m-b">
+                                        <span class="input-group-addon">-￥</span>
+                                        <input type="number" class="form-control" placeholder="0.00"
+                                               @keyup="changeBill(billForm.discount)" v-model="billForm.discount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <h5 class="text-muted">合计</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="pull-left">
+                                    <h5 class="text-orange" v-text="billFormTotal"></h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-md"
+                             v-if="maintenance.bill && maintenance.bill.spare && maintenance.bill.spare.length">
+                            <div id="spare-specifications" class="p-a-sm">
+                                <table class="table table-striped table-hover b-a">
+                                    <thead class="text-white" style="background-color: #374256;">
+                                    <tr>
+                                        <th>零配件</th>
+                                        <th>编号</th>
+                                        <th>损坏类型</th>
+                                        <th>保固截止日期</th>
+                                        <th>状态</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>费用</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="item in ((maintenance.bill || {}).spare || [])">
+                                        <td v-text="item.name"></td>
+                                        <td v-text="item.no"></td>
+
+                                        <td v-text="item.no"></td>
+                                        <td v-text="item.no"></td>
+                                        <td v-text="item.no"></td>
+
+                                        <td v-text="item.price"></td>
+                                        <td v-text="item.count"></td>
+                                        <td v-text="item.total"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ---------------------------------- 以上是费用编辑 ----------------------------------------->
+                    <div id="fees" v-else>
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">上门费</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="pull-left">
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.visit"></span></p>
+                                </div>
+                                <a class="pull-right text-muted m-r-sm" @click="billEdit=true" v-if="is_repair">
+                                    <i class="fa fa-edit m-r-xs opacity"></i>编辑
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row m-t-xs">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">零配件更换</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="pull-left">
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.spare_total"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +334,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<span type="number" v-text="maintenance.bill && maintenance.bill.labor"></span>
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.labor"></span>
                                     </p>
                                 </div>
                             </div>
@@ -135,7 +347,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<span type="number" v-text="maintenance.bill && maintenance.bill.travel"></span>
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.travel"></span>
                                     </p>
                                 </div>
                             </div>
@@ -148,20 +360,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<span type="number"
-                                              v-text="maintenance.bill && maintenance.bill.stay_total"></span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row m-t-xs">
-                            <div class="col-md-4">
-                                <div class="pull-right">
-                                    <p class="text-muted">快递费</p>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="pull-left">
-                                    <p>￥<span v-text="delivery_fee"></span></p>
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.stay_total"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -179,6 +378,18 @@
                             </div>
                         </div>
 
+                        <div class="row m-t-xs" v-if="maintenance.bill && maintenance.bill.discount">
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <p class="text-muted">优惠金额</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="pull-left">
+                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.discount"></span></p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row m-t-xs">
                             <div class="col-md-4">
                                 <div class="pull-right">
@@ -187,26 +398,43 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <h5 class="text-orange" v-text="maintenance.bill && maintenance.bill.total"></h5>
+                                    <h5 class="text-orange"
+                                        v-text="maintenance.bill && maintenance.bill.total"></h5>
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-md">
-                            <div id="spare-specifications">
-                                <table class="table table-striped table-hover">
+
+                        <div class="row m-t-md"
+                             v-if="maintenance.bill && maintenance.bill.spare && maintenance.bill.spare.length">
+                            <div id="spare-specifications" class="p-a-sm">
+                                <table class="table table-striped table-hover b-a">
                                     <thead class="text-white" style="background-color: #374256;">
                                     <tr>
                                         <th>零配件</th>
                                         <th>编号</th>
+                                        <th>损坏类型</th>
+                                        <th>保固截止日期</th>
+                                        <th>状态</th>
                                         <th>单价</th>
                                         <th>数量</th>
-                                        <th>变量</th>
+                                        <th>费用</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="item in ((maintenance.bill || {}).spare || [])">
                                         <td v-text="item.name"></td>
                                         <td v-text="item.no"></td>
+                                        <td>
+                                            <span v-if="item.category==1">自然</span>
+                                            <span v-if="item.category==0">人为</span>
+                                        </td>
+
+                                        <td v-text="item.guarantee_time"></td>
+                                        <td>
+                                            <span v-if="item.status">保固</span>
+                                            <span v-else>非保固</span>
+                                        </td>
+
                                         <td v-text="item.price"></td>
                                         <td v-text="item.count"></td>
                                         <td v-text="item.total"></td>
@@ -214,6 +442,12 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row p-t p-b" v-if="billEdit">
+                        <div class="text-center">
+                            <button class="btn btn-xs btn-fw dark m-r-sm" @click="updateBill">保存修改</button>
+                            <button class="btn btn-xs btn-fw dark m-l-sm" @click="billEdit=false">取消</button>
                         </div>
                     </div>
                     <hr>
@@ -278,19 +512,22 @@
                     <div class="row padding">
                         <div class="col-md-4"></div>
                         <div class="col-md-8">
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 1">
+                            <button class="b-a b-grey btn btn-xs rounded disabled"
+                                    v-if="maintenance.settlement >= 1">
                                 服务商审核
                             </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>服务商审核</button>
                             <span class="inline b-t b-t-dark"
                                   style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 2">
+                            <button class="b-a b-grey btn btn-xs rounded disabled"
+                                    v-if="maintenance.settlement >= 2">
                                 商户审核
                             </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>商户审核</button>
                             <span class="inline b-t b-t-dark"
                                   style="width: 15%; height: 4px; margin-left:-4px; margin-right:-4px;"></span>
-                            <button class="b-a b-grey btn btn-xs rounded disabled" v-if="maintenance.settlement >= 3">
+                            <button class="b-a b-grey btn btn-xs rounded disabled"
+                                    v-if="maintenance.settlement >= 3">
                                 工单结算
                             </button>
                             <button class="btn btn-xs rounded text-white opacity" v-else>工单结算</button>
@@ -418,7 +655,8 @@
                         <div class="col-md-8">
                             <div class="row m-b" v-if="maintenance.settle_repair_result">
                                 <div class="col-md-4">
-                                    <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>服务商已结算</span>
+                                        <span class="m-r"><i
+                                                class="fa fa-check-circle text-orange m-r-xs"></i>服务商已结算</span>
                                 </div>
                                 <div class="col-md-4">
                                     <span v-text="maintenance.settle_repair_user.name"></span> /
@@ -429,11 +667,13 @@
                             </div>
                             <div class="row m-b" v-if="maintenance.settle_merchant_result">
                                 <div class="col-md-4">
-                                    <span class="m-r"><i class="fa fa-check-circle text-orange m-r-xs"></i>商户已结算</span>
+                                        <span class="m-r"><i
+                                                class="fa fa-check-circle text-orange m-r-xs"></i>商户已结算</span>
                                 </div>
                                 <div class="col-md-4">
                                     <span v-text="maintenance.settle_merchant_user.name"></span> /
-                                    <span class="text-muted" v-text="maintenance.settle_merchant_user.mobile"></span>
+                                    <span class="text-muted"
+                                          v-text="maintenance.settle_merchant_user.mobile"></span>
                                 </div>
                                 <div class="col-md-4" v-text="maintenance.settle_merchant_date"></div>
                                 <div class="col-md-12" v-text="maintenance.settle_merchant_note"></div>
@@ -504,8 +744,12 @@
                     'mobile': this.maintenance.user && this.maintenance.user.mobile,
                 }
             },
-            totalFee: function () {
-                return (this.spare_fee || 0) + (this.labor_fee || 0) + (this.transport_fee || 0) + (this.house_fee || 0) + (this.delivery_fee || 0);
+            _billFormTotal(){
+                return (this.billForm.visit || 0) +
+                        (this.billForm.spare_total || 0) +
+                        (this.billForm.labor || 0) +
+                        (this.billForm.travel || 0) +
+                        (this.billForm.stay_total || 0);
             },
         },
         data () {
@@ -522,7 +766,6 @@
                 labor_fee: 0,
                 transport_fee: 0,
                 house_fee: 0,
-                delivery_fee: 0,
                 user: JSON.parse(sessionStorage.getItem('user')) || {},
                 audit_repair_result: null,
                 audit_repair_note: '',
@@ -532,38 +775,46 @@
                 settle_note: '',
                 is_store: false,
                 is_repair: false,
+                billEdit: false,
+                billForm: {},
+                otherFees: [],
+                billFormTotal: 0,
             }
         },
         created: function () {
             this.is_store = ['1', '3', '4', '5', '7'].indexOf(this.user.category) > -1;
             this.is_repair = ['0', '2', '6', '7'].indexOf(this.user.category) > -1;
-
-            var id = this.$route.params.id;
-            var url = global.API_HOST + '/maintenance/' + id;
-            var scope = this;
-            $.getJSON(url, {}, function (data) {
-                scope.status_list = data.status_list;
-                scope.maintenance = data;
-                scope.store = scope.maintenance.store;
-
-                scope.audit_repair_result = scope.maintenance['audit_repair_result_save'];
-                scope.audit_repair_note = scope.maintenance['audit_repair_note_save'];
-                scope.audit_merchant_result = scope.maintenance['audit_merchant_result_save'];
-                scope.audit_merchant_note = scope.maintenance['audit_merchant_note_save'];
-
-                if (scope.is_store) {
-                    scope.settle_result = scope.maintenance['settle_merchant_result_save'];
-                    scope.settle_note = scope.maintenance['settle_merchant_note_save'];
-                }
-
-                if (scope.is_repair) {
-                    scope.settle_result = scope.maintenance['settle_repair_result_save'];
-                    scope.settle_note = scope.maintenance['settle_repair_note_save'];
-                }
-
-            });
+            this.getDetail();
         },
         methods: {
+            getDetail(){
+                var id = this.$route.params.id;
+                var url = global.API_HOST + '/maintenance/' + id;
+                var scope = this;
+                $.getJSON(url, {}, function (data) {
+                    scope.status_list = data.status_list;
+                    scope.maintenance = data;
+                    scope.store = scope.maintenance.store;
+
+                    scope.audit_repair_result = scope.maintenance['audit_repair_result_save'];
+                    scope.audit_repair_note = scope.maintenance['audit_repair_note_save'];
+                    scope.audit_merchant_result = scope.maintenance['audit_merchant_result_save'];
+                    scope.audit_merchant_note = scope.maintenance['audit_merchant_note_save'];
+
+                    if (scope.is_store) {
+                        scope.settle_result = scope.maintenance['settle_merchant_result_save'];
+                        scope.settle_note = scope.maintenance['settle_merchant_note_save'];
+                    }
+
+                    if (scope.is_repair) {
+                        scope.settle_result = scope.maintenance['settle_repair_result_save'];
+                        scope.settle_note = scope.maintenance['settle_repair_note_save'];
+                    }
+
+                    scope.initBillForm();
+
+                });
+            },
             submit_repair_audit() {
                 var scope = this;
                 var data = {
@@ -674,28 +925,57 @@
                     }
                 });
             },
+            initBillForm(){
+                this.billForm = this.maintenance.bill;
+                this.billFormTotal = this.billForm.total;
+                this.otherFees = (this.maintenance.bill.others || []).map(function (e) {
+                    return {key: e.msg, value: e.total}
+                });
+            },
+            addFeeItem(){
+                this.otherFees.push({key: '', total: 0});
+            },
+            removeFeeItem(index){
+                this.otherFees.splice(index, 1);
+                this.changeBill();
+            },
+            changeBill(val){
+                if (val && isNaN(val)) {
+                    toastr.error('金额 ' + val + ' 不正确');
+                    return
+                }
+                this.billFormTotal = parseFloat(this.billForm.visit || 0) +
+                        parseFloat(this.billForm.spare_total || 0) +
+                        parseFloat(this.billForm.labor || 0) +
+                        parseFloat(this.billForm.travel || 0) +
+                        parseFloat(this.billForm.stay_total || 0) -
+                        parseFloat(this.billForm.discount || 0);
+
+                for (var i in this.otherFees) {
+                    var item = this.otherFees[i];
+                    if (item.key && item.value && !isNaN(item.value)) {
+                        this.billFormTotal += parseFloat(item.value);
+                    }
+                }
+            },
+            updateBill() {
+                this.billForm.total = this.billFormTotal;
+                this.billForm.others = JSON.stringify(this.otherFees || []);
+                var scope = this;
+
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/bill/' + this.billForm.id + '/update',
+                    data: this.billForm,
+                    crossDomain: true,
+                }).done(function (data) {
+                    scope.billEdit = false;
+                    scope.getDetail();
+                });
+            },
         },
         components: {
             appBreadcrumb,
         },
     }
 </script>
-
-<style>
-    #maintenance-info .box {
-        margin-bottom: 0;
-    }
-
-    #maintenance-info .detail {
-        padding-right: 0;
-    }
-
-    #maintenance-info .sidebar {
-        margin-top: 1px;
-        padding-left: 0;
-    }
-
-    #maintenance-info #fees input {
-        border: none;
-    }
-</style>

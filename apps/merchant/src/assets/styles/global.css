@@ -4,7 +4,7 @@ body {
     background: #ffffff;
 }
 
-.app-footer:not(.hide)~.app-body {
+.app-footer:not(.hide) ~ .app-body {
     padding-bottom: 5.125rem;
 }
 
@@ -20,11 +20,16 @@ body {
 }
 
 .b-orange {
-    border-color: #ff7043;
+    border-color: #ff7315;
 }
 
 .text-orange {
-    color: #ff7043;
+    color: #ff7315;
+}
+
+.orange {
+    background-color: #ff7315;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .theme-blue {

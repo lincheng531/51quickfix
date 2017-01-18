@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="billForm.labor">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">人工费</p>
@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="billForm.travel">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">交通费</p>
@@ -191,7 +191,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="billForm.stay_total">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">住宿费</p>
@@ -326,7 +326,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="maintenance.bill && maintenance.bill.labor">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">人工费</p>
@@ -339,7 +339,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="maintenance.bill && maintenance.bill.travel">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">交通费</p>
@@ -352,7 +352,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-xs">
+                        <div class="row m-t-xs" v-if="maintenance.bill && maintenance.bill.stay_total">
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <p class="text-muted">住宿费</p>
@@ -386,7 +386,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="pull-left">
-                                    <p>￥<span v-text="maintenance.bill && maintenance.bill.discount"></span></p>
+                                    <p>-￥<span v-text="maintenance.bill && maintenance.bill.discount"></span></p>
                                 </div>
                             </div>
                         </div>

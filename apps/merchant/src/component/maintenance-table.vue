@@ -13,7 +13,7 @@
                 <th width="8%">城市</th>
                 <th width="9%" v-if="user_category=='service'">商家品牌</th>
                 <th width="10%">餐厅</th>
-                <th width="7%">类别</th>
+                <th width="8%">维修类别</th>
                 <th width="10%">资产</th>
                 <th width="6%">时效</th>
                 <th width="11%">故障描述</th>
@@ -27,7 +27,7 @@
                 <th width="8%">城市</th>
                 <th width="9%" v-if="user_category=='service'">商家品牌</th>
                 <th width="10%">餐厅</th>
-                <th width="7%">类别</th>
+                <th width="8%">维修类别</th>
                 <th width="10%">资产</th>
                 <th width="6%">时效</th>
                 <th width="13%">故障描述</th>
@@ -41,7 +41,7 @@
                 <td @click="clickMaintenance(item)">
                     <a>
                         <div v-text="item.code"></div>
-                        <small class="text-muted">报修于: <span v-text="item.create_time.slice(0, 10)"></span></small>
+                        <small class="text-muted">报修于: <span v-text="item.create_time"></span></small>
                     </a>
                 </td>
                 <td v-text="item.city"></td>

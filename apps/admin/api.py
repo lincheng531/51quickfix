@@ -142,10 +142,10 @@ def maintenanceList(request):
         q = Maintenance.objects(status=2, settle_merchant_result=True, settle_repair_result=True)
 
     if search_q:
-        q = Maintenance.objects(Q(code=search_q) | Q(store_name=search_q))
+        q = Maintenance.objects(Q(code=search_q) | Q(store_name=search_q) | Q(product=search_q))
 
     filter_dict = {}
-    for item in ('city', 'category', 'state', 'head_type'):
+    for item in ('city', 'state', 'head_type'):
         if request.GET.get(item):
             filter_dict[item] = request.GET.get(item)
 
@@ -160,6 +160,7 @@ def maintenanceList(request):
     if starttime:
         filter_dict['create_time__gte'] = starttime
     if endtime:
+        endtime = datetime.datetime.strptime(endtime, '%Y-%m-%d') + timedelta(days=1)
         filter_dict['create_time__lte'] = endtime
 
     q = q.filter(**filter_dict)
@@ -199,9 +200,10 @@ def _process_result(_r):
 def update_bill(request, id):
     data = get_json_data(request) or request.POST.dict()
     bill = Bill.objects.get(id=ObjectId(id))
+
     for item in ['visit', 'labor', 'travel', 'stay_total', 'discount', 'total']:
         try:
-            value = int(data.get(item) or 0)
+            value = float(data.get(item) or 0)
         except:
             continue
 

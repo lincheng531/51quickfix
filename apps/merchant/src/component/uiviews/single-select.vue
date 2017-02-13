@@ -98,6 +98,19 @@
                     {id: "IT", text: "IT类"},
                     {id: "其他", text: "其他"},
                 ];
+            } else if (this.type == 'status') {
+                this.data = [
+                    {id: "", text: "全部"},
+                    {id: 0, text: '新维修单'},
+                    {id: 1, text: '接单或者出发中'},
+                    {id: 3, text: '到店'},
+                    {id: 5, text: '填写修单未确认'},
+                    {id: 2, text: '已经完成'},
+                    {id: 4, text: '维修失败'},
+                    {id: -1, text: '取消'},
+                    {id: 6, text: '暂停'},
+                    {id: 7, text: '被返修'},
+                ];
             }
         },
         mounted(){

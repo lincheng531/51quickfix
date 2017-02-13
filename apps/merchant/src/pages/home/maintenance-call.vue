@@ -121,17 +121,8 @@
                             <div class="col-md-10">
                                 <select name="" class="form-control lg" v-model="form.selectedDevice"
                                         id="selectedDevice">
-                                    <option value='冰箱 wise'>冰箱
-                                        <small class="text-muted">wise</small>
-                                    </option>
-                                    <option value='双边调理台 WISE'>双边调理台
-                                        <small class="text-muted">WISE</small>
-                                    </option>
-                                    <option value='员工冰箱 Haier'>员工冰箱
-                                        <small class="text-muted">Haier</small>
-                                    </option>
-                                    <option value='冷库库板 HairCarrier'>冷库库板
-                                        <small class="text-muted">HairCarrier</small>
+                                    <option :value="device.id" v-for="device in devices">{{ device.name }}
+                                        <small class="text-muted">{{ device.brand }}</small>
                                     </option>
                                 </select>
                             </div>
@@ -270,6 +261,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
         data () {
             return {
@@ -296,8 +288,10 @@
                 ecategories: [],
                 brands: [],
                 toCreateDevice: false,
+                devices: [],
             }
         },
+        computed: mapState({user: state => state.user}),
         mounted(){
             window.initialize = this.initMap();
             var script = document.createElement('script');
@@ -315,6 +309,7 @@
                 todayHighlight: true,
             });
             this.getCategories();
+            this.getDevices();
         },
         methods: {
             initMap() {
@@ -349,6 +344,8 @@
                 scope.form['store_loc'] = scope.store_loc;
                 scope.form['must_time'] = $('#must_time').val();
                 scope.form['expiration_date'] = $('#expiration_date').val();
+                console.log(scope.form);
+
                 this.$router.push({
                     path: '/maintenance/call/users',
                     query: scope.form,
@@ -414,6 +411,19 @@
                     else {
                         toastr.warning(res.alert);
                     }
+                });
+            },
+            getDevices(options){
+                var scope = this;
+                var data = options || {};
+                data.head_type = this.user.head_type;
+                data.user_id = this.user.id;
+                $.ajax({
+                    type: 'GET',
+                    url: global.API_HOST + '/devices',
+                    data: data,
+                }).done(function (res) {
+                    scope.devices = res
                 });
             },
             changeCategory() {

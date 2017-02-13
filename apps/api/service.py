@@ -286,7 +286,7 @@ def grab(request, oid):
         opt_loc = store.loc
         distance = distanceByLatLon(opt_loc[0], opt_loc[1], loc[0], loc[1])
         item = {
-            'status': 1,
+
             'come_time': ct,
             'update_time': dt.now(),
             'single_time': dt.now(),

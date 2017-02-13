@@ -112,5 +112,5 @@ urlpatterns = patterns('apps.admin',
     url(r'api/v1/maintenance/stats','api.stats'),
 
     url(r'api/v1/brands','api.brandList'),
-
+    url(r'api/v1/devices','api.deviceList'),
 )

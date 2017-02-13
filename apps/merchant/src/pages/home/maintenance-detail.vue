@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="box-body text-center">
+                <div class="box-body text-center" v-if="is_store">
                     <div class="m-t-md m-b">
                         <span class="avatar w-96">
                             <img v-bind:src="fixer.avatar_img">
@@ -66,7 +66,7 @@
                         <a class="btn form-control dark"><span class="lt">转服务商</span></a>
                     </div>
                 </div>
-                <hr>
+                <hr v-if="is_store">
                 <div class="box-body">
                     <com-maintenance-history :status_list="status_list"></com-maintenance-history>
                 </div>
@@ -724,12 +724,26 @@
     export default {
         computed: {
             infoTable: function () {
-                return [
-                    {'label': '资产', 'text': this.maintenance.device && this.maintenance.device.name},
-                    {'label': '固定资产编号', 'text': this.maintenance.device && this.maintenance.device.uid},
-                    {'label': '维修时效', 'text': this.maintenance && this.maintenance.must_time},
-                    {'label': '故障现象', 'text': this.maintenance && this.maintenance.content},
-                ]
+                if (this.is_store && this.maintenance.device && this.maintenance.device.uid) {
+                    return [
+                        {
+                            'label': '资产',
+                            'text': this.maintenance.device && (this.maintenance.device.brand ? this.maintenance.device.brand + '  ' : '') + this.maintenance.device.name + (this.maintenance.device.model ? '  ' + this.maintenance.device.model : '')
+                        },
+                        {'label': '固定资产编号', 'text': this.maintenance.device && this.maintenance.device.uid},
+                        {'label': '维修时效', 'text': this.maintenance && this.maintenance.must_time},
+                        {'label': '故障现象', 'text': this.maintenance && this.maintenance.content},
+                    ]
+                } else {
+                    return [
+                        {
+                            'label': '资产',
+                            'text': this.maintenance.device && (this.maintenance.device.brand ? this.maintenance.device.brand + '  ' : '') + this.maintenance.device.name + (this.maintenance.device.model ? '  ' + this.maintenance.device.model : '')
+                        },
+                        {'label': '维修时效', 'text': this.maintenance && this.maintenance.must_time},
+                        {'label': '故障现象', 'text': this.maintenance && this.maintenance.content},
+                    ]
+                }
             },
             fixer: function () {
                 return {
@@ -755,8 +769,8 @@
         data () {
             return {
                 breadcrumb: [
-                    {'title': '首页'},
-                    {'title': '维修'},
+                    {'title': '首页', path: '/home'},
+                    {'title': '维修', path: '/home/maintenances/status'},
                     {'title': '维修工单'},
                 ],
                 store: {},

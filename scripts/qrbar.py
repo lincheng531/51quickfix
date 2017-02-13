@@ -245,10 +245,10 @@ def create2():
 def barcode():
 	w = xlwt.Workbook()
 	ws = w.add_sheet('barcode')
-	for i in range(100):
+	for i in range(10000):
 		cid = str(_id())
 		ws.write(i,0, cid)
-	w.save('20160613.xls')
+	w.save('20170208.xls')
 
 if __name__ == '__main__':
 	barcode()

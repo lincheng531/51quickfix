@@ -136,30 +136,22 @@
 
                 var scope = this;
                 var device = this.$route.query.selectedDevice || this.$route.query.device;
-                var testMaintenance = {
-                    'create_time': moment().format('YYYY-MM-DD hh:mm:ss'),
-                    'city': '上海市',
-                    'store': this.$route.query.store_name,
-                    'store_no': this.$route.query.store_no,
-                    'store_name': this.$route.query.store_name,
-                    'category': this.$route.query.category,
-                    'product': device,
-                    'device': device,
-                    'brand': this.$route.query.brand,
-                    'brand_name': this.$route.query.brand,
-                    'state': 1,
-                    'content': this.$route.query.content,
-                    'grab_user': '未接单',
-                    'status': '0',
-                    'no': moment().format('YYYYMMDDhhm'),
-                    'user': this.$route.query.name,
-                };
 
-                var news = JSON.parse(sessionStorage.getItem('new')) || [];
-                news.unshift(testMaintenance);
-                sessionStorage.setItem('new', JSON.stringify(news));
-                toastr.success('报修成功！', function () {
-                    scope.$router.go(-2);
+                var data = this.$route.query;
+                data.user_ids = user_ids.join(',');
+                $.ajax({
+                    type: 'POST',
+                    url: global.API_HOST + '/maintenance/call',
+                    data: data,
+                }).done(function (res) {
+                    if (res.status == 1) {
+                        toastr.success('报修成功！', function () {
+                            scope.$router.go(-2);
+                        });
+                    }
+                    else {
+                        toastr.warning(res.alert);
+                    }
                 });
             },
             stepBack() {

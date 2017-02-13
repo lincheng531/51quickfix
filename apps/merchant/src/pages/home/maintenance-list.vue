@@ -34,7 +34,7 @@
                                     <com-ui-single-select :size="'sm'" :type="'city'" :width="'118px'"
                                                           v-model="queryFilter.city"></com-ui-single-select>
                                 </div>
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4" v-if="user_category=='merchant'">
                                     <div class="col-xs-4 text-right">
                                         <label class="m-r text-muted">餐厅</label>
                                     </div>
@@ -54,6 +54,13 @@
                                     </div>
                                     <com-ui-single-select :size="'sm'" :type="'head_type'" :width="'118px'"
                                                           v-model="queryFilter.head_type"></com-ui-single-select>
+                                </div>
+                                <div class="form-group col-xs-4" v-if="user_category=='service'">
+                                    <div class="col-xs-4 text-right">
+                                        <label class="m-r text-muted">餐厅</label>
+                                    </div>
+                                    <com-ui-single-select :size="'sm'" :width="'118px'"
+                                                          v-model="queryFilter.store"></com-ui-single-select>
                                 </div>
                             </div>
                             <div class="row m-b-sm">
@@ -88,20 +95,30 @@
                                     <com-ui-single-select :size="'sm'" :type="'state'" :width="'118px'"
                                                           v-model="queryFilter.state"></com-ui-single-select>
                                 </div>
-
-                                <div class="form-group col-xs-8">
-                                    <div class="col-xs-2 text-right">
+                                <div class="form-group col-xs-4">
+                                    <div class="col-xs-4 text-right">
+                                        <label class="m-r text-muted">维修状态</label>
+                                    </div>
+                                    <com-ui-single-select :size="'sm'" :type="'status'" :width="'118px'"
+                                                          v-model="queryFilter.status"></com-ui-single-select>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <div class="col-xs-4 text-right">
                                         <label class="m-r text-muted">报修时间</label>
                                     </div>
-                                    <div class="col-xs-6" style="padding-left:0">
-                                        <input type="text" class="fixTime w-sm" id="starttime"
+                                    <div class="col-xs-8" style="padding-left:0">
+                                        <input type="text" class="fixTime w-xs" id="starttime"
                                                v-model="queryFilter.starttime">
-                                        <label> 至 </label><input type="text" class="fixTime w-sm" id="endtime"
-                                                                 v-model="queryFilter.endtime">
+                                        <label> 至 </label>
+                                        <input type="text" class="fixTime w-xs" id="endtime"
+                                               v-model="queryFilter.endtime">
                                     </div>
-                                    <div class="col-xs-4">
-                                        <button class="btn btn-fw btn-xs dark" @click="getMaintenanceList()">筛选</button>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-b-sm">
+                                <div class="form-group col-xs-10 text-right">
+                                    <button class="btn btn-sm dark" @click="getMaintenanceList()">筛选
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -155,7 +172,7 @@
                         </li>
                         <li class="nav-item b-a box-radius-3x">
                             <a class="nav-link" data-toggle="tab" data-target="#tabAudit2" aria-expanded="false"
-                               @click="getMaintenanceList('merchantAudit3')">审核失败</a>
+                               @click="getMaintenanceList('merchantAudit3')">审核待定</a>
                         </li>
                     </ul>
 
@@ -175,7 +192,7 @@
                         </li>
                         <li class="nav-item b-a box-radius-3x">
                             <a class="nav-link" data-toggle="tab" data-target="#tabAudit4" aria-expanded="false"
-                               @click="getMaintenanceList('serviceAudit4')">审核失败</a>
+                               @click="getMaintenanceList('serviceAudit4')">审核待定</a>
                         </li>
                     </ul>
                 </div>
@@ -366,6 +383,9 @@
                 this.user_category = 'service';
             }
             this.maintenances = [];
+            if (this.list_type == 'status') {
+                this.getMaintenanceList('new');
+            }
         },
         mounted(){
             $('.fixTime').datetimepicker({

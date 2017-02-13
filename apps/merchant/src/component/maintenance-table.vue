@@ -1,5 +1,6 @@
 <style>
     .table td {
+        font-weight: normal;
         vertical-align: middle;
     }
 </style>
@@ -27,7 +28,7 @@
                 <th width="8%">城市</th>
                 <th width="9%" v-if="user_category=='service'">商家品牌</th>
                 <th width="10%">餐厅</th>
-                <th width="8%">维修类别</th>
+                <th width="9%">维修类别</th>
                 <th width="10%">资产</th>
                 <th width="6%">时效</th>
                 <th width="13%">故障描述</th>
@@ -64,15 +65,18 @@
                 <td v-text="item.content"></td>
 
                 <td v-if="list_type=='status'">
-                    <span v-if="item.target_user_name">
+                    <div v-if="item.target_user_name">
                         <div>
                             <span v-text="item.target_user_name"></span>
                             <small class="text-muted    " v-text="item.target_user_mobile"></small>
                         </div>
                         <div><small class="text-muted" v-text="item.target_company"></small></div>
 
-                    </span>
-                    <span v-else>未接单</span>
+                    </div>
+                    <div v-else>
+                        <div>未接单</div>
+                        <div><small class="text-center text-muted" v-text="item.supplier"></small></div>
+                    </div>
                 </td>
                 <td v-text="item.status" v-if="list_type=='status'"></td>
                 <td v-if="list_type=='audit' || list_type=='settlement'" v-text="item.bill && item.bill.total"></td>

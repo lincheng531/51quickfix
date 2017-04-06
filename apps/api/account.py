@@ -44,18 +44,18 @@ def download(request):
     '''
     category = int(request.POST.get('category', 1))
     if ENV == 'PRO':
-        href1 = 'http://www.51quickfix.com/static/app/release_business_8_v1.2.3.3_20170110.apk'
-        href2 = 'http://www.51quickfix.com/static/app/release_quickfix-8-v1.2.3.3-20170110.apk'
+        href1 = 'http://www.i1fix.com/static/app/release_business_10_v2.0_20170405_v20_jiagu_sign.apk'
+        href2 = 'http://www.i1fix.com/static/app/release_quickfix-10-v2.0-20170405_v20_jiagu_sign.apk'
     elif ENV == 'TEST2':
         href1 = 'http://bk.gaofriend.com/static/app/release_business_8_v1.2.3.3_20170110.apk'
         href2 = 'http://bk.gaofriend.com/static/app/release_quickfix-8-v1.2.3.3-20170110.apk'
     else:
-        href1 = 'http://51quickfix.gaofriend.com/static/app/release_business_8_v1.2.3.3_20170110.apk'
-        href2 = 'http://51quickfix.gaofriend.com/static/app/release_quickfix-8-v1.2.3.3-20170110.apk'
+        href1 = 'http://www.i1fix.com/static/app/release_business_10_v2.0_20170405_v20_jiagu_sign.apk'
+        href2 = 'http://www.i1fix.com/static/app/release_quickfix-10-v2.0-20170405_v20_jiagu_sign.apk'
     if category == 1:
-        resp = {'status':1, 'info':{'versionCode':8,'versionName':'51快修商户版V1.2.3.3','desc':u'', 'downloadUrl':href1}}
+        resp = {'status':1, 'info':{'versionCode':10,'versionName':'51快修商户版V2.0','desc':u'', 'downloadUrl':href1}}
     else: 
-        resp = {'status':1, 'info':{'versionCode':8,'versionName':'51快修V1.2.3.3','desc':u'', 'downloadUrl':href2}}
+        resp = {'status':1, 'info':{'versionCode':10,'versionName':'51快修V2.0','desc':u'', 'downloadUrl':href2}}
     return json_response(resp)
 
 @login_required
